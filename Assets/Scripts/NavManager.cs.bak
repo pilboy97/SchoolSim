@@ -1,0 +1,659 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Game.Map;
+using Game.Object;
+using Game.Room;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using Unity.Mathematics;
+using UnityEditor;
+using UnityEngine;
+using SerializationUtility = Sirenix.Serialization.SerializationUtility;
+
+namespace Game
+{
+    public class NavManager : Singleton<NavManager>
+    {
+        [SerializeField] private int floydLimit = 512;
+        
+        const int INF = 1<<20; // we don't care of large room
+        
+        private Map.Map GroundMap => MapController.Instance.groundMap;
+        private Map.Map WallMap => MapController.Instance.wallMap;
+        
+        public HashSet<Vector3Int> WalkableCells { get; private set; } = new();
+
+        private HashSet<(Vector3Int, Vector3Int)> _jumpPoints = new();
+        private HashSet<Vector3Int> _jumpPointsPos = new();
+        private Dictionary<(Vector3Int, Vector3Int), int> _distJP = null;
+        private Dictionary<(Vector3Int, Vector3Int), Vector3Int> _cacheJP = null;
+        private Dictionary<(Vector3Int, Vector3Int), Vector3Int> _cache = null;
+        private Dictionary<(Vector3Int, Vector3Int), int> _dist = null;
+
+        public Vector3Int RandomPos => Random.Choose(WalkableCells.ToList());
+        public Vector3Int RandomCPos => MapController.Instance.WorldToCell(RandomPos);
+
+        [ShowInInspector] private string CacheFilePath => Application.dataPath + "/Nav/navCacheData.dat";
+        [ShowInInspector] private string DistFilePath => Application.dataPath + "/Nav/navDistData.dat";
+        [ShowInInspector] private string CacheJpFilePath => Application.dataPath + "/Nav/navCacheJPData.dat";
+        [ShowInInspector] private string DistJpFilePath => Application.dataPath +  "/Nav/navDistJPData.dat";
+
+        public void Init()
+        {
+            _dist = null;
+            _cache = null;
+
+            foreach (var room in RoomManager.Instance.roomDatas)
+            {
+                foreach (var jp in room.portals)
+                {
+                    _jumpPointsPos.Add(jp.Dest);
+                    foreach (var pos in jp.Positions)
+                    {
+                        var cp = MapController.Instance.WorldToCell(pos);
+                        _jumpPoints.Add((cp, jp.Dest));
+                        _jumpPointsPos.Add(cp);
+                    }
+                }
+            }
+
+            SetWalkableCell();
+
+            FindPathFloyd();
+            FindInterRoom();
+        }
+
+        public void CreateDataFiles(bool forced)
+        {
+            CreateDataFile(DistFilePath, _dist, forced);
+            CreateDataFile(CacheFilePath, _cache, forced);
+            CreateDataFile(DistJpFilePath, _distJP, forced);
+            CreateDataFile(CacheJpFilePath, _cacheJP, forced);
+        }
+
+        private void DeleteDataFiles()
+        {
+            DeleteDataFile(DistFilePath);
+            DeleteDataFile(CacheFilePath);
+            DeleteDataFile(DistJpFilePath);
+            DeleteDataFile(CacheJpFilePath);
+        }
+        private void CreateDataFile<T>(string filePath, T obj, bool forced = false)
+        {
+            if (!forced && File.Exists(filePath)) return;
+            
+            try
+            {
+                var b = Sirenix.Serialization.SerializationUtility.SerializeValue(obj, DataFormat.Binary);
+                File.WriteAllBytes(filePath, b);
+                UnityEngine.Debug.Log($"{filePath} created");
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log(e);
+            }
+        }
+        private void LoadDataFile<T>(string filePath, out T obj) where T : class, new()
+        {
+            if (!File.Exists(filePath))
+            {
+                obj = new T();
+                return;
+            }
+            
+            try
+            {
+                var b = File.ReadAllBytes(filePath);
+                obj = SerializationUtility.DeserializeValue<T>(b, DataFormat.Binary);
+            }
+            catch (Exception e)
+            {
+                obj = new T();
+                UnityEngine.Debug.Log(e);
+            }
+        }
+
+        private void DeleteDataFile(string filePath)
+        {
+            try
+            {
+                File.Delete(filePath);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log(e);
+            }
+        }
+        
+        public List<(Vector3Int, Vector3Int)> GetJumpPoints(int at)
+        {
+            List<(Vector3Int, Vector3Int)> ret = new List<(Vector3Int, Vector3Int)>(_jumpPoints.Count);
+
+            foreach (var jp in _jumpPoints)
+            {
+                if (jp.Item1.z == at) ret.Add(jp);
+            }
+
+            return ret;
+        }
+
+        public List<Vector3Int> GetJumpPoints(int at, int to)
+        {
+            List<Vector3Int> ret = new List<Vector3Int>(_jumpPoints.Count);
+
+            foreach (var jp in _jumpPoints)
+            {
+                if (jp.Item1.z == at && jp.Item2.z == to) ret.Add(jp.Item1);
+            }
+
+            return ret;
+        }
+
+        public void SetWalkableCell()
+        {
+            HashSet<Vector3Int> groundCells = new();
+            HashSet<Vector3Int> otherCells = new();
+
+            for (var i = 0;i < RoomManager.Instance.roomDatas.Count;i++)
+            {
+                var data = RoomManager.Instance.roomDatas[i];
+
+                foreach (var rect in data.rects)
+                {
+                    HashSet<Vector3Int> target = otherCells;
+
+                    if (rect.targetMapID == GroundMap.mapID) target = groundCells;
+                    if (rect.targetMapID == MapController.Instance.jumpMap.mapID) continue;
+                    
+                    foreach (var pos in rect.rect.allPositionsWithin)
+                    {
+                        target.Add(new Vector3Int(pos.x, pos.y, i));
+                    }
+                }
+            }
+
+            foreach (var t in ObjectManager.Instance.occupied)
+            {
+                otherCells.Add(t);
+            }
+
+            WalkableCells = groundCells;
+
+            WalkableCells.ExceptWith(otherCells);
+        }
+
+        private void FindPathFloyd()
+        {
+            _dist = null;
+            _cache = null;
+            
+            if (File.Exists(DistFilePath))
+                LoadDataFile(DistFilePath, out _dist);
+            if (File.Exists(CacheFilePath))
+                LoadDataFile(CacheFilePath, out _cache);
+
+            if (_dist != null && _cache != null) return;
+            
+            _dist = new ();
+            _cache = new ();
+            
+            var list = new List<NavData>();
+            for (int i = 0; i < RoomManager.Instance.roomDatas.Count; i++)
+            {
+                var data = FindPathFloydSameMap(i);
+                list.AddRange(data);
+            }
+
+            foreach (var x in list)
+            {
+                _cache[(x.st, x.ed)] = x.value;
+                _dist[(x.st, x.ed)] = x.dist;
+            }
+        }
+        
+        private NavData[] FindPathFloydSameMap(int index)
+        {
+            var ret = new List<NavData>();
+            
+            var cells = WalkableCells.Where(p=>p.z == index).ToArray();
+
+            if (cells.Length > floydLimit) return Array.Empty<NavData>();
+            
+            for (int i = 0; i < cells.Length; i++)
+            {
+                for (int j = 0; j < cells.Length; j++)
+                {
+                    var x = cells[i];
+                    var y = cells[j];
+
+                    _dist[(x, y)] = i == j ? 0 : INF;
+                }
+            }
+            
+            var dir = new[]
+            {
+                new Vector3Int(0, 1),
+                new Vector3Int(0, -1),
+                new Vector3Int(-1, 0),
+                new Vector3Int(1, 0)
+            };
+            
+            for (int i = 0; i < cells.Length; i++)
+            {
+                var x = cells[i];
+                for (int j = 0; j < dir.Length; j++)
+                {
+                    var y = x + dir[j];
+
+                    if (WalkableCells.Contains(y))
+                    {
+                        _dist[(x, y)] = 1;
+                        _dist[(y, x)] = 1;
+                        _cache[(x, y)] = y;
+                        _cache[(y, x)] = x;
+                    }
+                }
+            }
+
+            foreach (var z in cells)
+            {
+                foreach (var x in cells)
+                {
+                    foreach (var y in cells)
+                    {
+                        if (_dist[(x,z)] < INF && _dist[(z, y)] < INF && _dist[(x, y)] > _dist[(x, z)] + _dist[(z, y)])
+                        {
+                            _dist[(x, y)] = _dist[(x, z)] + _dist[(z, y)];
+                            _cache[(x, y)] = _cache[(x,z)];
+                        }
+                    }
+                }
+            }
+
+            foreach (var kv in _cache)
+            {
+                ret.Add(new NavData()
+                {
+                    st = kv.Key.Item1,
+                    ed = kv.Key.Item2,
+                    value = kv.Value,
+                    dist = _dist[kv.Key]
+                });
+            }
+            
+            return ret.ToArray();
+        }
+        
+        private void FindPathNone()
+        {
+            _cache = null;
+        }
+
+        private (Vector3Int[], int) FindPathFloydSameMap(Vector3Int st, Vector3Int ed)
+        {
+            if (st.z != ed.z) return (null, INF);
+            
+            if (!WalkableCells.Contains(ed))
+            {
+                var dir = new[]
+                {
+                    new Vector3Int(0, 1),
+                    new Vector3Int(0, -1),
+                    new Vector3Int(-1, 0),
+                    new Vector3Int(1, 0)
+                };
+                Vector3Int[] r = null;
+                int min = INF;
+                Vector3Int vvv = ed;
+                int ddist = INF;
+                foreach (var v in dir)
+                {
+                    var vv = ed + v;
+                    if (WalkableCells.Contains(vv))
+                    {
+                        var (rr,d) = FindPathSameMap(st, vv);
+                        if (min > d)
+                        {
+                            min = d;
+                            r = rr;
+                            vvv = vv;
+                            ddist = _dist[(st, vvv)];
+                        }
+                    }
+                }
+
+                if (ddist == INF)
+                    return (null, INF);
+                
+                _cache[(st, ed)] = vvv;
+                _dist[(st, ed)] = ddist;
+                return (r?.Concat(new[] { vvv }).ToArray(), min);
+            }
+            
+            if (!_dist.TryGetValue((st, ed), out var dist)) 
+                return (null, INF);
+            
+            var x = st;
+            var route = new List<Vector3Int>() {st};
+            
+            while (x != ed)
+            {
+                x = _cache[(x, ed)];
+                route.Add(x);
+            }
+            
+            return (route.ToArray(), dist);
+        }
+
+        public void FindInterRoom()
+        {
+            _distJP = null;
+            _cacheJP = null;
+            
+            if (File.Exists(DistJpFilePath))
+                LoadDataFile(DistJpFilePath, out _distJP);
+            if (File.Exists(CacheJpFilePath))
+                LoadDataFile(CacheJpFilePath, out _cacheJP);
+
+            if (_distJP != null && _cacheJP != null) return;
+            
+            _cacheJP = new();
+            _distJP = new();
+
+
+            foreach (var x in _jumpPointsPos)
+            {
+                foreach (var y in _jumpPointsPos)
+                {
+                    _distJP[(x, y)] = INF;
+                }
+            }
+
+            foreach (var x in _jumpPoints)
+            {
+                _distJP[(x.Item1, x.Item1)] = 0;
+                _distJP[(x.Item1, x.Item2)] = 0;
+                _cacheJP[(x.Item1, x.Item2)] = x.Item2;
+                _distJP[(x.Item2, x.Item2)] = 0;
+            }
+
+            for (int i = 0; i < RoomManager.Instance.roomDatas.Count; i++)
+            {
+                var _d = _jumpPointsPos.Where(x => x.z == i).ToArray();
+
+                foreach (var X in _d)
+                {
+                    foreach (var Y in _d)
+                    {
+                        _distJP[(X, Y)] = FindPathSameMap(X, Y).Item2;
+                        _cacheJP[(X, Y)] = Y;
+                    }
+                }
+            }
+
+            foreach (var dot in _jumpPointsPos)
+            {
+                foreach (var ed in _jumpPointsPos)
+                {
+                    foreach (var st in _jumpPointsPos)
+                    {
+                        if (_distJP[(st, dot)] < INF && _distJP[(dot, ed)] < INF && _distJP[(st, dot)] + _distJP[(dot, ed)] < _distJP[(st, ed)])
+                        {
+                            _distJP[(st, ed)] = _distJP[(st, dot)] + _distJP[(dot, ed)];
+                            _cacheJP[(st, ed)] = dot;
+                        }
+                    }
+                }
+            }
+        }
+
+        private Vector3Int[] GetJump(Vector3Int s, Vector3Int e)
+        {
+            var P = s;
+            var route = new List<Vector3Int>() { s };
+
+            while (P != e)
+            {
+                P = _cacheJP[(P, e)];
+                route.Add(P);
+            }
+
+            return route.ToArray();
+        }
+
+        public (Vector3Int[], int) FindPath(Vector3 st, Vector3[] ed)
+        {
+            return FindPath(MapController.Instance.WorldToCell(st), ed.Select(p=>MapController.Instance.WorldToCell(p)).ToArray());
+        }
+        public (Vector3Int[], int) FindPath(Vector3 st, Vector3 ed)
+        {
+            return FindPath(MapController.Instance.WorldToCell(st), MapController.Instance.WorldToCell(ed));
+        }
+        public (Vector3Int[], int) FindPath(Vector3Int st, Vector3Int[] ed)
+        {
+            var tup = ed
+                .Select(p => FindPath(st, p))
+                .OrderBy(tup=>tup.Item2)
+                .FirstOrDefault();
+
+            return (tup.Item1, tup.Item2);
+        }
+        public (Vector3Int[], int) FindPath(Vector3Int st, Vector3Int ed)
+        {
+            if (st == ed) return (Array.Empty<Vector3Int>(), 0);
+            
+            int sId = st.z;
+            int eId = ed.z;
+
+            if (sId == eId) return FindPathSameMap(st, ed);
+
+            var sjp = _jumpPointsPos.Where(x => x.z == sId).ToArray();
+            var ejp = _jumpPointsPos.Where(x => x.z == eId).ToArray();
+
+            Vector3Int S = new Vector3Int();
+            Vector3Int E = new Vector3Int();
+            int dist = INF;
+            
+            foreach (var s in sjp)
+            {
+                foreach (var e in ejp)
+                {
+                    if (!_distJP.TryGetValue((s,e),out var distjp)) continue;
+                    if (distjp == INF) continue;
+
+                    var sdist = FindPathSameMap(st, s).Item2;
+                    var edist = FindPathSameMap(e, ed).Item2;
+                    
+                    if (sdist == INF || edist == INF) continue;
+                    
+                    var d = sdist + distjp + edist;
+                    if (dist > d) {
+                        dist = d;
+                        S = s;
+                        E = e;
+                    }
+                }
+            }
+
+            if (dist == INF) return (null, INF);
+
+            var jRoute = GetJump(S, E);
+            var route = FindPathSameMap(st, S).Item1.ToList();
+            for (int i = 0; i < jRoute.Length - 1; i++)
+            {
+                if (jRoute[i].z != jRoute[i + 1].z)
+                {
+                    continue;
+                }
+                var r = FindPathSameMap(jRoute[i], jRoute[i + 1]).Item1;
+                route.AddRange(r);
+            }
+
+            route.AddRange(FindPathSameMap(E, ed).Item1);
+
+            return (route.ToArray(), dist);
+        }
+        
+        private (Vector3Int[], int) FindPathSameMap(Vector3 st, Vector3[] ed)
+        {
+            var s = new Vector3Int(Mathf.FloorToInt(st.x), Mathf.FloorToInt(st.y));
+            var e = ed.Select(d => new Vector3Int(Mathf.FloorToInt(d.x), Mathf.FloorToInt(d.y))).ToArray();
+
+            return FindPathSameMap(s, e);
+        }
+        
+        private (Vector3Int[], int) FindPathSameMap(Vector3Int st, Vector3Int[] ed)
+        {
+            var tup = ed
+                .Select(p => FindPathSameMap(st, p))
+                .OrderBy(tup=>tup.Item2)
+                .FirstOrDefault();
+
+            return (tup.Item1, tup.Item2);
+        }
+        
+        private (Vector3Int[], int) FindPathSameMap(Vector3Int st, Vector3Int ed)
+        {
+            if (_cache != null)
+            {
+                return FindPathFloydSameMap(st, ed);
+            }
+            
+            if(st == ed) return (new Vector3Int[] {
+                ed
+            }, 0);
+            if (st.z != ed.z) return (null, INF);
+
+            var cells = WalkableCells.Where(x => x.z == st.z).ToArray();
+            var (minx, miny) = (cells[0].x, cells[0].y);
+            var (maxx, maxy) = (cells[0].x, cells[0].y);
+
+            foreach (var pos in cells)
+            {
+                minx = math.min(minx, pos.x);
+                miny = math.min(miny, pos.y);
+                maxx = math.max(maxx, pos.x);
+                maxy = math.max(maxy, pos.y);
+            }
+
+            var bounds = new RectInt(minx, miny, maxx - minx, maxy - miny);
+            
+            Func<Vector3Int, Vector3Int, int> distFunc = (x, y) =>
+                math.abs(x.x - y.x) + math.abs(x.y - y.y);
+
+            var gCost = new int[bounds.size.x + 1, bounds.size.y + 1];
+            var done = new bool[bounds.size.x + 1, bounds.size.y + 1];
+            var trace = new Vector3Int[bounds.size.x + 1, bounds.size.y + 1];
+
+            Heap<Vector3Int, int> queue = new();
+
+            var p = MapController.Instance.LocalCPos(st);
+            var (r, c) = (p.x, p.y);
+
+            for (var i = 0; i < bounds.size.x; i++)
+            for (var j = 0; j < bounds.size.y; j++)
+                gCost[i, j] = INF;
+
+            queue.Enqueue((st, 0));
+            
+            gCost[r, c] = 0;
+            done[r, c] = true;
+            trace[r, c] = Vector3Int.zero;
+
+            var dir = new[]
+            {
+                new Vector3Int(0, 1),
+                new Vector3Int(0, -1),
+                new Vector3Int(-1, 0),
+                new Vector3Int(1, 0)
+            };
+
+            while (queue.Size > 0)
+            {
+                var front = queue.Dequeue();
+                p = MapController.Instance.LocalCPos(front);
+                (r, c) = (p.x, p.y);
+
+                done[r, c] = true;
+
+                var cost = gCost[r, c] + 1;
+                foreach (var d in dir)
+                {
+                    var v = front + d;
+
+                    p = MapController.Instance.LocalCPos(v);
+                    (r, c) = (p.x, p.y);
+
+                    var dist = distFunc(ed, v);
+
+                    if (!WalkableCells.Contains(v))
+                    {
+                        if (v != ed) continue;
+                    }
+                    if (done[r, c]) continue;
+                    if (gCost[r, c] <= cost) continue;
+
+                    queue.Enqueue((v, -(dist + cost)));
+                    gCost[r, c] = cost;
+                    trace[r, c] = front;
+                }
+            }
+
+            p = MapController.Instance.LocalCPos(ed);
+            (r, c) = (p.x, p.y);
+            if (!done[r, c]) return (null, INF);
+
+            int distance = gCost[r, c];
+            Stack<Vector3Int> stack = new();
+
+            var dot = ed;
+
+            stack.Push(ed);
+            while (dot != st)
+            {
+                p = MapController.Instance.LocalCPos(dot);
+                (r, c) = (p.x, p.y);
+
+                dot = trace[r, c];
+                stack.Push(dot);
+            }
+
+            return (stack.ToArray(), distance);
+        }
+        
+        #if UNITY_EDITOR
+        [Button("remake nav file")]
+        private void Remake()
+        {
+            FileUtil.DeleteFileOrDirectory(DistFilePath);
+            FileUtil.DeleteFileOrDirectory(CacheFilePath);
+            FileUtil.DeleteFileOrDirectory(DistJpFilePath);
+            FileUtil.DeleteFileOrDirectory(CacheJpFilePath);
+            AssetDatabase.Refresh();
+                
+            GameManager.Instance.InitOnEditorMode(false);
+            Init();
+            CreateDataFiles(true);
+            
+            AssetDatabase.Refresh();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            MapController.Instance.Init(false);
+            SetWalkableCell();
+
+            foreach (var pos in WalkableCells)
+            {
+                if( pos.z != RoomManager.Instance.currentRoomIndex) continue;
+                var p = MapController.Instance.CellToWorld(pos);
+                
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(p, 0.1f);
+            }
+        }
+#endif
+    }
+}

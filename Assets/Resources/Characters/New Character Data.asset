@@ -1,0 +1,187 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cc20be1a65448687deb33ea25e2be6, type: 3}
+  m_Name: New Character Data
+  m_EditorClassIdentifier: 
+  ID: L6g06lyBXF
+  position: {x: 8.5, y: 1.5, z: 0}
+  charName: Minji
+  beauty: {x: 0.16873074, y: 0.029959096, z: 0.9852068}
+  attraction: 2.1205182
+  e: 0.6184204
+  eModifier: 1
+  rModifier: 1
+  gModifier: 1
+  gender: 1
+  mbti: 15
+  eventID: 
+  status:
+    keyData:
+    - stype: 36
+      id: 
+    - stype: 37
+      id: 
+    - stype: 38
+      id: 
+    - stype: 39
+      id: 
+    - stype: 42
+      id: 
+    - stype: 43
+      id: 
+    - stype: 44
+      id: 
+    - stype: 52
+      id: 
+    - stype: 35
+      id: 
+    - stype: 41
+      id: 
+    - stype: 51
+      id: 
+    - stype: 10
+      id: 
+    - stype: 11
+      id: 
+    - stype: 12
+      id: 
+    - stype: 13
+      id: 
+    - stype: 14
+      id: 
+    - stype: 15
+      id: 
+    - stype: 16
+      id: 
+    - stype: 17
+      id: 
+    - stype: 18
+      id: 
+    - stype: 19
+      id: 
+    - stype: 20
+      id: 
+    - stype: 21
+      id: 
+    - stype: 22
+      id: 
+    - stype: 23
+      id: 
+    - stype: 24
+      id: 
+    - stype: 27
+      id: 
+    - stype: 28
+      id: 
+    - stype: 29
+      id: 
+    - stype: 30
+      id: 
+    - stype: 31
+      id: 
+    - stype: 32
+      id: 
+    - stype: 48
+      id: i1QW3yXBJa
+    - stype: 48
+      id: 4KYiMb6eJR
+    - stype: 48
+      id: ukipeQ6InX
+    - stype: 48
+      id: y786Sec4Vx
+    - stype: 48
+      id: 1fclU3cpmL
+    - stype: 48
+      id: ulMG04Uf7E
+    - stype: 48
+      id: 3wni8Y2Fq1
+    - stype: 48
+      id: uuqEE5aLME
+    - stype: 48
+      id: dEUk3HrMYt
+    - stype: 48
+      id: Y3NKQbPosA
+    - stype: 48
+      id: evFDd6J1QX
+    - stype: 48
+      id: YDScFMOsl1
+    - stype: 48
+      id: L6g06lyBXF
+    - stype: 49
+      id: evFDd6J1QX
+    valueData:
+    - 97.42949
+    - 56.152454
+    - 61.863438
+    - 60.805264
+    - 99.687584
+    - 25.50876
+    - 41.514393
+    - 40.226982
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 7
+    - 0
+    - 0
+    - 0
+    - 7
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 6
+    - 7
+    - 0
+    - 0
+  classroom: {fileID: 11400000, guid: 1c27ec29485044a0da84355101a0da62, type: 2}
+  genData:
+    rid: 509001979734786401
+  references:
+    version: 2
+    RefIds:
+    - rid: 509001979734786401
+      type: {class: CharacterData/CharacterGenData, ns: Game.Object.Character, asm: Assembly-CSharp}
+      data:
+        charName: Minji
+        initStat:
+          rid: 509001979734786402
+        initPos: {x: 2147483647, y: 2147483647, z: 0}
+        gender: 1
+        mbtiCond: 
+        attractionLevel: 5
+    - rid: 509001979734786402
+      type: {class: StatusRandomDict, ns: Game, asm: Assembly-CSharp}
+      data:
+        keyData: []

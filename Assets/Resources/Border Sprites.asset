@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db70d8d6e504f9a98038d352d7b6607, type: 3}
+  m_Name: Border Sprites
+  m_EditorClassIdentifier: 
+  all: {fileID: -5664358468343172465, guid: da48a33ed93a74ef88a58052b2dbd6bc, type: 3}
+  none: {fileID: -8700874487318046778, guid: 217382a63fae14903a27e3e21d14ca4e, type: 3}
+  l: {fileID: 8537528440626432328, guid: f5b3a27d263fb44aa9144d9d20aebe4c, type: 3}
+  r: {fileID: -4389727042644312629, guid: 278dc04e70a424747a082edfe07f9ce2, type: 3}
+  t: {fileID: 8546297333686288399, guid: 551255f82ccdc4e069006d38aaef3fb5, type: 3}
+  b: {fileID: -8088828952334261695, guid: df7950ea5a03a4c4f8dff9580c2e2c91, type: 3}
+  lr: {fileID: 127742073382003888, guid: d3d7c7da62a294413a38078823b5450d, type: 3}
+  lt: {fileID: -525210192907737031, guid: e197b5425ca144dafb5a9c7252b867f5, type: 3}
+  lb: {fileID: 2681948592805984893, guid: a76b85083850b4d26b1a98306ef82ee1, type: 3}
+  rt: {fileID: 3204432620727486748, guid: 866e6220bf3b84c5d921684ee759f6cf, type: 3}
+  rb: {fileID: -6826658686595853302, guid: 779a0cd8511ba4ca8bc1bbeac30ae06c, type: 3}
+  tb: {fileID: -6012893210944770551, guid: 9535e6fb75ec1491580e044e1c6b1442, type: 3}
+  lrt: {fileID: 580357287033699541, guid: 7a006ce1fff4e48489f1a48509c1542e, type: 3}
+  lrb: {fileID: -5820666017988869842, guid: e4a55bc53406c490c8935dc03f2cfe70, type: 3}
+  ltb: {fileID: -5147700804679589452, guid: 9d296464dc9d04459b440904cce5a193, type: 3}
+  rtb: {fileID: -4630757636971045036, guid: cccd5d3f6d1bc464a9f9a2c75469ab2d, type: 3}

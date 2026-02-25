@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95b9626593df47b38385196d702a2ae2, type: 3}
+  m_Name: Kitchen
+  m_EditorClassIdentifier: 
+  objectName: kitchen
+  actions:
+  - actionName: Eat something
+    effect:
+      rid: 3831317788552855631
+    cond:
+      rid: 3831317788552855637
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  objID: OBJ_KITCHEN
+  references:
+    version: 2
+    RefIds:
+    - rid: 3831317788552855631
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 24000000
+            valueData:
+            - 5
+    - rid: 3831317788552855637
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
