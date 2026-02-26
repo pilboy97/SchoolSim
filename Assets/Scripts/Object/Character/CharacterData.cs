@@ -139,29 +139,21 @@ namespace Game.Object.Character
 
             return (MBTI)ret;
         }
-
+        
         public static bool CheckComponent(this MBTI mbti, MBTIComponent comp)
         {
+            int val = (int)mbti;
             switch (comp)
             {
-                case MBTIComponent.E:
-                    return ((int)mbti & 0b1000) == 0;
-                case MBTIComponent.I:
-                    return ((int)mbti & 0b1000) == 1;
-                case MBTIComponent.S:
-                    return ((int)mbti & 0b0100) == 0;
-                case MBTIComponent.N:
-                    return ((int)mbti & 0b0100) == 1;
-                case MBTIComponent.T:
-                    return ((int)mbti & 0b0010) == 0;
-                case MBTIComponent.F:
-                    return ((int)mbti & 0b0010) == 1;
-                case MBTIComponent.J:
-                    return ((int)mbti & 0b0001) == 0;
-                case MBTIComponent.P:
-                    return ((int)mbti & 0b0001) == 1;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(comp), comp, null);
+                case MBTIComponent.I: return (val & 0b1000) != 0; // 8이면 True
+                case MBTIComponent.E: return (val & 0b1000) == 0; // 0이면 True
+                case MBTIComponent.N: return (val & 0b0100) != 0;
+                case MBTIComponent.S: return (val & 0b0100) == 0;
+                case MBTIComponent.F: return (val & 0b0010) != 0;
+                case MBTIComponent.T: return (val & 0b0010) == 0;
+                case MBTIComponent.P: return (val & 0b0001) != 0;
+                case MBTIComponent.J: return (val & 0b0001) == 0;
+                default: throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -192,8 +184,9 @@ namespace Game.Object.Character
         [SerializeField] public MBTI mbti;
         
         [SerializeField] public string eventID;
-        [SerializeField] private StatusFloatDict status;
-
+        [SerializeField] private StatusFloatDict stats = new();
+        [SerializeField] public RelationFloatDict relations = new();
+        
         [SerializeField] public Class classroom;
         
         public CharacterData( Character owner, string id = null)
@@ -208,7 +201,8 @@ namespace Game.Object.Character
         public void Init()
         {
             ID = IHasID.GenerateID();
-            status = new();
+            stats = new();
+            relations = new();
             beauty = new Vector3(
                     UnityEngine.Random.value,
                     UnityEngine.Random.value,
@@ -231,6 +225,8 @@ namespace Game.Object.Character
 
             eventID = "";
 
+            relations = new RelationFloatDict();
+            
             if (genData != null)
             {
                 GenerateCharacter();
@@ -241,18 +237,35 @@ namespace Game.Object.Character
         {
             get
             {
-                if (status.TryGetValue(key, out var value))
+                if (stats.TryGetValue(key, out var value))
                 {
                     return value;
                 }
 
-                status.TryAdd(key, 0);
-                return status[key];
+                stats.TryAdd(key, 0);
+                return stats[key];
             }
             set
             {
                 var v = Mathf.Clamp(value, 0, 100);
-                status [key] = v;
+                stats [key] = v;
+            }
+        }
+        public float this[CharacterRelation key]
+        {
+            get
+            {
+                if (relations.TryGetValue(key, out var value))
+                {
+                    return value;
+                }
+
+                return 0;
+            }
+            set
+            {
+                var v = Mathf.Clamp(value, -100, 100);
+                relations [key] = v;
             }
         }
 
@@ -275,6 +288,7 @@ namespace Game.Object.Character
             [SerializeField] public MBTIComponent[] mbtiCond;
             [SerializeField] public int attractionLevel;
         }
+        
         [Header("Generate Character")]
         [SerializeReference] private CharacterGenData genData = null;
 
@@ -282,7 +296,7 @@ namespace Game.Object.Character
         {
             if(genData == null) return;
 
-            status = new StatusFloatDict();
+            stats = new StatusFloatDict();
             
             if (genData.attractionLevel != 0)
             {

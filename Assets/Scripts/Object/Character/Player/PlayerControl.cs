@@ -129,8 +129,23 @@ namespace Game.Object.Character.Player
             {
                 autoPilot = new AIControl(character);
             }            
+            
             MapController.Instance.groundMap.OnClickCPosHandler += OnClickCPos;
             InputManager.Instance.OnClickHandler += OnClickMap;
+        }
+
+        public bool IsAutuPilot => autoPilot != null;
+
+        public void ToggleAutoPilot()
+        {
+            if (autoPilot == null)
+            {
+                autoPilot = new AIControl(Character);
+            }
+            else
+            {
+                autoPilot = null;
+            }
         }
 
         public void SetNext(ITask task)
@@ -204,7 +219,6 @@ namespace Game.Object.Character.Player
 
         public void OnDestroy()
         {
-            ((IController)this).OnDestroy();
             MapController.Instance.groundMap.OnClickCPosHandler -= OnClickCPos;
             InputManager.Instance.OnClickHandler -= OnClickMap;
         }

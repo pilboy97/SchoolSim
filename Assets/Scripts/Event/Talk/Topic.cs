@@ -8,6 +8,7 @@ namespace Game.Event.Talk
     {
         public enum Type
         {
+            None,
             General,
             Romance,
             Subject, 

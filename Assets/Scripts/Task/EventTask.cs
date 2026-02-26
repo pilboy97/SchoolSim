@@ -54,9 +54,12 @@ namespace Game.Task
             GameManager.Instance.ClearValue(ID);
         }
 
-        public float CalcScore()
+        public CharacterStatusDeltaFactory CalcDeltaForScore()
         {
-            return sub.CalcScore(invitedEvent.Delta(sub), null);
+           var (x, y) = invitedEvent.CalcDeltaStats(sub);
+           x += sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(y);
+           
+           return x;
         }
 
         public string ID => id;

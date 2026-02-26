@@ -25,7 +25,7 @@ namespace Game.Event
             }
         }
         
-        public abstract CharacterStatusDeltaFactory Delta(Character c);
+        public abstract (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c);
         public virtual void Update()
         {
             switch (Status)
@@ -79,15 +79,10 @@ namespace Game.Event
         {
         }
 
-        protected CharacterStatusDeltaFactory Delta(Character c, CharacterStatusDeltaFactory delta)
+        protected (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c, CharacterStatusDeltaFactory delta, RelationFloatDict relDelta)
         {
-            var ret = new CharacterStatusDeltaFactory();
-            foreach (var kv in delta.dict)
-            {
-                ret.Add(kv.Key, kv.Value);
-            }
-
-            return ret.Delta(c);
+            var effect = c.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(relDelta);
+            return (c.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(delta + effect), relDelta);
         }
         
 

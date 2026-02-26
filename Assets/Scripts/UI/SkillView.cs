@@ -34,9 +34,9 @@ namespace Game.UI
 
         private void Draw()
         {
-            var value = GameManager.Instance.Player.Data[(CharacterStatus)stype];
+            var value = GameManager.Instance.Player.Data[stype];
             nameText.text = Enum.GetName(typeof(CharacterStatus),stype);
-            valueText.text = $"{value:000} / 100";
+            valueText.text = $"{value:F2} / 100";
             bar.value = value;
         }
     }

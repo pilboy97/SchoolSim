@@ -45,6 +45,25 @@ namespace Game.School
                     
                     ObjectManager.Instance.Add(character);
                 }
+
+                foreach (var ch in school.grp)
+                {
+                    ch.relations ??= new RelationFloatDict();
+                    
+                    foreach (var ch2 in school.grp)
+                    {
+                        ch.relations.TryAdd(new CharacterRelation()
+                        {
+                            ID = ch2.ID,
+                            relType = CharacterRelation.Type.Friend
+                        }, 0);
+                        ch.relations.TryAdd(new CharacterRelation()
+                        {
+                            ID = ch2.ID,
+                            relType = CharacterRelation.Type.Romance
+                        }, 0);
+                    }
+                }
             }
         }
     }

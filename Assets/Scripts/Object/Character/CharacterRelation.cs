@@ -2,7 +2,7 @@ using System;
 
 namespace Game.Object.Character
 {
-
+    [Serializable]
     public struct CharacterRelation
     {
         public enum Type
@@ -11,6 +11,7 @@ namespace Game.Object.Character
             Romance
         }
 
+        public Type relType;
         public string ID;
     }
 }

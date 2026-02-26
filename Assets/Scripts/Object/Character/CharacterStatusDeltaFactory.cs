@@ -55,7 +55,7 @@ namespace Game.Object.Character
         {
             var ret = new CharacterStatusDeltaFactory();
 
-            foreach (var kv in x.dict)
+            foreach (var kv in x?.dict ?? new())
             {
                 ret.dict.TryAdd(kv.Key, 0);
                 ret.dict[kv.Key] += kv.Value * y;
@@ -67,12 +67,12 @@ namespace Game.Object.Character
         {
             var ret = new CharacterStatusDeltaFactory();
 
-            foreach (var kv in x.dict)
+            foreach (var kv in x?.dict ?? new())
             {
                 ret.dict.TryAdd(kv.Key, 0);
                 ret.dict[kv.Key] += kv.Value;
             }
-            foreach (var kv in y.dict)
+            foreach (var kv in y?.dict ?? new())
             {
                 ret.dict.TryAdd(kv.Key, 0);
                 ret.dict[kv.Key] += kv.Value;
@@ -87,13 +87,13 @@ namespace Game.Object.Character
             return ReferenceEquals(this, other) || Equals(dict, other.dict);
         }
         
-        public CharacterStatusDeltaFactory Delta(Character sub)
+        public CharacterStatusDeltaFactory DeltaStats(Character sub)
         {
             var result = new CharacterStatusDeltaFactory();
             
             foreach (var (key, value) in dict)
             {
-                var r = sub.Receive(key, value);
+                var r = sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(key, value);
                 foreach (var (s,v) in r.dict) 
                 {
                     result.Add(s,v);

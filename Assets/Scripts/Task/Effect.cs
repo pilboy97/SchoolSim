@@ -27,7 +27,7 @@ namespace Game.Task
         
         public abstract bool Equals(Effect other);
 
-        public virtual CharacterStatusDeltaFactory Delta(Character sub, IInteractable obj)
+        public virtual CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
         {
             return new CharacterStatusDeltaFactory();
         }
@@ -40,7 +40,7 @@ namespace Game.Task
 
         public override void Do(Character subject, IInteractable other, Event.Event e)
         {
-            Delta(subject, other).Apply(subject, true, e?.members);
+            DeltaStats(subject, other).Apply(subject, true, e?.members);
         }
 
         public override bool Equals(Effect other)
@@ -50,9 +50,9 @@ namespace Game.Task
             return deltas == o.deltas;
         }
 
-        public override CharacterStatusDeltaFactory Delta(Character sub, IInteractable obj)
+        public override CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
         {
-            return deltas.Delta(sub);
+            return deltas.DeltaStats(sub);
         }
     }
 
@@ -76,18 +76,26 @@ namespace Game.Task
             subject.Busy = false;
         }
 
-        public override CharacterStatusDeltaFactory Delta(Character sub, IInteractable obj)
+        public override CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
         {
             if (obj is not Character ch) return new CharacterStatusDeltaFactory();
 
-            if (ch.CurEvent != null) return ch.CurEvent.Delta(sub);
+            CharacterStatusDeltaFactory ret;
+            RelationFloatDict rel;
+            
+            if (ch.CurEvent != null)
+            {
+                (ret, rel) = ch.CurEvent.CalcDeltaStats(sub);
+                return ret + sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(rel);
+            }
 
             var e = TargetEvent;
                 
             e.members.Add(sub);
             e.members.Add(ch);
 
-            return e.Delta(sub);
+            (ret, rel) = e.CalcDeltaStats(sub);
+            return ret + sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(rel);
 
         }
         public override bool Equals(Effect other)

@@ -54,7 +54,7 @@ namespace Game
         public void SetPlayer(Character newPlayer)
         {
             player = newPlayer;
-            player.ControllerType = ControllerType.AutoPilot;
+            player.ControllerType = ControllerType.Player;
             
             OnSetPlayer(player);
         }

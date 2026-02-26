@@ -60,14 +60,15 @@ namespace Game.Task
             GameManager.Instance.ClearValue(ID);
         }
 
-        public float CalcScore()
+        public CharacterStatusDeltaFactory CalcDeltaForScore()
         {
             CharacterStatusDeltaFactory delta = new();
             if (action.effect is AddDeltaEffect addDeltaEffect)
-                delta = addDeltaEffect.Delta(sub, obj);
+                delta = addDeltaEffect.DeltaStats(sub, obj);
             else if (action.effect is InviteSimpleEventEffect inviteEventEffect)
-                delta = inviteEventEffect.Delta(sub, obj);
-            return sub.CalcScore(delta, obj);
+                delta = inviteEventEffect.DeltaStats(sub, obj);
+
+            return delta;
         }
     }
 }

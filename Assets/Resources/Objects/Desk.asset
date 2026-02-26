@@ -14,11 +14,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: Desk
   actions:
-  - actionName: study
+  - actionName: study Literature
     effect:
       rid: 3831317788552855630
     cond:
       rid: 3831317788552855639
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: study Science
+    effect:
+      rid: 5080777858774991083
+    cond:
+      rid: 5080777858774991084
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: study Sociology
+    effect:
+      rid: 5080777858774991085
+    cond:
+      rid: 5080777858774991086
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: study Math
+    effect:
+      rid: 5080777858774991087
+    cond:
+      rid: 5080777858774991302
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: study Sports
+    effect:
+      rid: 5080777858774991088
+    cond:
+      rid: 5080777858774991300
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: study Arts
+    effect:
+      rid: 5080777858774991089
+    cond:
+      rid: 5080777858774991301
     indirect: 0
     busy: 0
     notOnce: 1
@@ -32,10 +77,70 @@ MonoBehaviour:
       data:
         deltas:
           dict:
-            keyData: 3000000025000000
+            keyData: 1b00000025000000
             valueData:
             - 1
             - -5
     - rid: 3831317788552855639
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 5080777858774991083
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 1e00000025000000
+            valueData:
+            - 1
+            - -5
+    - rid: 5080777858774991084
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 5080777858774991085
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 1d00000025000000
+            valueData:
+            - 1
+            - -5
+    - rid: 5080777858774991086
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 5080777858774991087
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 250000001c000000
+            valueData:
+            - -5
+            - 1
+    - rid: 5080777858774991088
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 1f00000025000000
+            valueData:
+            - 1
+            - -5
+    - rid: 5080777858774991089
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          dict:
+            keyData: 2000000025000000
+            valueData:
+            - 1
+            - -5
+    - rid: 5080777858774991300
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 5080777858774991301
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 5080777858774991302
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 

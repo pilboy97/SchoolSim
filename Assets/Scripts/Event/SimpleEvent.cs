@@ -1,11 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Game.Object.Character;
-using Game.School;
-using Game.Time;
-using UnityEngine;
 using Action = Game.Task.Action;
 
 namespace Game.Event
@@ -31,11 +25,11 @@ namespace Game.Event
             busy = data.busy;
         }
 
-        public override CharacterStatusDeltaFactory Delta(Character c)
+        public override (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c)
         {
-            if (c == null) return new CharacterStatusDeltaFactory();
+            if (c == null) return (null, null);
 
-            return Delta(c, data.effect.Delta(c, null));
+            return CalcDeltaStats(c, data.effect.DeltaStats(c, null), null);
         }
 
         protected override void OnStart()
@@ -60,9 +54,13 @@ namespace Game.Event
 
             foreach (var ch in members)
             {
-                var delta = Delta(ch);
+                var delta = CalcDeltaStats(ch);
                 
-                delta.Apply(ch);
+                delta.Item1.Apply(ch);
+                foreach (var (rel, v) in delta.Item2)
+                {
+                    ch.Apply(rel, v);
+                }
             }
         }
 

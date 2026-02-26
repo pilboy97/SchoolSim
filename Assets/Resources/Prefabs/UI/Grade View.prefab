@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0663f01090c4b8393ea800c5f81c320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stype: 0
+  stype: 31
   bar: {fileID: 4541829570842611565}
   nameText: {fileID: 3396123891161815317}
   valueText: {fileID: 3287743152428303862}
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -334,6 +335,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
