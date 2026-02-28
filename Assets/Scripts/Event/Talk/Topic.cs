@@ -8,18 +8,17 @@ namespace Game.Event.Talk
     {
         public enum Type
         {
-            None,
             General,
             Romance,
-            Subject, 
-            Skill,
+            Teach,
             RelationUp,
             RelationDown
         }
 
         public Type type;
-        public Character subject;
-        public CharacterStatus topic;
+        public Character speaker;
+        public CharacterStatsType knowledge;
+        
         public Character target;
 
         public override string ToString()
@@ -27,7 +26,7 @@ namespace Game.Event.Talk
             return type switch
             {
                 Type.General or Type.Romance  => Enum.GetName(typeof(Type), type),
-                Type.Subject or Type.Skill => Enum.GetName(typeof(CharacterStatus), topic),
+                Type.Teach => $"Teach {knowledge}",
                 Type.RelationUp => $"Compliment {target.Name}",
                 Type.RelationDown => $"Put down {target.Name}",
                 _ => throw new ArgumentOutOfRangeException()

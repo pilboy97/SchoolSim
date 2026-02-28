@@ -42,18 +42,6 @@ namespace Game
     }
     
     [Serializable]
-    public class StatusFloatDict : UnitySerializedDictionary<CharacterStatus, float>
-    {
-        
-    }
-    
-    [Serializable]
-    public class StatusRandomDict : UnitySerializedDictionary<CharacterStatus, IDistribution>
-    {
-        
-    }
-
-    [Serializable]
     public class StringFloatDict : UnitySerializedDictionary<string, float>
     {
         

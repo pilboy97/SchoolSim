@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Event;
@@ -10,7 +11,6 @@ using Game.Room;
 using Game.Task;
 using Sirenix.OdinInspector;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using Action = Game.Task.Action;
 
@@ -33,6 +33,8 @@ namespace Game.Object.Character
         [SerializeField] public Action[] actions = Array.Empty<Action>();
         public bool IsVisible => RoomManager.Instance.currentRoomIndex == CPosition.z;
 
+        public AIControl AI { get; private set; }
+        
         [SerializeField] private float curTime = 0;
         [SerializeField] private float coolTime = 0.5f;
 
@@ -118,26 +120,77 @@ namespace Game.Object.Character
         public CharacterData Data => _data;
         public TaskQueue TaskQueue => taskQueue;
 
-        public void Apply(CharacterStatus status, float value)
+        public float Receive(
+            (CharacterStats stats, RelationFloatDict rels) tup,
+            bool perSec = true)
         {
-            _data[status] += value;
+            if (perSec)
+            {
+                var deltaTime = UnityEngine.Time.deltaTime;
+
+                tup.stats *= deltaTime;
+                
+                if (tup.rels != null)
+                {
+                    RelationFloatDict r = new RelationFloatDict();
+
+                    foreach (var (k, v) in tup.rels)
+                    {
+                        r.TryAdd(k, v * deltaTime);
+                    }
+
+                    tup.rels = r;
+                }
+            }
+            
+            return Receive(tup.rels) + Receive(tup.stats);
+        }
+        
+        public float Receive(CharacterStats stats)
+        {
+            _data.Receive(stats);
+
+            return AI.CalcScore(stats, null);
         }
 
-        public void Apply(CharacterRelation status, float value)
+        public float Receive(RelationFloatDict relations, bool withSideEffect = true)
         {
-            _data[status] += value;
+            float sum = 0;
+            if (relations == null) return sum;
+
+            foreach (var (k,v) in relations)
+            {
+                sum += Receive(k, v, withSideEffect);
+            }
+
+            return sum;
+        }
+
+        public float Receive(CharacterRelation rel, float value, bool withSideEffect = true)
+        {
+            float sum = 0;
+            _data.Receive(rel, value);
+
+            if (withSideEffect)
+            {
+                var sideEffect = CalcPersonalizedStatsDeltaOnReceive(rel, value);
+                
+                _data.Receive(sideEffect);
+                sum += AI.CalcScore(sideEffect, null);
+            }
+
+            return sum;
         }
 
         private void Awake()
         {
             _view = GetComponent<ICharacterView>();
-            _distribution = new DistributionUniformDistribution(0.3f, 0.7f);
+            _distribution = new DistributionNormalDistribution(1f, 0.2f);
         }
 
         public void Init()
         {
             _data.Init();
-            _data.owner = this;
             id = _data.ID;
 
             var classroom = _data.classroom;
@@ -152,49 +205,32 @@ namespace Game.Object.Character
                 _ => null
             };
 
+            if (_controllerType == ControllerType.AI) AI = controller as AIControl;
+            else AI = ((PlayerControl)controller).Autopilot;
+
             gameObject.name = _data.charName;
 
-            var initStatus = new CharacterStatusDeltaFactory(new Dictionary<CharacterStatus, float>()
+            var initStatus = new CharacterStats()
             {
-                {
-                    CharacterStatus.Hungry,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-                    CharacterStatus.Fatigue,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-                    CharacterStatus.Toilet,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
+                hungry =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                fatigue =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                toilet =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                hygiene =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                loneliness =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                rLoneliness =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                fun =
+                    new DistributionNormalDistribution(50, 10).Sample,
+                motivation =
+                    new DistributionNormalDistribution(50, 10).Sample,
+            };
 
-                    CharacterStatus.Hygiene,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-
-                    CharacterStatus.Loneliness,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-
-                    CharacterStatus.RLoneliness,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-
-                    CharacterStatus.Fun,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-                {
-                    CharacterStatus.Motivation,
-                    new DistributionNormalDistribution(50, 10).Sample
-                },
-            });
-
-            initStatus.Apply(this, false);
+            Receive(initStatus);
         }
 
         public void Init(CharacterData data)
@@ -224,6 +260,9 @@ namespace Game.Object.Character
 
         public void OnUpdate()
         {
+            _view?.SetVisible(IsVisible);
+            Draw();
+            
             curTime += UnityEngine.Time.deltaTime;
 
             if (curTime < coolTime) return;
@@ -233,22 +272,21 @@ namespace Game.Object.Character
             curTime = 0;
             coolTime = _distribution.Sample;
 
-            _view?.SetVisible(IsVisible);
-
-            var deltas = new CharacterStatusDeltaFactory(new Dictionary<CharacterStatus, float>
+            var deltas = CalcPersonalizedStatsDeltaOnReceive(new CharacterStats()
             {
-                { CharacterStatus.Hungry, -0.1f },
-                { CharacterStatus.Fatigue, -0.1f },
-                { CharacterStatus.Motivation, -0.1f },
-                { CharacterStatus.Toilet, -0.1f },
-                { CharacterStatus.Loneliness, -0.1f },
-                { CharacterStatus.RLoneliness, -0.1f },
-                { CharacterStatus.Fun, -0.1f },
-                { CharacterStatus.Hygiene, -0.1f }
+                hungry = -0.1f,
+                fatigue = -0.1f,
+                toilet = -0.1f,
+                hygiene = -0.1f,
+                loneliness = -0.1f,
+                rLoneliness = -0.1f,
+                fun = -0.1f,
+                motivation = -0.1f
             }) * delta;
 
-            deltas.Apply(this);
+            Receive(deltas);
 
+            _data.stats = _data.stats.Clamp(0, 100);
             foreach (var ch in ObjectManager.Instance.Characters)
             {
                 var friendRel = new CharacterRelation()
@@ -353,95 +391,52 @@ namespace Game.Object.Character
 
             return ret;
         }
-        //
-        // public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(CharacterStatus s, float v)
-        // {
-        //     var ret = new CharacterStatusDeltaFactory();
-        //
-        //     if ((s > CharacterStatus.SubjectBegin && s < CharacterStatus.SubjectEnd) ||
-        //         (s > CharacterStatus.IntBegin && s < CharacterStatus.IntEnd) ||
-        //         (s > CharacterStatus.SkillBegin && s < CharacterStatus.SkillEnd)
-        //         )
-        //     {
-        //         ret.Add(CharacterStatus.Motivation, v);
-        //     }
-        //     
-        //     ret.Add(s, v);  
-        //
-        //     return ret;
-        // }
-        //
-        // public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(CharacterRelation s, float v)
-        // {
-        //     var ret = new CharacterStatusDeltaFactory();
-        //
-        //     var other = ObjectManager.Instance.Find(s.ID) as Character;
-        //     if (other == null) return ret;
-        //
-        //     var attr = PersonalAttractionFrom(other);
-        //     float funModifier = 0;
-        //     float fun = v;
-        //     
-        //     switch (s.relType)
-        //     {
-        //         case CharacterRelation.Type.Friend :
-        //             funModifier = (attr * 2);
-        //             fun *= funModifier;
-        //             var loneliness = v;
-        //
-        //             ret.Add(CharacterStatus.Fun, fun);
-        //             ret.Add(CharacterStatus.Loneliness, loneliness);
-        //             
-        //             break;
-        //         case CharacterRelation.Type.Romance :
-        //             funModifier = Mathf.Max(0, attr * 2 - 1);
-        //             fun = funModifier * v;
-        //             
-        //             var rLoneliness = v;
-        //             
-        //             ret.Add(CharacterStatus.Fun, fun);
-        //             ret.Add(CharacterStatus.RLoneliness, rLoneliness);
-        //
-        //             break;
-        //     }
-        //
-        //     return ret;
-        // }
 
-        // Character 클래스 내부 메서드라고 가정
-        public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(CharacterStatus s, float v)
+        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(CharacterStats s)
         {
-            var ret = new CharacterStatusDeltaFactory();
-            var mbti = Data.mbti; // CharacterData에서 가져옴
-            float mbtiModifier = 1.0f;
+            var mbti = Data.mbti;
 
-            // 1. S(감각) vs N(직관) : 무엇을 배울 때 더 몰입하는가?
-            if (s > CharacterStatus.SkillBegin && s < CharacterStatus.SkillEnd)
+            var sModifier = new CharacterStats()
             {
-                // 실질적 기술(S) 선호
-                if (mbti.CheckComponent(MBTIComponent.S)) mbtiModifier = 1.2f;
-                ret.Add(CharacterStatus.Motivation, v * mbtiModifier);
-            }
-            else if (s > CharacterStatus.SubjectBegin && s < CharacterStatus.SubjectEnd)
+                comedy = 0.2f,
+                conversation = 0.2f,
+                attractive = 0.2f,
+            };
+            var nModifier = new CharacterStats()
             {
-                // 추상적 이론(N) 선호
-                if (mbti.CheckComponent(MBTIComponent.N)) mbtiModifier = 1.2f;
-                ret.Add(CharacterStatus.Motivation, v * mbtiModifier);
-            }
+                literature = 0.2f,
+                math = 0.2f,
+                sociology = 0.2f,
+                science = 0.2f,
+                sports = 0.2f,
+                art = 0.2f,
+            };
+            var tModifier = new CharacterStats()
+            {
+                motivation = 0.2f
+            };
 
+            // 실질적 기술(S) 선호
+            if (mbti.CheckComponent(MBTIComponent.S))
+            {
+                s += s * sModifier;
+            }
+            // 추상적 이론(N) 선호
+            else
+            {
+                s += s * nModifier;
+            }
+            
             // 2. T(사고) : 성취(Motivation)에서 즐거움을 얻음
-            if (mbti.CheckComponent(MBTIComponent.T) && s == CharacterStatus.Motivation)
-            {
-                ret.Add(CharacterStatus.Fun, v * 0.3f); // 무언가 배우는 것 자체가 즐거움
-            }
+            if (mbti.CheckComponent(MBTIComponent.T))
+                s += s * tModifier;
 
-            ret.Add(s, v * mbtiModifier);
-            return ret;
+            return s;
         }
 
-        public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(CharacterRelation s, float v)
+        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(CharacterRelation s, float v)
         {
-            var ret = new CharacterStatusDeltaFactory();
+            var ret = new CharacterStats();
             var other = ObjectManager.Instance.Find(s.ID) as Character;
             if (other == null) return ret;
 
@@ -450,53 +445,53 @@ namespace Game.Object.Character
 
             // 3. E(외향) vs I(내향) : 사회적 활동의 에너지 효율
             // 외향인은 사교로 고독감이 더 빨리 해소됨(1.2x), 내향인은 효율이 낮음(0.8x)
-            float socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? 1.2f : 0.8f;
+            var socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? 1.2f : 0.8f;
 
-            float funModifier = 0;
-            float fun = v;
+            var funModifier = 0f;
+            var fun = v;
 
             switch (s.relType)
             {
                 case CharacterRelation.Type.Friend:
                     funModifier = (attr * 2);
+                    
                     // 4. F(감정) : 관계 형성에 대해 더 큰 정서적 만족(Fun)을 느낌
                     if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= 1.25f;
 
                     fun *= (funModifier * socialEfficiency);
-                    ret.Add(CharacterStatus.Fun, fun);
-                    ret.Add(CharacterStatus.Loneliness, v * socialEfficiency);
+
+                    ret += new CharacterStats()
+                    {
+                        fun = fun,
+                        loneliness = v * socialEfficiency,
+                    };
+                    
                     break;
 
                 case CharacterRelation.Type.Romance:
                     funModifier = Mathf.Max(0, attr * 2 - 1);
                     if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= 1.4f;
 
-                    ret.Add(CharacterStatus.Fun, funModifier * v * socialEfficiency);
-                    ret.Add(CharacterStatus.RLoneliness, v * socialEfficiency);
+                    ret += new CharacterStats()
+                    {
+                        fun = funModifier * v * socialEfficiency,
+                        rLoneliness = v
+                    };
+                    
                     break;
             }
 
             return ret;
         }
 
-        public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(
-            CharacterStatusDeltaFactory delta)
+        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(RelationFloatDict delta)
         {
-            var ret = new CharacterStatusDeltaFactory();
-            foreach (var (s, v) in delta.dict ?? new())
-            {
-                ret.Add(CalcPersonalizedStatsDeltaOnReceiveStatsDelta(s, v));
-            }
-
-            return ret;
-        }
-
-        public CharacterStatusDeltaFactory CalcPersonalizedStatsDeltaOnReceiveStatsDelta(RelationFloatDict delta)
-        {
-            var ret = new CharacterStatusDeltaFactory();
-            foreach (var (s, v) in delta ?? new())
-            {
-                ret.Add(CalcPersonalizedStatsDeltaOnReceiveStatsDelta(s, v));
+            var ret = new CharacterStats();
+            if (delta == null) return ret;
+            
+            foreach (var (s, v) in delta)
+            { 
+                ret += CalcPersonalizedStatsDeltaOnReceive(s, v);
             }
 
             return ret;

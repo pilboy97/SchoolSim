@@ -25,16 +25,21 @@ namespace Game.UI
                     x.transform.SetParent(GameManager.TEMP); 
                 }
             );
+            
+            Instance.gameObject.SetActive(false);
         }
-
+        
         public RequestPanel Get()
         {
+            gameObject.SetActive(true);
             return _requestPanelPool.Get();
         }
 
         public void Release(RequestPanel obj)
         {
             _requestPanelPool.Release(obj);
+            
+            if (root.childCount == 0) gameObject.SetActive(false);
         }
     }
 }

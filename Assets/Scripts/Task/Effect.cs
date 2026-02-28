@@ -27,32 +27,33 @@ namespace Game.Task
         
         public abstract bool Equals(Effect other);
 
-        public virtual CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
+        public virtual (CharacterStats, RelationFloatDict) DeltaStats(Character sub, IInteractable obj)
         {
-            return new CharacterStatusDeltaFactory();
+            return default;
         }
     }
 
     [Serializable]
     public class AddDeltaEffect : Effect
     {
-        [SerializeField] public CharacterStatusDeltaFactory deltas;
+        [SerializeField] public CharacterStats deltas;
+        [SerializeField] public bool perSec = true;
 
         public override void Do(Character subject, IInteractable other, Event.Event e)
         {
-            DeltaStats(subject, other).Apply(subject, true, e?.members);
+            subject.Receive(DeltaStats(subject, other), perSec);
         }
 
         public override bool Equals(Effect other)
         {
             if (other is not AddDeltaEffect o) return false;
 
-            return deltas == o.deltas;
+            return deltas.Equals(o.deltas);
         }
 
-        public override CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
+        public override (CharacterStats, RelationFloatDict) DeltaStats(Character sub, IInteractable obj)
         {
-            return deltas.DeltaStats(sub);
+            return (deltas, null);
         }
     }
 
@@ -76,17 +77,16 @@ namespace Game.Task
             subject.Busy = false;
         }
 
-        public override CharacterStatusDeltaFactory DeltaStats(Character sub, IInteractable obj)
+        public override (CharacterStats, RelationFloatDict) DeltaStats(Character sub, IInteractable obj)
         {
-            if (obj is not Character ch) return new CharacterStatusDeltaFactory();
+            if (obj is not Character ch) return default;
 
-            CharacterStatusDeltaFactory ret;
-            RelationFloatDict rel;
-            
+            CharacterStats ret = default;
+            RelationFloatDict rel = null;
+
             if (ch.CurEvent != null)
             {
-                (ret, rel) = ch.CurEvent.CalcDeltaStats(sub);
-                return ret + sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(rel);
+                return ch.CurEvent.CalcDeltaStats(sub);
             }
 
             var e = TargetEvent;
@@ -95,8 +95,9 @@ namespace Game.Task
             e.members.Add(ch);
 
             (ret, rel) = e.CalcDeltaStats(sub);
-            return ret + sub.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(rel);
+            ret += sub.CalcPersonalizedStatsDeltaOnReceive(rel);
 
+            return (ret, rel);
         }
         public override bool Equals(Effect other)
         {

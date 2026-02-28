@@ -12,121 +12,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cc20be1a65448687deb33ea25e2be6, type: 3}
   m_Name: New Character Data
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
-  ID: L6g06lyBXF
-  position: {x: 8.5, y: 1.5, z: 0}
+  ID: _XgC_yD3_1
+  position: {x: -0.5, y: 2.5, z: 2}
   charName: Minji
-  beauty: {x: 0.16873074, y: 0.029959096, z: 0.9852068}
-  attraction: 2.4443972
-  e: 0.6184204
+  beauty: {x: 0.20872648, y: 0.20061937, z: 0.9571756}
+  attraction: 2.620189
+  e: 0.58102405
   eModifier: 1
   rModifier: 1
   gModifier: 1
   gender: 1
-  mbti: 14
+  mbti: 11
   eventID: 
   stats:
-    keyData: 240000002500000026000000270000002a0000002b0000002c0000003000000023000000290000002f0000000a0000000b0000000c0000000d0000000e0000000f0000001000000011000000120000001300000014000000150000001600000017000000180000001b0000001c0000001d0000001e0000001f00000020000000
-    valueData:
-    - 52.952404
-    - 49.663044
-    - 50.612946
-    - 50.02609
-    - 50.51936
-    - 56.41387
-    - 50.392757
-    - 58.426144
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
+    logic: 0
+    language: 0
+    aesthetics: 0
+    social: 0
+    athletic: 0
+    comedy: 0
+    conversation: 0
+    attractive: 0
+    literature: 0
+    math: 0
+    sociology: 0
+    science: 0
+    sports: 0
+    art: 0
+    hungry: 35.72583
+    fatigue: 49.24503
+    toilet: 48.016113
+    hygiene: 60.625797
+    loneliness: 81.467964
+    rLoneliness: 28.090433
+    fun: 80.02419
+    motivation: 61.4933
   relations:
     keyData:
     - relType: 0
-      ID: sF3h0XvjwF
-    - relType: 0
-      ID: tOcDTD4VU6
-    - relType: 0
-      ID: L6g06lyBXF
+      ID: TA28MBl3Ci
     - relType: 1
-      ID: L6g06lyBXF
+      ID: TA28MBl3Ci
     - relType: 0
-      ID: 6QvUOUA2mU
-    - relType: 0
-      ID: Rv.R8MbnjO
-    - relType: 0
-      ID: MEeCXJLApw
-    - relType: 0
-      ID: iacGk7ld21
+      ID: 2sL0YiV_eD
     - relType: 1
-      ID: iacGk7ld21
+      ID: 2sL0YiV_eD
+    - relType: 0
+      ID: _XgC_yD3_1
     - relType: 1
-      ID: MEeCXJLApw
-    - relType: 0
-      ID: UDqRGA0nhb
-    - relType: 0
-      ID: 1hYpoisqU3
-    - relType: 1
-      ID: 1hYpoisqU3
-    - relType: 1
-      ID: UDqRGA0nhb
-    - relType: 0
-      ID: fsSmpW2Oyw
-    - relType: 0
-      ID: vOIQ2SuBvM
-    - relType: 1
-      ID: vOIQ2SuBvM
-    - relType: 0
-      ID: lA.r.dEayI
-    - relType: 0
-      ID: SyoWRN0sR4
-    - relType: 0
-      ID: .iek_iptwp
-    - relType: 0
-      ID: uyLD2n7Ci1
-    - relType: 0
-      ID: KYLJXeDX_L
+      ID: _XgC_yD3_1
     valueData:
-    - 0
-    - 0
-    - -4.0293617
-    - 7
-    - 0
-    - 0
-    - 6
-    - 2.0709052
-    - 5
-    - 1
-    - 0.70076823
+    - 3
     - 0
     - 3
-    - 2
-    - 9.54194
-    - 1.7455275
-    - 5
     - 0
-    - 0.92852455
-    - 24.307869
     - 0
     - 0
   classroom: {fileID: 11400000, guid: 1c27ec29485044a0da84355101a0da62, type: 2}
@@ -139,13 +78,7 @@ MonoBehaviour:
       type: {class: CharacterData/CharacterGenData, ns: Game.Object.Character, asm: Assembly-CSharp}
       data:
         charName: Minji
-        initStat:
-          rid: 509001979734786402
         initPos: {x: 2147483647, y: 2147483647, z: 0}
         gender: 1
         mbtiCond: 
         attractionLevel: 5
-    - rid: 509001979734786402
-      type: {class: StatusRandomDict, ns: Game, asm: Assembly-CSharp}
-      data:
-        keyData: 

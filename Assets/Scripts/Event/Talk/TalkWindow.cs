@@ -91,9 +91,32 @@ namespace Game.Event.Talk
 
         private void LateUpdate()
         {
-            target = GameManager.Instance.Player.CurEvent as TalkEvent;
-            if (target is { Status: EventStatus.Run }) return;
-            
+            var player = GameManager.Instance.Player;
+            target = player.CurEvent as TalkEvent;
+            if (target is { Status: EventStatus.Run })
+            {
+                var selected = target.selected[player.ID];
+
+                int index = 0;
+                for (index = 0; index < TalkEvent.Topics.Count; index++)
+                {
+                    var topic = TalkEvent.Topics[index];
+                    if (selected.type != topic.type) continue;
+
+                    if (selected.type == Topic.Type.General || selected.type == Topic.Type.Romance) break;
+                    if (selected.type == Topic.Type.Teach && selected.knowledge == topic.knowledge) break;
+                    if (
+                        (selected.type == Topic.Type.RelationUp ||
+                            selected.type == Topic.Type.RelationDown) &&
+                        selected.target == topic.target
+                        ) break;
+                }
+
+                select = index;
+                
+                return;
+            }
+
             Close();
         }
 
@@ -115,7 +138,7 @@ namespace Game.Event.Talk
             select = x;
             
             var topic = TalkEvent.Topics[x];
-            topic.subject = GameManager.Instance.Player;
+            topic.speaker = GameManager.Instance.Player;
             target.selected[GameManager.Instance.Player.ID] = topic;
             
             isChoose = true;

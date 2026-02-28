@@ -16,6 +16,7 @@ namespace Game.Object
     public class ObjectManager : Singleton<ObjectManager>
     {
         [ShowInInspector] private List<IInteractable> _objects = new();
+        private Dictionary<string, IInteractable> _objCache = new();
 
         [SerializeField] private MapObject orig;
         [SerializeField] private MapObject[] mapObjs;
@@ -98,8 +99,6 @@ namespace Game.Object
                     _objects.Add(jp);
                 }
             }
-            
-            foreach(var o in _objects) o?.Init();
 
             occupied = mapObjs.SelectMany(o => o.CPositions).ToArray();
             ActiveObjectsAtZIndex(RoomManager.Instance.currentRoomIndex);
@@ -125,15 +124,17 @@ namespace Game.Object
             Destroy(c.gameObject);
         }
         
+        
         public IInteractable Find(string id)
         {
-            foreach (var obj in _objects)
+            if (_objCache.TryGetValue(id, out var value)) return value;
+
+            foreach (var i in _objects)
             {
-                if (obj == null) continue;
-                if (obj.ID == id) return obj;
+                _objCache.TryAdd(i.ID, i);
             }
 
-            return null;
+            return _objCache[id];
         }
 
         public IInteractable[] GetObjectAt(Vector3Int cpos)

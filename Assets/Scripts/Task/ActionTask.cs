@@ -60,13 +60,19 @@ namespace Game.Task
             GameManager.Instance.ClearValue(ID);
         }
 
-        public CharacterStatusDeltaFactory CalcDeltaForScore()
+        public CharacterStats CalcDeltaForScore()
         {
-            CharacterStatusDeltaFactory delta = new();
+            CharacterStats delta = new();
             if (action.effect is AddDeltaEffect addDeltaEffect)
-                delta = addDeltaEffect.DeltaStats(sub, obj);
+            {
+                var (s, r) = addDeltaEffect.DeltaStats(sub, obj);
+                delta = s + sub.CalcPersonalizedStatsDeltaOnReceive(r);
+            }
             else if (action.effect is InviteSimpleEventEffect inviteEventEffect)
-                delta = inviteEventEffect.DeltaStats(sub, obj);
+            {
+                var(s,r) = inviteEventEffect.DeltaStats(sub, obj);
+                delta = s + sub.CalcPersonalizedStatsDeltaOnReceive(r);
+            }
 
             return delta;
         }

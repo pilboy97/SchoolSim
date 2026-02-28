@@ -8,7 +8,7 @@ namespace Game.UI
 {
     public class GradeView : UIBehaviour
     {
-        [SerializeField] private CharacterStatus stype;
+        [SerializeField] private CharacterStatsType stype;
         [SerializeField] private ProgressBar bar;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI valueText;
@@ -20,7 +20,7 @@ namespace Game.UI
             Init(stype);
         }
 
-        public void Init(CharacterStatus stype)
+        public void Init(CharacterStatsType stype)
         {
             this.stype = stype;
             
@@ -35,7 +35,7 @@ namespace Game.UI
         private void Draw()
         {
             var value = GameManager.Instance.Player.Data[stype];
-            nameText.text = Enum.GetName(typeof(CharacterStatus),stype);
+            nameText.text = Enum.GetName(typeof(CharacterStats),stype);
             valueText.text = $"{value:F2} / 100";
             bar.value = value;
         }

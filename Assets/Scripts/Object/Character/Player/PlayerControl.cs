@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Event;
 using Game.Map;
 using Game.Object.Character.AI;
 using Game.Room;
@@ -22,6 +21,8 @@ namespace Game.Object.Character.Player
         [SerializeReference] private ITask next;
 
         [SerializeReference] private AIControl autoPilot;
+        public AIControl Autopilot => autoPilot;
+        [SerializeField] public bool isAutoPilot;
 
         private void OnClickMap(Vector2 pos)
         {
@@ -123,29 +124,17 @@ namespace Game.Object.Character.Player
         public PlayerControl(Character character, bool isAutoPilot = false)
         {
             this.character = character;
+            this.isAutoPilot = isAutoPilot;
             
-            autoPilot = null;
-            if(isAutoPilot)
-            {
-                autoPilot = new AIControl(character);
-            }            
+            autoPilot = new AIControl(character);
             
             MapController.Instance.groundMap.OnClickCPosHandler += OnClickCPos;
             InputManager.Instance.OnClickHandler += OnClickMap;
         }
 
-        public bool IsAutuPilot => autoPilot != null;
-
         public void ToggleAutoPilot()
         {
-            if (autoPilot == null)
-            {
-                autoPilot = new AIControl(Character);
-            }
-            else
-            {
-                autoPilot = null;
-            }
+            isAutoPilot = !isAutoPilot;
         }
 
         public void SetNext(ITask task)
@@ -155,23 +144,21 @@ namespace Game.Object.Character.Player
         
         public ITask Select()
         {
-            if (next != null)
+            if (next == null) return isAutoPilot ? autoPilot.Select() : null;
+            
+            var ret = next;
+            ret.Busy = true;
+
+            var p = ret;
+            while (p != null)
             {
-                var ret = next;
-                ret.Busy = true;
-
-                var p = ret;
-                while (p != null)
-                {
-                    p.Busy = true;
-                    p = p.Prev;
-                }
-                
-                next = null;
-                return ret;
+                p.Busy = true;
+                p = p.Prev;
             }
+                
+            next = null;
+            return ret;
 
-            return autoPilot?.Select();
         }
 
         public Character Character => character;
@@ -184,6 +171,11 @@ namespace Game.Object.Character.Player
             
             if (!forced)
             {
+                if (isAutoPilot)
+                {
+                    return await autoPilot.TryInviteMeAsync(token, e, who, false);
+                }
+                
                 var front = character.TaskQueue.Front;
                 if (front is ActionTask { action: { effect: InviteSimpleEventEffect frontEffect } } && 
                     e.Equals(frontEffect.eventData)) return true;

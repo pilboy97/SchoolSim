@@ -18,12 +18,8 @@ namespace Game.UI
 
             if (player.controller is not PlayerControl playerController) return;
 
-            txt.text = playerController.IsAutuPilot switch
-            {
-                true => "Auto Pilot is ON",
-                _ => "Auto Pilot is OFF"
-            };
-
+            txt.text = (playerController.isAutoPilot) ? "Auto Pilot is ON" : "Auto Pilot is OFF";
+            
             if (!_wannaChange) return;
             
             playerController?.ToggleAutoPilot();

@@ -2239,6 +2239,7 @@ MonoBehaviour:
   zIndex: 0
   obj: {fileID: 11400000, guid: cdd89473509a5464ab19a0f19e6a82a3, type: 2}
   label: {fileID: 240013038}
+  id: 
 --- !u!4 &563072368
 Transform:
   m_ObjectHideFlags: 0
@@ -3094,6 +3095,7 @@ MonoBehaviour:
   zIndex: 2
   obj: {fileID: 11400000, guid: 4469ce67c9c9b334d82322bc74730195, type: 2}
   label: {fileID: 1256677626}
+  id: 
 --- !u!4 &757976779
 Transform:
   m_ObjectHideFlags: 0
@@ -3757,6 +3759,7 @@ MonoBehaviour:
   zIndex: 1
   obj: {fileID: 11400000, guid: 9e0038a1aba894c4b9b7a7a3fad4a3c4, type: 2}
   label: {fileID: 68819527}
+  id: 
 --- !u!4 &1191364492
 Transform:
   m_ObjectHideFlags: 0
@@ -3973,6 +3976,7 @@ MonoBehaviour:
   zIndex: 2
   obj: {fileID: 11400000, guid: 5f536dbd8026cec47ba1221236045c0c, type: 2}
   label: {fileID: 152876953}
+  id: 
 --- !u!4 &1194225169
 Transform:
   m_ObjectHideFlags: 0
@@ -5127,6 +5131,7 @@ MonoBehaviour:
   zIndex: 2
   obj: {fileID: 11400000, guid: e8644c65f8e33844a9634a75b4c4201d, type: 2}
   label: {fileID: 1096883332}
+  id: 
 --- !u!4 &1963674808
 Transform:
   m_ObjectHideFlags: 0

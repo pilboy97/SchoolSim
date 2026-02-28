@@ -25,11 +25,14 @@ namespace Game.Event
             busy = data.busy;
         }
 
-        public override (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c)
+        public override (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c)
         {
-            if (c == null) return (null, null);
+            if (c == null) return default;
 
-            return CalcDeltaStats(c, data.effect.DeltaStats(c, null), null);
+            var (s, r) = data.effect.DeltaStats(c, null);
+            
+            s += c.CalcPersonalizedStatsDeltaOnReceive(r);
+            return (c.CalcPersonalizedStatsDeltaOnReceive(s), r);
         }
 
         protected override void OnStart()
@@ -54,13 +57,9 @@ namespace Game.Event
 
             foreach (var ch in members)
             {
-                var delta = CalcDeltaStats(ch);
+                var (s, r) = CalcDeltaStats(ch);
                 
-                delta.Item1.Apply(ch);
-                foreach (var (rel, v) in delta.Item2)
-                {
-                    ch.Apply(rel, v);
-                }
+                ch.Receive((s, r));
             }
         }
 

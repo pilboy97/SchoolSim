@@ -86,13 +86,13 @@ namespace Game.Task
             NotEqual
         }
 
-        [SerializeField] public CharacterStatus status;
+        [SerializeField] public CharacterStatsType stats;
         [SerializeField] public Type cmpType;
         [SerializeField] public float value;
         
         public override bool Check(Event.Event e, Action a, Character sub, IInteractable obj)
         {
-            var subStat = sub.Data[status];
+            var subStat = sub.Data[stats];
             
             return cmpType switch
             {

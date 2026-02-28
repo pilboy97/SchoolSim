@@ -68,7 +68,6 @@ MonoBehaviour:
     busy: 0
     notOnce: 1
     allowSelf: 0
-  objID: OBJ_DESK
   references:
     version: 2
     RefIds:
@@ -76,11 +75,42 @@ MonoBehaviour:
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 1b00000025000000
-            valueData:
-            - 1
-            - -5
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 1
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 3831317788552855639
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -88,11 +118,42 @@ MonoBehaviour:
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 1e00000025000000
-            valueData:
-            - 1
-            - -5
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 1
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 5080777858774991084
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -100,11 +161,42 @@ MonoBehaviour:
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 1d00000025000000
-            valueData:
-            - 1
-            - -5
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 0
+          math: 0
+          sociology: 1
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 5080777858774991086
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -112,29 +204,122 @@ MonoBehaviour:
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 250000001c000000
-            valueData:
-            - -5
-            - 1
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 0
+          math: 1
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 5080777858774991088
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 1f00000025000000
-            valueData:
-            - 1
-            - -5
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 1
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 5080777858774991089
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
         deltas:
-          dict:
-            keyData: 2000000025000000
-            valueData:
-            - 1
-            - -5
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          craft: 0
+          speech: 0
+          writing: 0
+          comedy: 0
+          painting: 0
+          music: 0
+          dance: 0
+          swim: 0
+          soccer: 0
+          conversation: 0
+          attractive: 0
+          cook: 0
+          combat: 0
+          run: 0
+          gym: 0
+          coding: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 1
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
     - rid: 5080777858774991300
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 

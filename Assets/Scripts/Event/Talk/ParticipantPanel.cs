@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Object.Character;
 using TMPro;
 using UnityEngine;
@@ -20,8 +21,6 @@ namespace Game.Event.Talk
         {
             this.talkEvent = talkEvent;
             this.character = character;
-
-            nameText.text = character.Name;
         }
 
         private void LateUpdate()
@@ -29,6 +28,7 @@ namespace Game.Event.Talk
             if (talkEvent == null) return; 
             talkEvent.selected.TryAdd(character.ID, TalkEvent.Topics[0]);
             
+            nameText.text = $"{character.Name} : {talkEvent.shareOfMember.GetValueOrDefault(character.ID) * 100} %";
             topicText.text = talkEvent.selected[character.ID].ToString();
         }
     }

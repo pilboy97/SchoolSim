@@ -24,15 +24,22 @@ namespace Game.School
         [SerializeReference] public List<RoomData> maps = new();
 
         public List<CharacterData> grp = new();
-        
-        private CharacterStatus RandomSubject()
-        {
-            var begin = (int)CharacterStatus.SubjectBegin;
-            var end = (int)CharacterStatus.SubjectEnd;
 
-            return (CharacterStatus)UnityEngine.Random.Range(begin + 1, end - 1);
+        private CharacterStatsType RandomSubject()
+        {
+            var subjects = new CharacterStatsType[]
+            {
+                CharacterStatsType.Literature,
+                CharacterStatsType.Math,
+                CharacterStatsType.Sociology,
+                CharacterStatsType.Science,
+                CharacterStatsType.Sports,
+                CharacterStatsType.Art,
+            };
+
+            return Game.Random.Choose(subjects);
         }
-        
+
         [Serializable]
         public class StartClassEffect : Effect
         {
@@ -95,18 +102,20 @@ namespace Game.School
         
         public void StartClass(Event.Event e)
         {
-            foreach (var character in grp)
+            foreach (var chData in grp)
             {
-                character.owner.TryInviteMeAsync(GameManager.Instance.Global.Token, e, character.owner, true).GetAwaiter().GetResult();
+                var character = ObjectManager.Instance.Find(chData.ID) as Character;
+                character?.TryInviteMeAsync(GameManager.Instance.Global.Token, e, character, true).GetAwaiter().GetResult();
             }
 
             foreach (var cl in classes)
             {
                 var cells = NavManager.Instance.WalkableCells.Where(x => x.z == cl.map.zIndex).ToList();
 
-                foreach (var ch in cl.grp)
+                foreach (var chData in cl.grp)
                 {
-                    ch.owner.CPosition = Random.Choose(cells);
+                    var character = ObjectManager.Instance.Find(chData.ID) as Character;
+                    character.CPosition = Random.Choose(cells);
                 }
             }
         }
@@ -131,12 +140,14 @@ namespace Game.School
                     var end = begin + Calendar.ToTick(1, 0, 0);
 
                     session.name = $"{Enum.GetName(typeof(DayFlag), (DayFlag)(1<<i))} {j} class";
+                    var del = new CharacterStats
+                    {
+                        [RandomSubject()] = 1
+                    };
+
                     session.effect = new AddDeltaEffect()
                     {
-                        deltas = new CharacterStatusDeltaFactory(new Dictionary<CharacterStatus, float>()
-                        {
-                            { (CharacterStatus)RandomSubject(), 1f }
-                        })
+                        deltas = del
                     };
 
                     session.eventName = $"{j}th class";

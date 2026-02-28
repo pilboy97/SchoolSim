@@ -1,21 +1,20 @@
 using System;
-using System.Collections.Generic;
-// using System.Linq;
 using Game.Object;
-using Game.Room;
 using TMPro;
 using UnityEngine;
-using ContextMenu = Game.UI.ContextMenu;
 
 namespace Game.Map
 {
     [RequireComponent(typeof(Grid))]
     [RequireComponent(typeof(Map))]
-    public class MapObject : MonoBehaviour, IInteractable
+    public class MapObject : MonoBehaviour, IInteractable, IHasID
     {
         [SerializeField] public int zIndex;
         [SerializeField] public ObjectData obj;
         [SerializeField] private TextMeshPro label;
+        [SerializeField] private string id;
+
+        public string ID => id;
         
         private Vector3 _center;
         private Vector3Int[] _cPositions;
@@ -53,8 +52,6 @@ namespace Game.Map
             zIndex = idx;
         }
 
-        public string ID => obj?.ID ?? "";
-
         private void Start()
         {
             Init();
@@ -62,6 +59,8 @@ namespace Game.Map
 
         public void Init()
         {
+            id = IHasID.GenerateID();
+            
             _grid = GetComponent<Grid>();
             _map = GetComponent<Map>();
 

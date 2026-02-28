@@ -126,13 +126,12 @@ namespace Game.Object.Character
             }
         }
 
-        public static async UniTask AddStatusAsync(this Character character, CancellationToken token, CharacterStatusDeltaFactory delta)
+        public static async UniTask AddStatusAsync(this Character character, CancellationToken token, CharacterStats delta)
         {
             await UniTask.NextFrame(token);
             if (token.IsCancellationRequested) return;
-            if (delta == null) return;
             
-            delta.Apply(character);
+            character.Receive(delta);
         }
 
         public static async UniTask WalkAsync(this Character character,CancellationToken token, Vector2[] dest)

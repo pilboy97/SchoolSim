@@ -21,7 +21,7 @@ namespace Game.UI
         [SerializeField] private SkillView skillViewPrefab;
 
         [SerializeField] private Transform content;
-
+        
         public void ToggleShow()
         {
             var e = gameObject.activeSelf;
@@ -80,10 +80,10 @@ namespace Game.UI
 
         private void DrawSkill()
         {
-            for (var it = CharacterStatus.SkillBegin + 1; it < CharacterStatus.SkillEnd; it++)
+            for(var skill = CharacterStatsType.SkillBegin + 1;skill < CharacterStatsType.SkillEnd;skill++)
             {
                 var view = Instantiate(skillViewPrefab, content);
-                view.Init(it);
+                view.Init(skill);
             }
         }
 
@@ -101,10 +101,10 @@ namespace Game.UI
 
         private void DrawGrade()
         {
-            for (var it = CharacterStatus.SubjectBegin + 1; it < CharacterStatus.SubjectEnd; it++)
+            for(var subject = CharacterStatsType.SubjectBegin + 1;subject < CharacterStatsType.SubjectEnd;subject++)
             {
                 var view = Instantiate(skillViewPrefab, content);
-                view.Init(it);
+                view.Init(subject);
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Game.UI
 {
     public class SkillView : UIBehaviour
     {
-        [SerializeField] private CharacterStatus stype;
+        [SerializeField] private CharacterStatsType statsType;
         [SerializeField] private ProgressBar bar;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI valueText;
@@ -17,7 +17,7 @@ namespace Game.UI
         {
             base.Awake();
             
-            Init(stype);
+            Init(statsType);
         }
 
         private void LateUpdate()
@@ -25,17 +25,17 @@ namespace Game.UI
             Draw();
         }
 
-        public void Init(CharacterStatus stype)
+        public void Init(CharacterStatsType statsType)
         {
-            this.stype = stype;
+            this.statsType = statsType;
             
             Draw();
         }
 
         private void Draw()
         {
-            var value = GameManager.Instance.Player.Data[stype];
-            nameText.text = Enum.GetName(typeof(CharacterStatus),stype);
+            var value = GameManager.Instance.Player.Data[statsType];
+            nameText.text = Enum.GetName(typeof(CharacterStatsType),statsType);
             valueText.text = $"{value:F2} / 100";
             bar.value = value;
         }

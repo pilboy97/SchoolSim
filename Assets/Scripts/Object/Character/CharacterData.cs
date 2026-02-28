@@ -50,7 +50,7 @@ namespace Game.Object.Character
         public static MBTIComponent[] ToComponents(this MBTI mbti)
         {
             var ret = new MBTIComponent[4];
-            
+
             if (((int)mbti & 0b1000) != 0) ret[0] = MBTIComponent.I;
             else ret[0] = MBTIComponent.E;
             if (((int)mbti & 0b0100) != 0) ret[1] = MBTIComponent.N;
@@ -72,18 +72,18 @@ namespace Game.Object.Character
             {
                 switch (comp)
                 {
-                   case MBTIComponent.I:
-                       ret |= 0b1000;
-                       break;
-                   case MBTIComponent.N:
-                       ret |= 0b0100;
-                       break;
-                   case MBTIComponent.F:
-                       ret |= 0b0010;
-                       break;
-                   case MBTIComponent.P:
-                       ret |= 0b0001;
-                       break;
+                    case MBTIComponent.I:
+                        ret |= 0b1000;
+                        break;
+                    case MBTIComponent.N:
+                        ret |= 0b0100;
+                        break;
+                    case MBTIComponent.F:
+                        ret |= 0b0010;
+                        break;
+                    case MBTIComponent.P:
+                        ret |= 0b0001;
+                        break;
                 }
             }
 
@@ -139,7 +139,7 @@ namespace Game.Object.Character
 
             return (MBTI)ret;
         }
-        
+
         public static bool CheckComponent(this MBTI mbti, MBTIComponent comp)
         {
             int val = (int)mbti;
@@ -162,11 +162,10 @@ namespace Game.Object.Character
             return Enum.GetName(typeof(MBTI), mbti);
         }
     }
-    
+
     [CreateAssetMenu(menuName = "Object/Character")]
     public class CharacterData : ScriptableObject
     {
-        public Character owner;
         [SerializeField] public string ID;
         [SerializeField] public Vector3 position;
         [SerializeField] public string charName;
@@ -174,7 +173,7 @@ namespace Game.Object.Character
         [SerializeField] public Vector3 beauty;
         [SerializeField] public float attraction;
         [SerializeField] public float e;
-            
+
         [SerializeField] public float eModifier = 1f;
         [SerializeField] public float rModifier = 1f;
         [SerializeField] public float gModifier = 1f;
@@ -182,16 +181,15 @@ namespace Game.Object.Character
         [SerializeField] public Gender gender;
 
         [SerializeField] public MBTI mbti;
-        
+
         [SerializeField] public string eventID;
-        [SerializeField] private StatusFloatDict stats = new();
+        [SerializeField] public CharacterStats stats = new();
         [SerializeField] public RelationFloatDict relations = new();
-        
+
         [SerializeField] public Class classroom;
-        
-        public CharacterData( Character owner, string id = null)
+
+        public CharacterData(string id = null)
         {
-            this.owner = owner;
             Init();
 
             if (id != null)
@@ -213,10 +211,10 @@ namespace Game.Object.Character
             gender = Random.ChooseEnum<Gender>();
             mbti = MBTIHelper.RandomMBTI();
             charName = NameGenerator.RandomName(gender);
-            
+
             position = MapController.Instance.CellToWorld(NavManager.Instance.RandomPos);
             attraction = DistributionNormalDistribution.GetTruncatedNormal(-2f, 2f);
-            
+
             e = new DistributionNormalDistribution(0.5f, 0.1f).Sample;
 
             eModifier = 1;
@@ -226,78 +224,65 @@ namespace Game.Object.Character
             eventID = "";
 
             relations = new RelationFloatDict();
-            
+
             if (genData != null)
             {
                 GenerateCharacter();
             }
         }
 
-        public float this[CharacterStatus key]
+        public void Receive(CharacterStats x)
         {
-            get
-            {
-                if (stats.TryGetValue(key, out var value))
-                {
-                    return value;
-                }
-
-                stats.TryAdd(key, 0);
-                return stats[key];
-            }
-            set
-            {
-                var v = Mathf.Clamp(value, 0, 100);
-                stats [key] = v;
-            }
+            stats += x;
         }
+
+        public void Receive(CharacterRelation rel, float v)
+        {
+            v = Mathf.Clamp(v, -100, 100);
+            relations[rel] = v;
+        }
+
         public float this[CharacterRelation key]
         {
-            get
-            {
-                if (relations.TryGetValue(key, out var value))
-                {
-                    return value;
-                }
+            get => relations.GetValueOrDefault(key, 0);
+            set => Receive(key, value);
+        }
 
-                return 0;
-            }
-            set
-            {
-                var v = Mathf.Clamp(value, -100, 100);
-                relations [key] = v;
-            }
+        public float this[CharacterStatsType statsType]
+        {
+            get => stats[statsType];
+            set => stats[statsType] = value;
         }
 
         public float GetVar(string name)
         {
             return GameManager.Instance.GetVar(ID, name);
         }
+
         public void SetVar(string name, float value)
         {
             GameManager.Instance.SetVar(ID, name, value);
         }
-        
+
         [Serializable]
-        private class CharacterGenData 
+        private class CharacterGenData
         {
             public string charName;
-            [SerializeReference] public StatusRandomDict initStat = new();
             [SerializeField] public Vector3Int initPos = new Vector3Int(int.MaxValue, int.MaxValue, 0);
             [SerializeField] public Gender gender;
             [SerializeField] public MBTIComponent[] mbtiCond;
             [SerializeField] public int attractionLevel;
         }
-        
-        [Header("Generate Character")]
-        [SerializeReference] private CharacterGenData genData = null;
+
+        [Header("Generate Character")] [SerializeReference]
+        private CharacterGenData genData = null;
 
         public void GenerateCharacter()
         {
-            if(genData == null) return;
+            if (genData == null) return;
 
-            stats = new StatusFloatDict();
-            
+            stats = default;
+
             if (genData.attractionLevel != 0)
             {
                 var alevel = genData.attractionLevel - 3;
@@ -313,30 +298,29 @@ namespace Game.Object.Character
                     pmin = float.NegativeInfinity;
                     pmax = alevel + 1;
                 }
-                
-                var attr = DistributionNormalDistribution.GetTruncatedNormal(pmin,pmax);
+
+                var attr = DistributionNormalDistribution.GetTruncatedNormal(pmin, pmax);
 
                 attraction = attr;
             }
-            
+
             if (genData.initPos.x != int.MaxValue)
                 position = MapController.Instance.CellToWorld(genData.initPos);
-            
+
             gender = genData.gender;
 
             mbti = MBTIHelper.GenerateMBTI(genData.mbtiCond);
-            
+
             charName = genData.charName;
             eventID = "";
-            foreach (var kv in genData.initStat)
-                this[kv.Key] = kv.Value.Sample;
         }
+
         [Button("generate")]
         private void GenerateCharacterOnEditor()
         {
             GameManager.Instance.InitOnEditorMode(false);
             Init();
-            
+
             GenerateCharacter();
         }
     }

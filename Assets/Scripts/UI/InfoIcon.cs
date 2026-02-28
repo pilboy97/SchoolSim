@@ -20,7 +20,7 @@ namespace Game.UI
 
         private void OnUpdate()
         {
-            if (GameManager.Instance.Player.CurEvent is not TalkEvent t)
+            if (GameManager.Instance.Player?.CurEvent is not TalkEvent t)
             {
                 gameObject.SetActive(false);
                 return;

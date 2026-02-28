@@ -21,7 +21,7 @@ namespace Game
         private HashSet<(Vector3Int, Vector3Int)> _jumpPoints = new();
         private HashSet<Vector3Int> _jumpPointsPos = new();
 
-        private Dictionary<int, Vector3Int[]> _jumpPointsCache = new();
+        private readonly Dictionary<int, Vector3Int[]> _jumpPointsCache = new();
         
         private Dictionary<(Vector3Int, Vector3Int), int> _distJP = new();
         private Dictionary<(Vector3Int, Vector3Int), Vector3Int> _cacheJP = new();
@@ -182,6 +182,11 @@ namespace Game
         public (Vector3Int[], int) FindPath(Vector3Int st, Vector3Int ed)
         {
             if (st == ed) return (Array.Empty<Vector3Int>(), 0);
+
+            if (_pathCache.TryGetValue((st, ed), out var mem))
+            {
+                return mem;
+            }
             
             int sId = st.z;
             int eId = ed.z;
@@ -246,6 +251,8 @@ namespace Game
                     ret[cnt++] = dot;
                 }
             }
+
+            _pathCache[(st, ed)] = (ret, dist);
             
             return (ret, dist);
         }

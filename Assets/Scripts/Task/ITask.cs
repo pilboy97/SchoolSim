@@ -11,7 +11,7 @@ namespace Game.Task
         string Desc { get; }
         ITask Prev { get; set; }
         UniTask DoAsync(CancellationToken token);
-        CharacterStatusDeltaFactory CalcDeltaForScore();
+        CharacterStats CalcDeltaForScore();
 
         float GetVar(string name) => GameManager.Instance.GetVar($"{ID}|{name}");
         void SetVar(string name, float val) => GameManager.Instance.SetVar($"{ID}|{name}", val);

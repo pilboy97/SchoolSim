@@ -25,7 +25,6 @@ namespace Game.Event
             }
         }
         
-        public abstract (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c);
         public virtual void Update()
         {
             switch (Status)
@@ -79,11 +78,7 @@ namespace Game.Event
         {
         }
 
-        protected (CharacterStatusDeltaFactory, RelationFloatDict) CalcDeltaStats(Character c, CharacterStatusDeltaFactory delta, RelationFloatDict relDelta)
-        {
-            var effect = c.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(relDelta);
-            return (c.CalcPersonalizedStatsDeltaOnReceiveStatsDelta(delta + effect), relDelta);
-        }
+        public abstract (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c);
         
 
         protected abstract bool CheckRun();
