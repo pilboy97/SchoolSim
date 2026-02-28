@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Map;
 using Game.School;
 using Sirenix.OdinInspector;
@@ -112,7 +113,7 @@ namespace Game.Object.Character
                     case MBTIComponent.S or MBTIComponent.N:
                         fix[1] = true;
 
-                        ret |= (comp == MBTIComponent.N) ? 0b1000 : 0;
+                        ret |= (comp == MBTIComponent.N) ? 0b0100 : 0;
                         break;
                     case MBTIComponent.T or MBTIComponent.F:
                         fix[2] = true;
@@ -166,27 +167,38 @@ namespace Game.Object.Character
     [CreateAssetMenu(menuName = "Object/Character")]
     public class CharacterData : ScriptableObject
     {
+        [Header("basic information")]
         [SerializeField] public string ID;
         [SerializeField] public Vector3 position;
         [SerializeField] public string charName;
-
+        [SerializeField] public Gender gender;
+        [SerializeField] public MBTI mbti;
+        
+        [Header("attraction")]
         [SerializeField] public Vector3 beauty;
         [SerializeField] public float attraction;
         [SerializeField] public float e;
 
+        [Header("ai score")]
         [SerializeField] public float eModifier = 1f;
         [SerializeField] public float rModifier = 1f;
         [SerializeField] public float gModifier = 1f;
 
-        [SerializeField] public Gender gender;
-
-        [SerializeField] public MBTI mbti;
-
-        [SerializeField] public string eventID;
+        [Header("status")]
         [SerializeField] public CharacterStats stats = new();
         [SerializeField] public RelationFloatDict relations = new();
+        [SerializeField] public List<CharacterData> friends = new();
+        [SerializeField] public List<CharacterData> rivals = new();
 
+        [Header("Generate Character Data")] 
+        [SerializeReference]
+        private CharacterGenData genData = null;
+            
+        [Header("etc")]
         [SerializeField] public Class classroom;
+        [SerializeField] public string eventID;
+        [SerializeField] private DistributionNormalDistribution friendDistribution = new DistributionNormalDistribution(50, 10);
+        [SerializeField] private DistributionNormalDistribution rivalDistribution = new DistributionNormalDistribution(-50,10);
 
         public CharacterData(string id = null)
         {
@@ -198,7 +210,7 @@ namespace Game.Object.Character
 
         public void Init()
         {
-            ID = IHasID.GenerateID();
+            ID ??= IHasID.GenerateID();
             stats = new();
             relations = new();
             beauty = new Vector3(
@@ -224,58 +236,14 @@ namespace Game.Object.Character
             eventID = "";
 
             relations = new RelationFloatDict();
-
+            rivals = new List<CharacterData>();
+            friends = new List<CharacterData>();
+            
             if (genData != null)
             {
                 GenerateCharacter();
             }
         }
-
-        public void Receive(CharacterStats x)
-        {
-            stats += x;
-        }
-
-        public void Receive(CharacterRelation rel, float v)
-        {
-            v = Mathf.Clamp(v, -100, 100);
-            relations[rel] = v;
-        }
-
-        public float this[CharacterRelation key]
-        {
-            get => relations.GetValueOrDefault(key, 0);
-            set => Receive(key, value);
-        }
-
-        public float this[CharacterStatsType statsType]
-        {
-            get => stats[statsType];
-            set => stats[statsType] = value;
-        }
-
-        public float GetVar(string name)
-        {
-            return GameManager.Instance.GetVar(ID, name);
-        }
-
-        public void SetVar(string name, float value)
-        {
-            GameManager.Instance.SetVar(ID, name, value);
-        }
-
-        [Serializable]
-        private class CharacterGenData
-        {
-            public string charName;
-            [SerializeField] public Vector3Int initPos = new Vector3Int(int.MaxValue, int.MaxValue, 0);
-            [SerializeField] public Gender gender;
-            [SerializeField] public MBTIComponent[] mbtiCond;
-            [SerializeField] public int attractionLevel;
-        }
-
-        [Header("Generate Character")] [SerializeReference]
-        private CharacterGenData genData = null;
 
         public void GenerateCharacter()
         {
@@ -311,8 +279,70 @@ namespace Game.Object.Character
 
             mbti = MBTIHelper.GenerateMBTI(genData.mbtiCond);
 
+            friends = genData.friends.ToList();
+            rivals = genData.rivals.ToList();
+
+            foreach (var friend in friends)
+            {
+                relations.TryAdd(new CharacterRelation()
+                {
+                    ID = friend.ID,
+                    relType = CharacterRelation.Type.Friend
+                }, friendDistribution.Sample);
+            }
+            foreach (var rival in rivals)
+            {
+                relations.TryAdd(new CharacterRelation()
+                {
+                    ID = rival.ID,
+                    relType = CharacterRelation.Type.Friend
+                }, rivalDistribution.Sample);
+            }
+            
             charName = genData.charName;
             eventID = "";
+        }
+
+        public void Receive(CharacterStats x)
+        {
+            stats += x;
+        }
+        
+        
+        public void Set(CharacterRelation rel, float v)
+        {
+            relations[rel] = v;
+            relations[rel] = Mathf.Clamp(relations[rel], -100, 100);
+        }
+
+        public void Receive(CharacterRelation rel, float v)
+        {
+            if (v > 8) 
+                UnityEngine.Debug.Log($"TOO BIG {v}");
+            
+            this[rel] += v;
+        }
+
+        public float this[CharacterRelation key]
+        {
+            get => relations.GetValueOrDefault(key, 0);
+            set => Set(key, value);
+        }
+
+        public float this[CharacterStatsType statsType]
+        {
+            get => stats[statsType];
+            set => stats[statsType] = value;
+        }
+
+        public float GetVar(string name)
+        {
+            return GameManager.Instance.GetVar(ID, name);
+        }
+
+        public void SetVar(string name, float value)
+        {
+            GameManager.Instance.SetVar(ID, name, value);
         }
 
         [Button("generate")]

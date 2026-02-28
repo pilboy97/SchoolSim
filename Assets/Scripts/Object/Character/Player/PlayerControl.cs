@@ -180,7 +180,7 @@ namespace Game.Object.Character.Player
                 if (front is ActionTask { action: { effect: InviteSimpleEventEffect frontEffect } } && 
                     e.Equals(frontEffect.eventData)) return true;
                 
-                string str = $"{who.Name} asked {character.Name} to join {e.eventName}";
+                string str = $"{who.charName} asked {character.charName} to join {e.eventName}";
                 
                 var timescale = UnityEngine.Time.timeScale;
                 TimeManager.Instance.SetTimeScale0_1();

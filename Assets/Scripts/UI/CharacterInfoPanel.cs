@@ -3,26 +3,38 @@ using Game.Object.Character;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class CharacterInfoPanel : UIBehaviour
+    public class CharacterInfoPanel : Singleton<CharacterInfoPanel>
     {
-        [SerializeField] private Object.Character.Character target;
+        [SerializeField] private Character _target;
         [SerializeField] private CharacterMoreInfoPanel moreInfo;
-
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI classText;
         [SerializeField] private TextMeshProUGUI clubText;
         [SerializeField] private TextMeshProUGUI MBTIText;
+        [SerializeField] private Button returnToPlayerBtn;
 
-        protected override void Awake()
+        public Action OnChangeTarget = () => { };
+
+        public Character Target
         {
-            base.Awake();
+            get => _target;
+            set
+            {
+                _target = value;
+                
+                OnChangeTarget.Invoke();
+            }
+        }
 
+        protected void Awake()
+        {
             GameManager.Instance.OnSetPlayer += (c) => {
                 gameObject.SetActive(c != null);
-                if (c != null) target = c;
+                if (c != null) _target = c;
                 
                 Init(c);
             };
@@ -32,9 +44,9 @@ namespace Game.UI
 
         public void Init(Character who)
         {
-            target = who;
+            _target = who;
             
-            if (target == null)
+            if (Target == null)
             {
                 gameObject.SetActive(false);
                 return;
@@ -42,13 +54,27 @@ namespace Game.UI
             
             gameObject.SetActive(true);
             
-            nameText.text = target.Name;
-            MBTIText.text = target.Data.mbti.ToString();
+            nameText.text = Target.charName;
+            MBTIText.text = Target.Data.mbti.ToString();
+        }
+        
+        
+        private void LateUpdate()
+        {
+            nameText.text = Target.charName;
+            MBTIText.text = Target.Data.mbti.ToString();
+            
+            returnToPlayerBtn.gameObject.SetActive(Target.ID != GameManager.Instance.Player.ID);
         }
 
         private void OnClick()
         {
             moreInfo.ToggleShow();
+        }
+
+        public void ReturnToPlayer()
+        {
+            Target = GameManager.Instance.Player;
         }
     }
 }

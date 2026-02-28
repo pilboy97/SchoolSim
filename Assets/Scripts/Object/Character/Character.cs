@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Event;
@@ -41,7 +40,11 @@ namespace Game.Object.Character
         public bool Busy
         {
             get => busy;
-            set => busy = value;
+            set
+            {
+                busy = value;
+                curTime = (busy) ? 0 : coolTime;
+            }
         }
 
         public Action[] Actions => actions;
@@ -68,8 +71,8 @@ namespace Game.Object.Character
             set => _data.position = value;
         }
 
-        public string Name => _data.charName;
-        public string Desc => $"{Name}:{ID}";
+        public string charName => _data.charName;
+        public string Desc => $"{charName}:{ID}";
 
         public Vector3[] Positions => new[] { Position };
         public Vector3 CenterPosition => Position;
@@ -122,7 +125,7 @@ namespace Game.Object.Character
 
         public float Receive(
             (CharacterStats stats, RelationFloatDict rels) tup,
-            bool perSec = true)
+            bool perSec = true, bool withSideEffect = true)
         {
             if (perSec)
             {
@@ -143,11 +146,16 @@ namespace Game.Object.Character
                 }
             }
             
-            return Receive(tup.rels) + Receive(tup.stats);
+            return Receive(tup.rels, withSideEffect) + Receive(tup.stats, withSideEffect);
         }
         
-        public float Receive(CharacterStats stats)
+        public float Receive(CharacterStats stats, bool withSideEffect = true)
         {
+            if (withSideEffect)
+            {
+                stats = CalcPersonalizedStatsDeltaOnReceive(stats);
+            }
+            
             _data.Receive(stats);
 
             return AI.CalcScore(stats, null);
@@ -166,11 +174,61 @@ namespace Game.Object.Character
             return sum;
         }
 
+        public bool IsRival(Character x)
+        {
+            foreach (var rival in _data.rivals)
+            {
+                if (x.id == rival.ID) return true;
+            }
+
+            return false;
+        }
+        public bool IsRival(string id)
+        {
+            foreach (var rival in _data.rivals)
+            {
+                if (id == rival.ID) return true;
+            }
+
+            return false;
+        }
+        public bool IsFriend(Character x)
+        {
+            foreach (var friend in _data.friends)
+            {
+                if (x.id == friend.ID) return true;
+            }
+
+            return false;
+        }
+        public bool IsFriend(string id)
+        {
+            foreach (var friend in _data.friends)
+            {
+                if (id == friend.ID) return true;
+            }
+
+            return false;
+        }
+        
         public float Receive(CharacterRelation rel, float value, bool withSideEffect = true)
         {
             float sum = 0;
-            _data.Receive(rel, value);
 
+            if (IsRival(rel.ID))
+            {
+                if (rel.relType == CharacterRelation.Type.Friend && value > 0)
+                    value *= 0.1f;
+                else if (rel.relType == CharacterRelation.Type.Romance && value > 0)
+                    value = 0;
+            }
+            else if (IsFriend(rel.ID))
+            {
+                if (rel.relType == CharacterRelation.Type.Friend && value < 0) value *= 0.1f;
+            }
+            
+            _data.Receive(rel, value);
+            
             if (withSideEffect)
             {
                 var sideEffect = CalcPersonalizedStatsDeltaOnReceive(rel, value);
@@ -185,7 +243,7 @@ namespace Game.Object.Character
         private void Awake()
         {
             _view = GetComponent<ICharacterView>();
-            _distribution = new DistributionNormalDistribution(1f, 0.2f);
+            _distribution = new DistributionNormalDistribution(0.5f, 0.1f);
         }
 
         public void Init()
@@ -255,23 +313,14 @@ namespace Game.Object.Character
 
         private void LateUpdate()
         {
-            _view.SetPosition(_data.position);
+            _view?.SetVisible(IsVisible);
+            Draw();
         }
 
         public void OnUpdate()
         {
-            _view?.SetVisible(IsVisible);
-            Draw();
+            float delta = UnityEngine.Time.deltaTime;
             
-            curTime += UnityEngine.Time.deltaTime;
-
-            if (curTime < coolTime) return;
-
-            var delta = curTime;
-
-            curTime = 0;
-            coolTime = _distribution.Sample;
-
             var deltas = CalcPersonalizedStatsDeltaOnReceive(new CharacterStats()
             {
                 hungry = -0.1f,
@@ -283,9 +332,19 @@ namespace Game.Object.Character
                 fun = -0.1f,
                 motivation = -0.1f
             }) * delta;
-
+            
             Receive(deltas);
+            UpdateRelations();
+            
+            curTime += delta;
 
+            if (curTime < coolTime) return;
+
+            delta = curTime;
+
+            curTime = 0;
+            coolTime = _distribution.Sample;
+            
             _data.stats = _data.stats.Clamp(0, 100);
             foreach (var ch in ObjectManager.Instance.Characters)
             {
@@ -296,11 +355,13 @@ namespace Game.Object.Character
                 };
                 var romanceRel = new CharacterRelation()
                 {
-                    relType = CharacterRelation.Type.Friend,
+                    relType = CharacterRelation.Type.Romance,
                     ID = ch.id
                 };
-                var friendshipVal = _data[friendRel];
 
+                _data[friendRel] = Mathf.Clamp(_data[friendRel], -100, 100);
+                var friendshipVal = _data[friendRel];
+                
                 if (friendshipVal <= 0)
                     _data[romanceRel] = 0;
                 else
@@ -323,7 +384,7 @@ namespace Game.Object.Character
                     null,
                     new Action()
                     {
-                        actionName = $"Move closer To ${actionTask.Obj.Name}",
+                        actionName = $"Move closer To ${actionTask.Obj.charName}",
                         indirect = false,
                         busy = true,
                         effect = new TractTargetEffect
@@ -363,6 +424,8 @@ namespace Game.Object.Character
 
             taskQueue.Clear();
             taskQueue.PushFront(e, who);
+
+            curTime = 0;
 
             return true;
         }
@@ -447,6 +510,11 @@ namespace Game.Object.Character
             // 외향인은 사교로 고독감이 더 빨리 해소됨(1.2x), 내향인은 효율이 낮음(0.8x)
             var socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? 1.2f : 0.8f;
 
+            if (IsRival(s.ID))
+                socialEfficiency = -4 * socialEfficiency;
+            else if (IsFriend(s.ID))
+                socialEfficiency = 4 * socialEfficiency;
+            
             var funModifier = 0f;
             var fun = v;
 
@@ -495,6 +563,34 @@ namespace Game.Object.Character
             }
 
             return ret;
+        }
+
+        public void UpdateRelations()
+        {
+            foreach (var (k, v) in _data.relations)
+            {
+                if (k.relType == CharacterRelation.Type.Romance) continue;
+
+                var other = ObjectManager.Instance.Find(k.ID) as Character;
+                if (other == null) continue;
+                
+                if (v > 20 && IsRival(other))
+                {
+                    _data.rivals.Remove(other._data);
+                }
+                else if (v < -20 && IsFriend(other))
+                {
+                    _data.friends.Remove(other._data);
+                }
+                else if (v > 50 && !IsFriend(other))
+                {
+                    _data.friends.Add(other._data);
+                }
+                else if (v < -50 && !IsRival(other))
+                {
+                    _data.rivals.Add(other._data);
+                }
+            }
         }
     }
 }

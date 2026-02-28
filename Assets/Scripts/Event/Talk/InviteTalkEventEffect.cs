@@ -25,6 +25,6 @@ namespace Game.Event.Talk
         public override bool Equals(Effect other)
         {
             return other is InviteTalkEventEffect;
-        }
+        } 
     }
 }

@@ -29,11 +29,18 @@ namespace Game.UI
             gameObject.SetActive(!e);
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            CharacterInfoPanel.Instance.OnChangeTarget += Draw;
+        }
+
         protected override void Start()
         {
             base.Start();
 
-            if (GameManager.Instance.Player == null)
+            if (CharacterInfoPanel.Instance.Target == null)
             {
                 gameObject.SetActive(false);
                 return;
@@ -92,7 +99,7 @@ namespace Game.UI
             var characters = ObjectManager.Instance.Characters;
             foreach (var target in characters)
             {
-                if (target.ID == GameManager.Instance.Player.ID) continue;
+                if (target.ID == CharacterInfoPanel.Instance.Target.ID) continue;
                 
                 var view = Instantiate(relationViewPrefab, content);
                 view.Init(target.ID);

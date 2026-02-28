@@ -6,9 +6,10 @@ using UnityEngine.EventSystems;
 
 namespace Game.UI
 {
-    public class RelationView : UIBehaviour
+    public class RelationView : UIBehaviour, IPointerClickHandler
     {
-        private Character _target;
+        private Character who;
+        
         [SerializeField] private string ID;
         [SerializeField] private ProgressBar fbar;
         [SerializeField] private ProgressBar rbar;
@@ -20,7 +21,7 @@ namespace Game.UI
         public void Init(string id)
         {
             ID = id;
-            _target = ObjectManager.Instance.Find(ID) as Character;
+            who = ObjectManager.Instance.Find(ID) as Character;
 
             Draw();
         }
@@ -32,26 +33,31 @@ namespace Game.UI
 
         private void Draw()
         {
-            var player = GameManager.Instance.Player;
-            var fvalue = _target.Data[new CharacterRelation()
+            var target = CharacterInfoPanel.Instance.Target;
+            var fvalue = who.Data[new CharacterRelation()
             {
                 relType = CharacterRelation.Type.Friend,
-                ID = player.ID
+                ID = target.ID
             }];
-            var rvalue = _target.Data[new CharacterRelation()
+            var rvalue = who.Data[new CharacterRelation()
             {
                 relType = CharacterRelation.Type.Romance,
-                ID = player.ID
+                ID = target.ID
             }];
 
-            nameText.text = _target.Data.charName;
+            nameText.text = who.Data.charName;
             fvalueText.text = $"{fvalue:000} / 100";
             fbar.value = fvalue;
 
             rvalueText.text = $"{rvalue:000} / 100";
             rbar.value = rvalue;
 
-            attractionText.text = $"{_target.PersonalAttractionFrom(player)}";
+            attractionText.text = $"{who.PersonalAttractionFrom(target)}";
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            CharacterInfoPanel.Instance.Target = who;
         }
     }
 }

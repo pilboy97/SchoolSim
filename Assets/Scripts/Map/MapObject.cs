@@ -25,7 +25,7 @@ namespace Game.Map
         
         public Vector3Int[] CPositions => _cPositions;
         public Vector3[] Positions => _positions;
-        public string Name => obj?.objectName ?? "";
+        public string charName => obj?.objectName ?? "";
 
         public Vector3 CenterPosition
         {

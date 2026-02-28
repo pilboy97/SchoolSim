@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Game.Object.Character;
 using UnityEngine;
-using Action = Game.Task.Action;
 using EventTask = Game.Task.EventTask;
 
 namespace Game.Event
@@ -10,6 +9,12 @@ namespace Game.Event
     [Serializable]
     public abstract class Event : IEquatable<Event>
     {
+        // --- 설정 필드 ---
+        [Header("Settings")]
+        [SerializeField]
+        public float minMember = 2;
+        [SerializeField] public float maxMember = 8;
+        
         [SerializeField] protected string id = "";
         [SerializeField] protected EventStatus status = EventStatus.Ready;
         public EventStatus Status => status; 
@@ -81,8 +86,9 @@ namespace Game.Event
         public abstract (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c);
         
 
-        protected abstract bool CheckRun();
-        protected abstract bool CheckInvite(Character who);
+        protected virtual bool CheckRun() => members.Count >= minMember;
+        protected virtual bool CheckInvite(Character who) => members.Count + 1 <= maxMember;
+
 
         public string ID => id;
 

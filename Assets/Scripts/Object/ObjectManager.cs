@@ -127,6 +127,7 @@ namespace Game.Object
         
         public IInteractable Find(string id)
         {
+            if (id == null) return null;
             if (_objCache.TryGetValue(id, out var value)) return value;
 
             foreach (var i in _objects)
@@ -134,7 +135,7 @@ namespace Game.Object
                 _objCache.TryAdd(i.ID, i);
             }
 
-            return _objCache[id];
+            return _objCache.GetValueOrDefault(id);
         }
 
         public IInteractable[] GetObjectAt(Vector3Int cpos)

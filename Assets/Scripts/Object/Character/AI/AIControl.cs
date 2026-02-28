@@ -25,6 +25,7 @@ namespace Game.Object.Character.AI
         private const int RandomSize = 6;
         private readonly (IInteractable obj, Action action, float score)[] _topActions = new (IInteractable obj, Action action, float score)[RandomSize];
 
+        
         public ITask Select()
         {
             var objs = ObjectManager.Instance.Objects;
@@ -53,13 +54,13 @@ namespace Game.Object.Character.AI
                         actionTask.action.Equals(action) &&
                         actionTask.Obj.Equals(o))
                     {
-                        score *= 1.2f;
+                        score *= 2f;
                     }
                     else if (currentTask is EventTask eventTask && 
                         action.effect is InviteEventEffect invite && 
                         eventTask.invitedEvent.Equals(invite.TargetEvent))
                     {
-                        score *= 1.2f;
+                        score *= 2f;
                     }
 
                     if (score <= 0) continue;
@@ -222,6 +223,8 @@ namespace Game.Object.Character.AI
 
         public float CalcScore(RelationFloatDict deltas, IInteractable o)
         {
+            if (deltas == null) return 0;
+            
             var statsDelta = new CharacterStats();
             
             foreach (var (rel, v) in deltas)

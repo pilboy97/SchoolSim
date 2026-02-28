@@ -9,18 +9,24 @@ namespace Game.Object.Character
         public float language;
         public float aesthetics;
         public float social;
+
         public float athletic;
+
         /*-------------------------------*/
         public float comedy;
         public float conversation;
+
         public float attractive;
+
         /*-------------------------------*/
         public float literature;
         public float math;
         public float sociology;
         public float science;
         public float sports;
+
         public float art;
+
         /*-------------------------------*/
         public float hungry;
         public float fatigue;
@@ -31,8 +37,9 @@ namespace Game.Object.Character
         public float fun;
         public float motivation;
 
-        
+
         #region 덧셈 (+)
+
         public static CharacterStats operator +(CharacterStats x, CharacterStats y)
         {
             return new CharacterStats()
@@ -44,7 +51,8 @@ namespace Game.Object.Character
                 literature = x.literature + y.literature, math = x.math + y.math, sociology = x.sociology + y.sociology,
                 science = x.science + y.science, sports = x.sports + y.sports, art = x.art + y.art,
                 hungry = x.hungry + y.hungry, fatigue = x.fatigue + y.fatigue, toilet = x.toilet + y.toilet,
-                hygiene = x.hygiene + y.hygiene, loneliness = x.loneliness + y.loneliness, rLoneliness = x.rLoneliness + y.rLoneliness,
+                hygiene = x.hygiene + y.hygiene, loneliness = x.loneliness + y.loneliness,
+                rLoneliness = x.rLoneliness + y.rLoneliness,
                 fun = x.fun + y.fun, motivation = x.motivation + y.motivation
             };
         }
@@ -66,9 +74,11 @@ namespace Game.Object.Character
         }
 
         public static CharacterStats operator +(float s, CharacterStats x) => x + s;
+
         #endregion
 
         #region 곱셈 (*)
+
         public static CharacterStats operator *(CharacterStats x, CharacterStats y)
         {
             return new CharacterStats()
@@ -80,7 +90,8 @@ namespace Game.Object.Character
                 literature = x.literature * y.literature, math = x.math * y.math, sociology = x.sociology * y.sociology,
                 science = x.science * y.science, sports = x.sports * y.sports, art = x.art * y.art,
                 hungry = x.hungry * y.hungry, fatigue = x.fatigue * y.fatigue, toilet = x.toilet * y.toilet,
-                hygiene = x.hygiene * y.hygiene, loneliness = x.loneliness * y.loneliness, rLoneliness = x.rLoneliness * y.rLoneliness,
+                hygiene = x.hygiene * y.hygiene, loneliness = x.loneliness * y.loneliness,
+                rLoneliness = x.rLoneliness * y.rLoneliness,
                 fun = x.fun * y.fun, motivation = x.motivation * y.motivation
             };
         }
@@ -102,9 +113,11 @@ namespace Game.Object.Character
         }
 
         public static CharacterStats operator *(float s, CharacterStats x) => x * s;
+
         #endregion
 
         #region 뺄셈 (-)
+
         public static CharacterStats operator -(CharacterStats x, CharacterStats y)
         {
             return new CharacterStats()
@@ -116,7 +129,8 @@ namespace Game.Object.Character
                 literature = x.literature - y.literature, math = x.math - y.math, sociology = x.sociology - y.sociology,
                 science = x.science - y.science, sports = x.sports - y.sports, art = x.art - y.art,
                 hungry = x.hungry - y.hungry, fatigue = x.fatigue - y.fatigue, toilet = x.toilet - y.toilet,
-                hygiene = x.hygiene - y.hygiene, loneliness = x.loneliness - y.loneliness, rLoneliness = x.rLoneliness - y.rLoneliness,
+                hygiene = x.hygiene - y.hygiene, loneliness = x.loneliness - y.loneliness,
+                rLoneliness = x.rLoneliness - y.rLoneliness,
                 fun = x.fun - y.fun, motivation = x.motivation - y.motivation
             };
         }
@@ -127,7 +141,7 @@ namespace Game.Object.Character
             {
                 logic = x.logic - s, language = x.language - s, aesthetics = x.aesthetics - s,
                 social = x.social - s, athletic = x.athletic - s,
-                comedy = x.comedy - s, 
+                comedy = x.comedy - s,
                 conversation = x.conversation - s, attractive = x.attractive - s,
                 literature = x.literature - s, math = x.math - s, sociology = x.sociology - s,
                 science = x.science - s, sports = x.sports - s, art = x.art - s,
@@ -152,9 +166,11 @@ namespace Game.Object.Character
                 fun = s - x.fun, motivation = s - x.motivation
             };
         }
+
         #endregion
 
         #region 유틸리티 (Clamp)
+
         // 값을 최소(min) ~ 최대(max) 사이로 고정
         public CharacterStats Clamp(float min, float max)
         {
@@ -165,18 +181,18 @@ namespace Game.Object.Character
                 aesthetics = Math.Clamp(this.aesthetics, min, max),
                 social = Math.Clamp(this.social, min, max),
                 athletic = Math.Clamp(this.athletic, min, max),
-                
+
                 comedy = Math.Clamp(this.comedy, min, max),
                 conversation = Math.Clamp(this.conversation, min, max),
                 attractive = Math.Clamp(this.attractive, min, max),
-                
+
                 literature = Math.Clamp(this.literature, min, max),
                 math = Math.Clamp(this.math, min, max),
                 sociology = Math.Clamp(this.sociology, min, max),
                 science = Math.Clamp(this.science, min, max),
                 sports = Math.Clamp(this.sports, min, max),
                 art = Math.Clamp(this.art, min, max),
-                
+
                 hungry = Math.Clamp(this.hungry, min, max),
                 fatigue = Math.Clamp(this.fatigue, min, max),
                 toilet = Math.Clamp(this.toilet, min, max),
@@ -187,6 +203,7 @@ namespace Game.Object.Character
                 motivation = Math.Clamp(this.motivation, min, max)
             };
         }
+
         #endregion
 
         #region 점수 계산
@@ -210,30 +227,102 @@ namespace Game.Object.Character
         {
             return SumENeeds() + SumRNeeds() + SumGNeeds();
         }
-        
+
         #endregion
+
+        public float this[CharacterStatsType typeName]
+        {
+            get
+            {
+                return typeName switch
+                {
+                    CharacterStatsType.Logic => logic,
+                    CharacterStatsType.Language => language,
+                    CharacterStatsType.Aesthetics => aesthetics,
+                    CharacterStatsType.Social => social,
+                    CharacterStatsType.Athletic => athletic,
+                    /*-------------------------------*/
+                    CharacterStatsType.Comedy => comedy,
+                    CharacterStatsType.Conversation => conversation,
+                    CharacterStatsType.Attractive => attractive,
+                    /*-------------------------------*/
+                    CharacterStatsType.Literature => literature,
+                    CharacterStatsType.Math => math,
+                    CharacterStatsType.Sociology => sociology,
+                    CharacterStatsType.Science => science,
+                    CharacterStatsType.Sports => sports,
+                    CharacterStatsType.Art => art,
+                    /*-------------------------------*/
+                    CharacterStatsType.Hungry => hungry,
+                    CharacterStatsType.Fatigue => fatigue,
+                    CharacterStatsType.Toilet => toilet,
+                    CharacterStatsType.Hygiene => hygiene,
+                    CharacterStatsType.Loneliness => loneliness,
+                    CharacterStatsType.RLoneliness => rLoneliness,
+                    CharacterStatsType.Fun => fun,
+                    CharacterStatsType.Motivation => motivation,
+                    _ => 0
+                };
+            }
+            set
+            {
+                switch (typeName)
+                {
+                    case CharacterStatsType.Logic: logic = value; break;
+                    case CharacterStatsType.Language: language = value; break;
+                    case CharacterStatsType.Aesthetics: aesthetics = value; break;
+                    case CharacterStatsType.Social: social = value; break;
+                    case CharacterStatsType.Athletic: athletic = value; break;
+                    /*-------------------------------*/
+                    case CharacterStatsType.Comedy: comedy = value; break;
+                    case CharacterStatsType.Conversation: conversation = value; break;
+                    case CharacterStatsType.Attractive: attractive = value; break;
+                    /*-------------------------------*/
+                    case CharacterStatsType.Literature: literature = value; break;
+                    case CharacterStatsType.Math: math = value; break;
+                    case CharacterStatsType.Sociology: sociology = value; break;
+                    case CharacterStatsType.Science: science = value; break;
+                    case CharacterStatsType.Sports: sports = value; break;
+                    case CharacterStatsType.Art: art = value; break;
+                    /*-------------------------------*/
+                    case CharacterStatsType.Hungry: hungry = value; break;
+                    case CharacterStatsType.Fatigue: fatigue = value; break;
+                    case CharacterStatsType.Toilet: toilet = value; break;
+                    case CharacterStatsType.Hygiene: hygiene = value; break;
+                    case CharacterStatsType.Loneliness: loneliness = value; break;
+                    case CharacterStatsType.RLoneliness: rLoneliness = value; break;
+                    case CharacterStatsType.Fun: fun = value; break;
+                    case CharacterStatsType.Motivation: motivation = value; break;
+
+                    default:
+                        throw new ArgumentException($"알 수 없는 스테이터스 이름입니다: {typeName}");
+                }
+            }
+        }
+
+        #region Equal
 
         public bool Equals(CharacterStats other)
         {
             return
                 logic.Equals(other.logic) &&
                 language.Equals(other.language) &&
-                aesthetics.Equals(other.aesthetics) && 
+                aesthetics.Equals(other.aesthetics) &&
                 social.Equals(other.social) &&
-                athletic.Equals(other.athletic)  && 
-                comedy.Equals(other.comedy) && 
-                conversation.Equals(other.conversation) && 
+                athletic.Equals(other.athletic) &&
+                comedy.Equals(other.comedy) &&
+                conversation.Equals(other.conversation) &&
                 attractive.Equals(other.attractive) &&
-                literature.Equals(other.literature) && 
-                math.Equals(other.math) && 
-                sociology.Equals(other.sociology) && 
+                literature.Equals(other.literature) &&
+                math.Equals(other.math) &&
+                sociology.Equals(other.sociology) &&
                 science.Equals(other.science) &&
-                sports.Equals(other.sports) && 
-                art.Equals(other.art) && 
+                sports.Equals(other.sports) &&
+                art.Equals(other.art) &&
                 hungry.Equals(other.hungry) &&
-                fatigue.Equals(other.fatigue) && 
-                toilet.Equals(other.toilet) && 
-                hygiene.Equals(other.hygiene) && 
+                fatigue.Equals(other.fatigue) &&
+                toilet.Equals(other.toilet) &&
+                hygiene.Equals(other.hygiene) &&
                 loneliness.Equals(other.loneliness) &&
                 rLoneliness.Equals(other.rLoneliness) &&
                 fun.Equals(other.fun) &&
@@ -244,76 +333,7 @@ namespace Game.Object.Character
         {
             return obj is CharacterStats other && Equals(other);
         }
-        
-        public float this[CharacterStatsType typeName]
-{
-    get
-    {
-        return typeName switch
-        {
-            CharacterStatsType.Logic => logic,
-            CharacterStatsType.Language => language,
-            CharacterStatsType.Aesthetics => aesthetics,
-            CharacterStatsType.Social => social,
-            CharacterStatsType.Athletic => athletic,
-            /*-------------------------------*/
-            CharacterStatsType.Comedy => comedy,
-            CharacterStatsType.Conversation => conversation,
-            CharacterStatsType.Attractive => attractive,
-            /*-------------------------------*/
-            CharacterStatsType.Literature => literature,
-            CharacterStatsType.Math => math,
-            CharacterStatsType.Sociology => sociology,
-            CharacterStatsType.Science => science,
-            CharacterStatsType.Sports => sports,
-            CharacterStatsType.Art => art,
-            /*-------------------------------*/
-            CharacterStatsType.Hungry => hungry,
-            CharacterStatsType.Fatigue => fatigue,
-            CharacterStatsType.Toilet => toilet,
-            CharacterStatsType.Hygiene => hygiene,
-            CharacterStatsType.Loneliness => loneliness,
-            CharacterStatsType.RLoneliness => rLoneliness,
-            CharacterStatsType.Fun => fun,
-            CharacterStatsType.Motivation => motivation,
-            _ => 0
-        };
-    }
-    set
-    {
-        switch (typeName)
-        {
-            case CharacterStatsType.Logic: logic = value; break;
-            case CharacterStatsType.Language: language = value; break;
-            case CharacterStatsType.Aesthetics: aesthetics = value; break;
-            case CharacterStatsType.Social: social = value; break;
-            case CharacterStatsType.Athletic: athletic = value; break;
-            /*-------------------------------*/
-            case CharacterStatsType.Comedy: comedy = value; break;
-            case CharacterStatsType.Conversation: conversation = value; break;
-            case CharacterStatsType.Attractive: attractive = value; break;
-            /*-------------------------------*/
-            case CharacterStatsType.Literature: literature = value; break;
-            case CharacterStatsType.Math: math = value; break;
-            case CharacterStatsType.Sociology: sociology = value; break;
-            case CharacterStatsType.Science: science = value; break;
-            case CharacterStatsType.Sports: sports = value; break;
-            case CharacterStatsType.Art: art = value; break;
-            /*-------------------------------*/
-            case CharacterStatsType.Hungry: hungry = value; break;
-            case CharacterStatsType.Fatigue: fatigue = value; break;
-            case CharacterStatsType.Toilet: toilet = value; break;
-            case CharacterStatsType.Hygiene: hygiene = value; break;
-            case CharacterStatsType.Loneliness: loneliness = value; break;
-            case CharacterStatsType.RLoneliness: rLoneliness = value; break;
-            case CharacterStatsType.Fun: fun = value; break;
-            case CharacterStatsType.Motivation: motivation = value; break;
-            
-            default:
-                throw new ArgumentException($"알 수 없는 스테이터스 이름입니다: {typeName}");
-        }
-    }
-}
+
 
         public override int GetHashCode()
         {
@@ -342,5 +362,7 @@ namespace Game.Object.Character
             hashCode.Add(motivation);
             return hashCode.ToHashCode();
         }
+
+        #endregion
     }
 }

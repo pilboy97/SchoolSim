@@ -14,11 +14,12 @@ namespace Game.School
 
         public void Init()
         {
-            foreach (var school in schools)
+            foreach (var s in schools)
             {
+                var school = Instantiate(s);
                 school.Init();
 
-                for (int i = 0; i < school.randomGenCharacter; i++)
+                for (int i = 0; i < s.randomGenCharacter; i++)
                 {
                     var character = Instantiate(characterPrefab);
                     var data = ScriptableObject.CreateInstance<CharacterData>();
@@ -28,13 +29,14 @@ namespace Game.School
                     character.Init(data);
                     character.CPosition = NavManager.Instance.RandomCPos;
                     
-                    school.Enter(character);
+                    s.Enter(character);
                     
                     ObjectManager.Instance.Add(character);
                 }
 
-                foreach (var data in school.characters)
+                foreach (var d in school.characters)
                 {
+                    var data = Instantiate(d);
                     data.GenerateCharacter();
                     
                     var character = Instantiate(characterPrefab);

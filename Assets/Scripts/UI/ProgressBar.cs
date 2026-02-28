@@ -10,27 +10,33 @@ namespace Game.UI
         [SerializeField] public float min;
         [SerializeField] public float max = 100f;
 
-        [SerializeField] private Image background;
-        [SerializeField] private Image foreground;
-        [SerializeField] private float[] colorPivot;
-        [SerializeField] private Color[] colors;
+        [SerializeField] protected Image background;
+        [SerializeField] protected Image foreground;
+        [SerializeField] protected float[] colorPivot;
+        [SerializeField] protected Color[] colors;
 
-        private void Update()
+        protected virtual void LateUpdate()
         {
             var w = background.rectTransform.rect.width;
             var p = GetRatio();
+            
+            Draw(w, p);
+        }
+
+        protected void Draw(float w, float p)
+        {
             var size = foreground.rectTransform.sizeDelta;
 
             foreground.rectTransform.sizeDelta = new Vector2(p * w, size.y);
             foreground.color = GetColor();
         }
 
-        private float GetRatio()
+        protected float GetRatio()
         {
             return (value - min) / (max - min);
         }
 
-        private Color GetColor()
+        protected Color GetColor()
         {
             if (colorPivot == null || colorPivot.Length == 0) return Color.green;
 

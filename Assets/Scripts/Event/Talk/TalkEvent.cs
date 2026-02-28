@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Game.Object;
 using Game.Object.Character;
 using Game.Object.Character.AI;
-using Game.Object.Character.Player;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 
 namespace Game.Event.Talk
 {
@@ -14,11 +12,6 @@ namespace Game.Event.Talk
     {
         [Serializable]
         public class StringTopicDict : UnitySerializedDictionary<string, Topic> { }
-
-        // --- 설정 필드 ---
-        [Header("Settings")]
-        [SerializeField] private float minMember = 2;
-        [SerializeField] private float maxMember = 8;
         
         [Header("Weights")]
         [SerializeField] private float baseLoneliness = 5f;  // R-욕구 (결핍)
@@ -34,9 +27,29 @@ namespace Game.Event.Talk
         [SerializeField] public float curTime = 0f;
         [SerializeField] public StringTopicDict selected = new StringTopicDict();
 
+        [Header("Influence")]
         public StringFloatDict scoreBySpeaker = new();
-        public StringFloatDict shareOfMember = new();
-        
+        public StringFloatDict shareOfInfluence = new();
+
+        private (Topic topic, float score)[] _bestTopics;
+        private int _bestSize = 6;
+
+        public float AverageScore
+        {
+            get
+            {
+                if (members.Count == 0) return 0;
+                float sum = 0;
+                foreach (var (_, v) in scoreBySpeaker)
+                {
+                    sum += v;
+                }
+
+                return sum / members.Count;
+            }
+        }
+
+        public float DesiredShare => 1f / members.Count;
         public static List<Topic> Topics;
 
         // 결과값을 담기 위한 구조체 (할당 최적화)
@@ -48,8 +61,12 @@ namespace Game.Event.Talk
 
         public TalkEvent()
         {
+            minMember = 2;
+            maxMember = 8;
+            
             eventName = "Talk";
             busy = false;
+            _bestTopics = new (Topic topic, float score)[_bestSize];
         }
 
         // --- 초기화 로직 ---
@@ -88,11 +105,16 @@ namespace Game.Event.Talk
         {
             // 이 캐릭터에게 가장 점수가 높은 주제를 찾아 그 변화량을 반환
             Topic best = GetBestTopicForCharacter(c);
-            var result = InternalCalculateDelta(c, best);
+            var result = CalcStatusDelta(c, best);
 
+            if (members.Contains(c) && status == EventStatus.Run)
+            {
+                result = CalcStatsDeltaWithShare(result, c);
+            }
+            
             var ret = result.Stats;
             var rel = result.Relation;
-
+            
             ret += c.CalcPersonalizedStatsDeltaOnReceive(rel);
 
             return (ret, rel);
@@ -101,6 +123,7 @@ namespace Game.Event.Talk
         private Topic GetBestTopicForCharacter(Character ch)
         {
             AIControl controller = null;
+            
             if (ch.ControllerType == ControllerType.Player)
             {
                 controller = ch.AI;
@@ -111,32 +134,69 @@ namespace Game.Event.Talk
             }
 
             if (controller == null) return selected.GetValueOrDefault(ch.ID);
-            
-            float maxScore = float.NegativeInfinity;
-            Topic bestTopic = default;
+
+            for (var i = 0; i < _bestSize; i++)
+            {
+                _bestTopics[i].topic = default;
+                _bestTopics[i].score = -1;
+            }
 
             for (int i = 0; i < Topics.Count; i++)
             {
                 Topic t = Topics[i];
                 t.speaker = ch;
 
-                DeltaResult delta = InternalCalculateDelta(ch, t);
+                DeltaResult delta = CalcStatusDelta(ch, t);
 
-                // 여기서 우리가 만든 E, R, G(양성피드백) 공식이 적용된 점수를 계산함
                 float score = controller.CalcScore((delta.Stats, delta.Relation), null);
 
-                if (score > maxScore)
+                int j = _bestSize - 1;
+                
+                if (score > _bestTopics[j].score)
                 {
-                    maxScore = score;
-                    bestTopic = t;
+                    _bestTopics[j] = (t, score);
+
+                    while (j > 0 && _bestTopics[j].score > _bestTopics[j - 1].score)
+                    {
+                        (_bestTopics[j], _bestTopics[j - 1]) = (_bestTopics[j - 1], _bestTopics[j]);
+                        j--;
+                    }
                 }
             }
-            return bestTopic;
+
+            int cnt = 0;
+            List<float> scores = new();
+            for (cnt = 0; cnt < _bestSize; cnt++)
+            {
+                if (_bestTopics[cnt].score < 0) break;
+                
+                scores.Add(_bestTopics[cnt].score);
+            }
+
+            var x = Random.SelectWithMultiplier(scores);
+            return _bestTopics[x].topic;
         }
 
-        private DeltaResult InternalCalculateDelta(Character listener, Topic topic)
+        private DeltaResult CalcStatsDeltaWithShare(DeltaResult delta, Character ch)
         {
-            var resStatus = new CharacterStats(){
+            var modifier = shareOfInfluence.GetValueOrDefault(ch.ID) / DesiredShare;
+            delta.Stats *= modifier;
+
+            if (delta.Relation != null)
+            {
+                // 딕셔너리에 들어있는 키들만 꺼내서 값만 수정 (O(N) 순회 방지)
+                var keys = new List<CharacterRelation>(delta.Relation.Keys);
+                foreach (var key in keys)
+                {
+                    delta.Relation[key] *= modifier;
+                }
+            }
+            return delta;
+        }
+        
+        private DeltaResult CalcStatusDelta(Character listener, Topic topic)
+        {
+            var resStats = new CharacterStats(){
                 loneliness = baseLoneliness // 대화 자체로 고독감 해소
             };
             var resRel = new RelationFloatDict();
@@ -144,34 +204,28 @@ namespace Game.Event.Talk
             Character speaker = topic.speaker;
             if (speaker == null) return default;
 
-            float attraction = listener.PersonalAttractionFrom(speaker);
-
             switch (topic.type)
             {
                 case Topic.Type.General:
-                    (resStatus, resRel) = CalcStatsDeltaForGeneral(listener, speaker);
+                    (resStats, resRel) = CalcStatsDeltaForGeneral(listener, speaker);
                     break;
 
                 case Topic.Type.Romance:
-                    (resStatus, resRel) = CalcStatsDeltaForRomance(listener, speaker);
+                    (resStats, resRel) = CalcStatsDeltaForRomance(listener, speaker);
                     break;
 
                 case Topic.Type.Teach:
                     // G-욕구: 상대방의 숙련도가 높을수록 배울 점이 많아 점수가 높아짐
-                    float speakerSkill = speaker.Data[topic.knowledge];
-                    float learningValue = (speakerSkill / 100f + 1) * baseTeach;
-                    
-                    resStatus[topic.knowledge] = learningValue;
-                    (resStatus, resRel) = CalcStatsDeltaTeachEffect(listener, topic);
+                    (resStats, resRel) = CalcStatsDeltaTeachEffect(listener, topic);
                     break;
 
                 case Topic.Type.RelationUp:
                 case Topic.Type.RelationDown:
-                    (resStatus, resRel) =  CalcStatsDeltaReputationEffect(listener, topic);
+                    (resStats, resRel) =  CalcStatsDeltaReputationEffect(listener, topic);
                     break;
             }
-
-            return new DeltaResult { Stats = resStatus, Relation = resRel };
+            
+            return new DeltaResult { Stats = resStats, Relation = resRel };
         }
 
         // --- 실행 및 상태 관리 ---
@@ -186,6 +240,11 @@ namespace Game.Event.Talk
             // 1. 플레이어 선택 대기 로직
             if (waitForSelect)
             {
+                foreach (var member in members)
+                {
+                    member.Busy = true;
+                }
+                
                 if (!TalkWindow.Instance.isChoose && curTime < selectTime) return;
 
                 Character player = GameManager.Instance.Player;
@@ -225,46 +284,72 @@ namespace Game.Event.Talk
 
             ApplyAllSelectedTopics();
 
+            foreach (var member in members)
+            {
+                member.Busy = false;
+            }
+
             alreadySelect = false;
             curTime = 0;
         }
 
         private void UpdateShare()
         {
-            shareOfMember.Clear();
+            // 대화가 진행될수록 과거의 점수 비중을 살짝 줄임 (예: 20% 감쇠)
+            var keys = new List<string>(scoreBySpeaker.Keys);
+            foreach(var key in keys) {
+                scoreBySpeaker[key] *= 0.8f; 
+            }
+    
+            shareOfInfluence.Clear();
 
             float sum = 0;
             foreach (var member in members)
             {
-                sum +=  Mathf.Max(1, scoreBySpeaker[member.ID]);
+                shareOfInfluence.TryAdd(member.ID, 0);
+                scoreBySpeaker.TryAdd(member.ID, 0);
+                sum +=  Mathf.Max(1, scoreBySpeaker.GetValueOrDefault(member.ID) );
             }
 
             foreach (var member in members)
             {
-                shareOfMember.TryAdd(member.ID, 0);
-                shareOfMember[member.ID] = Mathf.Max(1, scoreBySpeaker[member.ID]) / sum;
+                shareOfInfluence[member.ID] = Mathf.Max(1, scoreBySpeaker[member.ID]) / sum;
+                
             }
         }
         private void ApplyAllSelectedTopics()
         {
-            // selected 딕셔너리 순회 (LINQ 없이 Enumerator 사용)
-            var enumerator = selected.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (var entry in selected)
             {
-                var entry = enumerator.Current;
                 Character speaker = ObjectManager.Instance.Find(entry.Key) as Character;
                 if (speaker == null) continue;
 
                 Topic topic = entry.Value;
                 topic.speaker = speaker;
-
+                
                 for (int i = 0; i < members.Count; i++)
                 {
                     Character listener = members[i];
-                    DeltaResult res = InternalCalculateDelta(listener, topic);
-
+    
+                    // 1. 화자가 준비한 순수한 변화량 계산 (영향력 깎이기 전!)
+                    DeltaResult rawRes = CalcStatusDelta(listener, topic);
+    
                     scoreBySpeaker.TryAdd(speaker.ID, 0);
-                    scoreBySpeaker[speaker.ID] += listener.Receive((res.Stats, res.Relation), false);
+
+                    // 2. ★ 핵심 수정 ★ 
+                    // 영향력이 곱해져서 딕셔너리가 오염되기 전에, '순수 델타(rawRes)'를 기반으로 화자의 가치를 평가합니다.
+                    float relScore = listener.AI.CalcScore(rawRes.Relation, null);
+                    float statsScore = listener.AI.CalcScore(
+                        rawRes.Stats + listener.CalcPersonalizedStatsDeltaOnReceive(rawRes.Stats), null);
+    
+                    // 화자는 정당한 점수를 받습니다.
+                    scoreBySpeaker[speaker.ID] += (relScore + statsScore);
+
+                    // 3. 이제 현재 영향력(Share)을 곱해서 리스너에게 실제로 적용될 수치로 깎습니다.
+                    DeltaResult finalRes = CalcStatsDeltaWithShare(rawRes, speaker);
+
+                    // 4. 리스너에게는 깎인 수치(finalRes)만 실제 적용합니다. (반환되는 깎인 점수는 버림)
+                    listener.Receive((finalRes.Stats, finalRes.Relation), false);
                 }
             }
             
@@ -287,6 +372,7 @@ namespace Game.Event.Talk
                         ID = members[i].ID,
                         relType = CharacterRelation.Type.Friend,
                     }, baseFriendly);
+                    s.loneliness += baseFriendly;
                 }
             }
             else
@@ -323,6 +409,8 @@ namespace Game.Event.Talk
                         ID = members[i].ID,
                         relType = CharacterRelation.Type.Romance,
                     }, val);
+                    
+                    s.rLoneliness+= baseRomance;
                 }
             }
             else
@@ -330,6 +418,7 @@ namespace Game.Event.Talk
                 var attr = listener.PersonalAttractionFrom(speaker);
                 float attractionMod = Mathf.Max(0, 2 * attr - 1);
                 var val = baseRomance * attractionMod;
+                
                 r.Add(new CharacterRelation()
                 {
                     ID = speaker.ID,
@@ -357,6 +446,7 @@ namespace Game.Event.Talk
                 {
                     motivation = effect
                 };
+                s[topic.knowledge] += effect;
             }
             else
             {
@@ -380,18 +470,35 @@ namespace Game.Event.Talk
             Character target = ObjectManager.Instance.Find(topic.target.ID) as Character;
             var speaker = topic.speaker;
             
-            if (target == null || topic.speaker.ID == topic.target.ID) return (s, r);
+            if (target == null || topic.speaker.ID == topic.target.ID) return default;
 
             bool isUp = topic.type == Topic.Type.RelationUp;
             float finalInf = isUp ? baseInfluence : -baseInfluence;
-
+            
             if (listener.ID == speaker.ID)
             {
-                r.Add(new CharacterRelation()
+                if (!(isUp && !members.Contains(target)))
                 {
-                    ID = topic.target.ID,
-                    relType = CharacterRelation.Type.Friend
-                }, finalInf * 3);
+                    r.Add(new CharacterRelation()
+                    {
+                        ID = topic.target.ID,
+                        relType = CharacterRelation.Type.Friend
+                    }, finalInf * 4);
+                }
+
+                foreach (var member in members)
+                {
+                    if (member.ID == speaker.ID || member.ID == target.ID) continue;
+                    
+                    var currentRel = listener.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
+                    var effect = (isUp ? 1 : -1) * (currentRel / 100f);
+                    
+                    r.Add(new CharacterRelation()
+                    {
+                        ID = member.ID,
+                        relType = CharacterRelation.Type.Friend
+                    }, effect);
+                }
             }
             else if (listener.ID == target.ID)
             {
@@ -399,15 +506,24 @@ namespace Game.Event.Talk
                {
                    ID = topic.speaker.ID,
                    relType = CharacterRelation.Type.Friend
-               }, finalInf * 3);
+               }, finalInf * 4);
             }
             else
             {
-                var currentRelToSpeaker = listener.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
+                var currentRelToSpeaker = listener.Data[new CharacterRelation { ID = topic.speaker.ID, relType = CharacterRelation.Type.Friend }];
                 var currentRelToTarget = listener.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
                 
                 var effectToSpeaker = (isUp ? 1 : -1) * (currentRelToTarget / 100f);
                 var effectToTarget = finalInf * (currentRelToSpeaker / 100f);
+
+                if (listener.IsRival(speaker) )
+                {
+                    return default;
+                }
+                if (listener.IsFriend(speaker))
+                {
+                    effectToTarget *= 4;
+                }
 
                 r.Add(new CharacterRelation()
                 {
@@ -430,8 +546,12 @@ namespace Game.Event.Talk
             base.OnEnter(who);
             Topic defaultTopic = Topics[0];
             defaultTopic.speaker = who;
+
+            who.Busy = true;
+            
             selected.TryAdd(who.ID, defaultTopic);
             scoreBySpeaker.TryAdd(who.ID, 0);
+            scoreBySpeaker[who.ID] = AverageScore;
             
             UpdateShare();
             
@@ -440,17 +560,17 @@ namespace Game.Event.Talk
 
         protected override void OnLeave(Character who)
         {
+                
             base.OnLeave(who);
             
-            if (who.ID == GameManager.Instance.Player.ID) TalkWindow.Instance.Close();
+            if (who.ID == GameManager.Instance.Player.ID) TalkWindow.Instance?.Close();
+            
             selected.Remove(who.ID);
-            scoreBySpeaker[who.ID] = 0;
+            scoreBySpeaker.Remove(who.ID); 
+            shareOfInfluence.Remove(who.ID);
             
             UpdateShare();
         }
-
-        protected override bool CheckRun() => members.Count >= minMember && members.Count < maxMember;
-        protected override bool CheckInvite(Character who) => true;
         
         protected override void OnDone()
         {

@@ -21,6 +21,7 @@ namespace Game.Event.Talk
         [SerializeField] private TopicButton topicButtonPrefab;
         [SerializeField] private ParticipantPanel participantPanelPrefab;
         [SerializeField] private ProgressBar timer;
+        [SerializeField] private TalkShareGraph graph;
 
         private ObjectPool<ParticipantPanel> _participantPanelPool;
         
@@ -129,6 +130,8 @@ namespace Game.Event.Talk
             timer.max = target.selectTime;
 
             isChoose = false;
+            
+            graph.Init(target);
             
             window.Open();
         }

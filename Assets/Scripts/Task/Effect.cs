@@ -38,10 +38,11 @@ namespace Game.Task
     {
         [SerializeField] public CharacterStats deltas;
         [SerializeField] public bool perSec = true;
+        [SerializeField] public bool noSideEffect = false;
 
         public override void Do(Character subject, IInteractable other, Event.Event e)
         {
-            subject.Receive(DeltaStats(subject, other), perSec);
+            subject.Receive(DeltaStats(subject, other), perSec, !noSideEffect);
         }
 
         public override bool Equals(Effect other)

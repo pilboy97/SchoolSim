@@ -55,7 +55,7 @@ namespace Game.UI
             onClick = item.onClick;
             _obj = obj;
 
-            text.text = $"{_obj?.Name ?? ""} {item.name}";
+            text.text = $"{_obj?.charName ?? ""} {item.name}";
         }
     }
 }

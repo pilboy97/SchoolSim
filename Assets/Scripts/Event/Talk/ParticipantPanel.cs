@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Object.Character;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,8 +28,11 @@ namespace Game.Event.Talk
         {
             if (talkEvent == null) return; 
             talkEvent.selected.TryAdd(character.ID, TalkEvent.Topics[0]);
+
+            var mod = talkEvent.shareOfInfluence.GetValueOrDefault(character.ID);
+            mod /= talkEvent.DesiredShare;
             
-            nameText.text = $"{character.Name} : {talkEvent.shareOfMember.GetValueOrDefault(character.ID) * 100} %";
+            nameText.text = $"{character.charName} x{mod:F2} %";
             topicText.text = talkEvent.selected[character.ID].ToString();
         }
     }
