@@ -45,6 +45,7 @@ namespace Game.Room
         private void OnSetPlayer(Character player)
         {
             if (player == null) return;
+            if(UIManager.Instance.State == UIManager.UIState.Move) return;
 
             var z = player.ZIndex;
             currentRoomIndex = z;
@@ -63,7 +64,7 @@ namespace Game.Room
 
         private void LateUpdate()
         {
-            if (currentRoomIndex != GameManager.Instance.Player.ZIndex)
+            if (currentRoomIndex != MainCamera.Instance?.zIndex)
             {
                 LoadPlayerRoom();
             }
@@ -71,6 +72,12 @@ namespace Game.Room
 
         private void LoadPlayerRoom()
         {
+            if (GameManager.Instance?.Player == null)
+            {
+                LoadRoomData(roomDatas[0], 0);
+                return;
+            }
+            
             var z = GameManager.Instance.Player.CPosition.z;
             if (currentRoomIndex == z && 0 <= z && z < roomDatas.Count)  return;
             

@@ -79,7 +79,7 @@ namespace Game.Event
 
         protected override bool CheckInvite(Character who)
         {
-            return data.runCond.Check(this, new Action(), who, null);
+            return base.CheckInvite(who) && data.runCond.Check(this, new Action(), who, null);
         }
 
         public override bool Equals(Event other)

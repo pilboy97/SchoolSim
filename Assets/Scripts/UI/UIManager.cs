@@ -14,7 +14,7 @@ namespace Game
         }
 
         [SerializeField] private ReturnToPlayerButton btn;
-        [SerializeField] private TrackPlayer playerCamera;
+        [SerializeField] private MainCamera playerCamera;
         [SerializeField] private Canvas mainCanvas;
         [SerializeField] private UIState state = UIState.Default;
 
@@ -24,28 +24,38 @@ namespace Game
             set
             {
                 var isDefault = value != UIState.Move;
-                playerCamera.enabled = isDefault;
-                
+                playerCamera.GetComponent<TrackPlayer>().enabled = isDefault;
+
                 btn.gameObject.SetActive(!isDefault);
+
+                if (isDefault)
+                {
+                    RoomManager.Instance.LoadRoomData(
+                        RoomManager.Instance.CurrentRoom,
+                        RoomManager.Instance.currentRoomIndex);
+                }
             }
         }
 
-        private void Awake()
+        public void Init()
         {
             btn.gameObject.SetActive(state == UIState.Move);
 
             RoomManager.Instance.OnRoomLoad += OnRoomLoad;
         }
 
+        private void Start()
+        {
+            playerCamera = MainCamera.Instance;
+        }
+
         private void OnRoomLoad(int x)
         {
-            var cpos = GameManager.Instance.Player?.CenterPosition;
-            if (cpos == null) return;
+            if (state == UIState.Move) return;
+            
+            var pos = MainCamera.Instance.transform.position;
 
-            var value = cpos.Value;
-            var z = GameManager.Instance.mainCamera.transform.position.z;
-
-            GameManager.Instance.mainCamera.transform.position = new Vector3(value.x, value.y, z);
+            GameManager.Instance.mainCamera.transform.position = new Vector3(pos.x, pos.y, -10);
         }
     }
 }

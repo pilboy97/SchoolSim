@@ -121,7 +121,7 @@ namespace Game.Object.Character.Player
             ContextMenu.Instance.Init(pos, items.ToArray());
         }
 
-        public PlayerControl(Character character, bool isAutoPilot = false)
+        public PlayerControl(Character character, bool isAutoPilot = true)
         {
             this.character = character;
             this.isAutoPilot = isAutoPilot;
@@ -195,8 +195,6 @@ namespace Game.Object.Character.Player
                 who.Busy = t2;
                 RequestView.Instance.Release(panel);
                 
-                TimeManager.Instance.SetTimeScale(timescale);
-
                 if (!isYes) return false;
 
                 character.TaskQueue.Cancel();

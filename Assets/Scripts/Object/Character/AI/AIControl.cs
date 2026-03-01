@@ -60,13 +60,13 @@ namespace Game.Object.Character.AI
                         actionTask.action.Equals(action) &&
                         actionTask.Obj.Equals(o))
                     {
-                        score *= 10f;
+                        score *= 5f;
                     }
                     else if (currentTask is EventTask eventTask && 
                              action.effect is InviteEventEffect invite && 
                              eventTask.invitedEvent.Equals(invite.TargetEvent))
                     {
-                        score *= 10f;
+                        score *= 5f;
                     }
 
                     if (score <= 0) continue;
@@ -164,11 +164,6 @@ namespace Game.Object.Character.AI
             return UniTask.FromResult(e.TryInvite(character));
         }
 
-        private void Log(SelectLogData data)
-        {
-            DebugSystem.Instance.Datas.Add(data);
-        }
-
         public bool TryInterrupt()
         {
             return !character.Busy;
@@ -200,7 +195,7 @@ namespace Game.Object.Character.AI
         }
         private float CalcRNeedScoreMultiplier(float val)
         {
-            return Mathf.Max(0, 1.2f * (100f - val));
+            return Mathf.Max(0, 2f * (100f - val));
         }
 
         private CharacterStats CalcGNeedScoreMultiplier(CharacterStats val)
@@ -213,11 +208,10 @@ namespace Game.Object.Character.AI
 
         private float CalcGNeedScoreMultiplier(float val)
         {
-            // 1. 기본적으로는 숙련도가 낮을 때 아주 최소한의 '배워야겠다'는 의지가 있음 (15점)
             float baseWill = 10f; 
             
             float ratio = val / 100f;
-            float passion = (ratio * ratio) * 100;
+            float passion = (ratio * ratio * ratio) * 100;
 
             return baseWill + passion;
         }

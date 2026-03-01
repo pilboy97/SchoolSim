@@ -149,7 +149,7 @@ namespace Game.Event.Talk
 
         public void Close()
         {
-            window.Close();
+            window?.Close();
         }
     }
 }

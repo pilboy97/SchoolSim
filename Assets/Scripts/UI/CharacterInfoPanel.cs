@@ -34,30 +34,32 @@ namespace Game.UI
         {
             GameManager.Instance.OnSetPlayer += (c) => {
                 gameObject.SetActive(c != null);
-                if (c != null) _target = c;
+                _target = c;
                 
                 Init(c);
             };
             
             moreInfo.gameObject.SetActive(false); 
+            gameObject.SetActive(false);
         }
 
         public void Init(Character who)
         {
             _target = who;
             
-            if (Target == null)
+            if (_target == null)
             {
                 gameObject.SetActive(false);
                 return;
             }
             
-            gameObject.SetActive(true);
+            gameObject.SetActive(false);
             
             nameText.text = Target.charName;
             MBTIText.text = Target.Data.mbti.ToString();
+            
+            GameManager.Instance.OnSetPlayer += (ch) => gameObject.SetActive(ch != null);
         }
-        
         
         private void LateUpdate()
         {

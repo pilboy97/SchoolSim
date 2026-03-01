@@ -36,7 +36,7 @@ namespace Game
             Global.RegisterRaiseCancelOnDestroy(gameObject);
         }
 
-        private void Start()
+        public void Init()
         {
             MapController.Instance.Init();
             RoomManager.Instance.Init();
@@ -45,15 +45,20 @@ namespace Game
             
             SchoolManager.Instance.Init();
             
-            player = ObjectManager.Instance.Find(initPlayer.ID) as Character;
+            player = ObjectManager.Instance.Find(initPlayer?.ID ?? "") as Character;
             SetPlayer(player);
 
+            UIManager.Instance.Init();
+            
             afterInit();
         }
 
         public void SetPlayer(Character newPlayer)
         {
             player = newPlayer;
+            
+            if (player == null) return;
+            
             player.ControllerType = ControllerType.Player;
             
             OnSetPlayer(player);

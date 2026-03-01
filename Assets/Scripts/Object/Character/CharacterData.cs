@@ -310,9 +310,6 @@ namespace Game.Object.Character
 
         public void Receive(CharacterRelation rel, float v)
         {
-            if (v > 8) 
-                UnityEngine.Debug.Log($"TOO BIG {v}");
-            
             this[rel] += v;
         }
 

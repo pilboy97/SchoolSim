@@ -11,10 +11,20 @@ namespace Game.UI
         [SerializeField] private TextMeshProUGUI txt;
 
         private bool _wannaChange = false;
-        
+
+        private void Start()
+        {
+            GameManager.Instance.OnSetPlayer += ch =>
+            {
+                gameObject.SetActive(ch != null);
+            };
+            
+            gameObject.SetActive(false);
+        }
+
         public void LateUpdate()
         {
-            var player = GameManager.Instance.Player;
+            var player = GameManager.Instance?.Player;
 
             if (player.controller is not PlayerControl playerController) return;
 

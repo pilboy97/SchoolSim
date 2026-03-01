@@ -16,7 +16,7 @@ namespace Game.Event.Talk
         [Header("Weights")]
         [SerializeField] private float baseLoneliness = 0.2f;  // R-욕구 (결핍)
         [SerializeField] private float baseFriendly = 1f;    // R-욕구 (관계)
-        [SerializeField] private float baseRomance = 1f;     // R-욕구 (로맨스)
+        [SerializeField] private float baseRomance = 5f;     // R-욕구 (로맨스)
         [SerializeField] private float baseTeach = 0.2f;     // G-욕구 (성장 - 양성 피드백 대상)
         [SerializeField] private float baseInfluence = 2f;   // 평판 변화량
 
@@ -374,6 +374,8 @@ namespace Game.Event.Talk
             {
                 for (int i = 0; i < members.Count; i++)
                 {
+                    var attr = listener.PersonalAttractionFrom(members[i]);
+                    
                     if (members[i].ID == listener.ID) continue;
                     var f = new CharacterRelation()
                     {
@@ -382,12 +384,13 @@ namespace Game.Event.Talk
                     };
                     
                     r.TryAdd(f, 0);
-                    r[f] += baseFriendly;
+                    r[f] += baseFriendly * (2 * attr);
                     s.loneliness += baseLoneliness;
                 }
             }
             else
             {
+                var attr = listener.PersonalAttractionFrom(speaker);
                 var f = new CharacterRelation()
                 {
                     ID = speaker.ID,
@@ -395,7 +398,7 @@ namespace Game.Event.Talk
                 };
                 
                 r.TryAdd(f, 0);
-                r[f] += baseFriendly;
+                r[f] += baseFriendly * (2 * attr);
                 s.loneliness += baseLoneliness;
             }
 
@@ -414,9 +417,10 @@ namespace Game.Event.Talk
                 {
                     if (members[i].ID == listener.ID) continue;
                     
-                    var attr = speaker.PersonalAttractionFrom(members[i]);
+                    var attr = listener.PersonalAttractionFrom(members[i]);
                     float attractionMod = Mathf.Max(0, 2 * attr - 1);
-                    var val = baseRomance * attractionMod;
+                    var val = baseRomance * attractionMod * attr;
+                    
                     var ro = new CharacterRelation()
                     {
                         ID = members[i].ID,
@@ -432,7 +436,7 @@ namespace Game.Event.Talk
             {
                 var attr = listener.PersonalAttractionFrom(speaker);
                 float attractionMod = Mathf.Max(0, 2 * attr - 1);
-                var val = baseRomance * attractionMod;
+                var val = baseRomance * attractionMod * attr;
                 var ro = new CharacterRelation()
                 {
                     ID = speaker.ID,
@@ -569,7 +573,7 @@ namespace Game.Event.Talk
                 r[ta] += effectToTarget;
             }
 
-           listener.CalcPersonalizedStatsDeltaOnReceive(ref result);
+            listener.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
 
         protected override void OnEnter(Character who)
@@ -585,15 +589,15 @@ namespace Game.Event.Talk
             
             UpdateShare();
             
-            if (who.ID == GameManager.Instance.Player.ID) TalkWindow.Instance.Init(this);
+            if (who.ID == GameManager.Instance.Player?.ID) TalkWindow.Instance.Init(this);
         }
 
         protected override void OnLeave(Character who)
         {
-                
             base.OnLeave(who);
             
-            if (who.ID == GameManager.Instance.Player.ID) TalkWindow.Instance?.Close();
+            if (GameManager.Instance.Player != null && who.ID == GameManager.Instance.Player.ID) 
+                TalkWindow.Instance?.Close();
             
             selected.Remove(who.ID);
             scoreBySpeaker.Remove(who.ID); 

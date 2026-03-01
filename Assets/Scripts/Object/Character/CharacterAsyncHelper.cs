@@ -57,7 +57,10 @@ namespace Game.Object.Character
 
             if (curEvent.Equals(e))
             {
-                await character.TryInviteMeAsync(token, curEvent, who, true);
+                if (await character.TryInviteMeAsync(token, curEvent, who))
+                {
+                    character.Busy = temp;
+                }
             }
             else
             {
@@ -73,9 +76,9 @@ namespace Game.Object.Character
                 {
                     e.Finish();
                 }
+                
+                character.Busy = temp;
             }
-            
-            character.Busy = temp;
         }
 
         public static async UniTask TrackTargetAsync(
