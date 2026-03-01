@@ -24,7 +24,12 @@ namespace Game.Object.Character.AI
         public Character Character => character;
         private const int RandomSize = 6;
         private readonly (IInteractable obj, Action action, float score)[] _topActions = new (IInteractable obj, Action action, float score)[RandomSize];
-
+        
+        private DeltaResult _result = new DeltaResult()
+        {
+            Stats = default,
+            Relation = new RelationFloatDict()
+        };
         
         public ITask Select()
         {
@@ -36,31 +41,32 @@ namespace Game.Object.Character.AI
                 _topActions[i].score = -1;
             }
                 
-            for (int i = 0; i < objs.Count; i++)
+            foreach (var o in objs)
             {
-                var o = objs[i];
                 if (o?.Actions == null) continue;
-                
-                for (int j = 0; j < o.Actions.Length; j++)
+
+                foreach (var action in o.Actions)
                 {
-                    var action = o.Actions[j];
                     if (o.ID == character.ID && !action.allowSelf) continue;
                     if (!action.Check(character, o)) continue;
 
-                    var score = CalcScore(action.DeltaStats(character, o), o);
+                    _result.Reset();
+
+                    action.DeltaStats(character, o, ref _result);
+                    var score = CalcScore(o, ref _result);
 
                     // 관성 보너스
                     if (currentTask is ActionTask actionTask &&
                         actionTask.action.Equals(action) &&
                         actionTask.Obj.Equals(o))
                     {
-                        score *= 2f;
+                        score *= 10f;
                     }
                     else if (currentTask is EventTask eventTask && 
-                        action.effect is InviteEventEffect invite && 
-                        eventTask.invitedEvent.Equals(invite.TargetEvent))
+                             action.effect is InviteEventEffect invite && 
+                             eventTask.invitedEvent.Equals(invite.TargetEvent))
                     {
-                        score *= 2f;
+                        score *= 10f;
                     }
 
                     if (score <= 0) continue;
@@ -81,11 +87,13 @@ namespace Game.Object.Character.AI
 
             int idx = Random.SelectWithMultiplier(scoresOnly);
             if (idx < 0 || idx > RandomSize) return null;
-             
+
+            _result.Reset();
+            
             var selected = _topActions[idx];
 
             // 결정 임계치 체크
-            float idleScore = CalcScore();
+            float idleScore = CalcScore(ref _result);
             if (selected.score < idleScore * 1.3f) return null;
 
             // 현재 행동과 동일한지 체크
@@ -123,37 +131,37 @@ namespace Game.Object.Character.AI
             }
         }
 
-        public async UniTask<bool> TryInviteMeAsync(CancellationToken token, Event.Event e, Character who,
+        public UniTask<bool> TryInviteMeAsync(CancellationToken token, Event.Event e, Character who,
             bool forced = false)
         {
-            if (token.IsCancellationRequested) return false;
-            if (character.Data.eventID != "") return false;
+            if (token.IsCancellationRequested) return  UniTask.FromResult(false);
+            if (character.Data.eventID != "")return  UniTask.FromResult(false);
 
-            if (!forced)
+            if (forced) return UniTask.FromResult(e.TryInvite(character, true));
+            
+            _result.Reset();
+            
+            var x = CalcScore(ref _result);
+
+            e.CalcDeltaStats(character, ref _result);
+            
+            _result.Reset();
+            var y = CalcScore(null, ref _result) ; 
+
+            if (TryInterrupt() && x > y)
             {
-                var x = CalcScore();
-                var y = CalcScore(e.CalcDeltaStats(character),null) ; 
+                var front = character.TaskQueue.Front;
 
-                if (TryInterrupt() && x > y)
-                {
-                    var front = character.TaskQueue.Front;
+                if (front is not ActionTask actionTask ||
+                    actionTask.action.effect is not InviteSimpleEventEffect frontEffect) return UniTask.FromResult(false);
+                if (!e.Equals(frontEffect.eventData)) return UniTask.FromResult(false);
 
-                    if (front is not ActionTask actionTask ||
-                        actionTask.action.effect is not InviteSimpleEventEffect frontEffect) return false;
-                    if (!e.Equals(frontEffect.eventData)) return false;
+                var ch = actionTask.Obj as Character;
 
-                    var ch = actionTask.Obj as Character;
-
-                    if (ch?.CurEvent?.members != null && !ch.CurEvent.members.Contains(who)) return false;
-                }
+                if (ch?.CurEvent?.members != null && !ch.CurEvent.members.Contains(who)) return UniTask.FromResult(false);
             }
 
-            if (!e.TryInvite(character, forced))
-            {
-                return false;
-            }
-
-            return true;
+            return UniTask.FromResult(e.TryInvite(character));
         }
 
         private void Log(SelectLogData data)
@@ -214,33 +222,38 @@ namespace Game.Object.Character.AI
             return baseWill + passion;
         }
 
-        public float CalcScore()
+        public float CalcScore(ref DeltaResult result)
         {
-            if (character.taskQueue.Current != null) return CalcScore(character.taskQueue.Current.CalcDeltaForScore(), null);
+            result.Reset();
+
+            if (character.taskQueue.Current != null)
+            {
+                character.taskQueue.Current.CalcDeltaForScore(ref result);
+                return CalcScore(result.Relation, null, ref result) + CalcScore(result.Stats, null, ref result);
+            }
 
             return 0;
         }
 
-        public float CalcScore(RelationFloatDict deltas, IInteractable o)
+        public float CalcScore(IInteractable o, ref DeltaResult result)
+        {
+            return CalcScore(result.Relation, o, ref result) + CalcScore(result.Stats, o, ref result);
+        }
+        
+        public float CalcScore(RelationFloatDict deltas, IInteractable o, ref DeltaResult result)
         {
             if (deltas == null) return 0;
             
-            var statsDelta = new CharacterStats();
-            
             foreach (var (rel, v) in deltas)
             {
-                statsDelta += character.CalcPersonalizedStatsDeltaOnReceive(rel, v);
+                character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref _result);
             }
 
-            return CalcScore(statsDelta, o);
+            return CalcScore(result.Stats, o, ref result);
         }
 
-        public float CalcScore((CharacterStats, RelationFloatDict ) deltaStats, IInteractable o)
-        {
-            return CalcScore(deltaStats.Item1, o) + CalcScore(deltaStats.Item2 ?? new(), o);
-        }
         
-        public float CalcScore(CharacterStats deltas, IInteractable o)
+        public float CalcScore(CharacterStats deltas, IInteractable o, ref DeltaResult result)
         {
             var score =
                 (deltas *
@@ -248,30 +261,26 @@ namespace Game.Object.Character.AI
                   CalcRNeedScoreMultiplier(character.Data.stats) * character.Data.rModifier +
                   CalcGNeedScoreMultiplier(character.Data.stats) * character.Data.gModifier)).SumNeeds();
             
-            var dist = NavManager.Instance.FindPathAround(character.Position, o?.Positions ?? new Vector3[] {
-                character.Position
-            }).Item2;
+            var dist = NavManager.Instance.FindPathAround(character.Position, o?.Positions).Item2;
 
             return score / math.max(dist, 1f);
         }
-        
-        
+
+
         public float CalcScore(ActionTask task)
         {
-            CharacterStats s = new();
-            RelationFloatDict r = null;
+            _result.Reset();
             
             if (task.action.effect is AddDeltaEffect addDeltaEffect)
-                (s,r) = addDeltaEffect.DeltaStats(task.Sub, task.Obj);
+                addDeltaEffect.DeltaStats(task.Sub, task.Obj, ref _result);
             else if (task.action.effect is InviteSimpleEventEffect inviteEventEffect)
-                (s,r) = inviteEventEffect.DeltaStats(task.Sub, task.Obj);
-            return CalcScore((s,r), task.Obj);
+                inviteEventEffect.DeltaStats(task.Sub, task.Obj, ref _result);
+            return CalcScore(task.Obj, ref _result);
         }
         
-        protected void CalcDeltaStats(Character c, CharacterStats delta, RelationFloatDict relDelta)
+        protected void CalcDeltaStats(Character c, ref DeltaResult result)
         {
-            c.CalcPersonalizedStatsDeltaOnReceive(relDelta);
-            c.CalcPersonalizedStatsDeltaOnReceive(delta);
+            c.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
     }
 }

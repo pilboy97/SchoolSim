@@ -16,9 +16,9 @@ namespace Game.Task
         [SerializeField] public bool notOnce;
         [SerializeField] public bool allowSelf;
 
-        public (CharacterStats, RelationFloatDict) DeltaStats(Character s, IInteractable o)
+        public void DeltaStats(Character s, IInteractable o, ref DeltaResult result)
         {
-            return effect?.DeltaStats(s, o) ?? default;
+            effect.DeltaStats(s, o, ref result);
         }
 
         public bool Equals(Action other)

@@ -91,7 +91,7 @@ namespace Game.Object.Character
             if (target == null) return;
 
             var cp = target.CenterPosition;
-            var routine = NavManager.Instance.FindPath(character.Position, target.Positions);
+            var routine = NavManager.Instance.FindPathAround(character.Position, target.Positions);
             var idx = 0;
             while (target.Distance(character) > 1.3f)
             {
@@ -139,7 +139,6 @@ namespace Game.Object.Character
             if (token.IsCancellationRequested) return;
             if (dest == null) return;
             
-            // var moveDestCPos = dest.Select(d=>MapController.Instance.WorldToCell(d)).ToArray();
             var moveDestCPos = new Vector3Int[dest.Length];
             for(int i = 0;i < dest.Length;i++)
             {

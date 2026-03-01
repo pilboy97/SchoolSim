@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -124,41 +125,44 @@ namespace Game.Object.Character
         public TaskQueue TaskQueue => taskQueue;
 
         public float Receive(
-            (CharacterStats stats, RelationFloatDict rels) tup,
+            ref DeltaResult result,
             bool perSec = true, bool withSideEffect = true)
         {
             if (perSec)
             {
                 var deltaTime = UnityEngine.Time.deltaTime;
 
-                tup.stats *= deltaTime;
+                result.Stats *= deltaTime;
                 
-                if (tup.rels != null)
+                if (result.Relation != null)
                 {
                     RelationFloatDict r = new RelationFloatDict();
 
-                    foreach (var (k, v) in tup.rels)
+                    foreach (var (k, v) in result.Relation)
                     {
                         r.TryAdd(k, v * deltaTime);
                     }
 
-                    tup.rels = r;
+                    result.Relation = r;
                 }
             }
             
-            return Receive(tup.rels, withSideEffect) + Receive(tup.stats, withSideEffect);
+            return Receive(result.Relation, withSideEffect) + Receive(result.Stats, withSideEffect);
         }
         
         public float Receive(CharacterStats stats, bool withSideEffect = true)
         {
             if (withSideEffect)
             {
-                stats = CalcPersonalizedStatsDeltaOnReceive(stats);
+                _result.Reset();
+                CalcPersonalizedStatsDeltaOnReceive(stats, ref _result);
+
+                stats += _result.Stats;
             }
-            
+
             _data.Receive(stats);
 
-            return AI.CalcScore(stats, null);
+            return AI.CalcScore(stats, null, ref _result);
         }
 
         public float Receive(RelationFloatDict relations, bool withSideEffect = true)
@@ -231,10 +235,12 @@ namespace Game.Object.Character
             
             if (withSideEffect)
             {
-                var sideEffect = CalcPersonalizedStatsDeltaOnReceive(rel, value);
+                _result.Reset();
                 
-                _data.Receive(sideEffect);
-                sum += AI.CalcScore(sideEffect, null);
+                CalcPersonalizedStatsDeltaOnReceive(rel, value, ref _result);
+                
+                _data.Receive(_result);
+                sum += AI.CalcScore(_result.Stats, null, ref _result) + AI.CalcScore(_result.Relation, null, ref _result);
             }
 
             return sum;
@@ -316,12 +322,18 @@ namespace Game.Object.Character
             _view?.SetVisible(IsVisible);
             Draw();
         }
-
+        
+        private DeltaResult _result = new DeltaResult()
+        {
+            Stats = default,
+            Relation = new RelationFloatDict()
+        };
+        
         public void OnUpdate()
         {
             float delta = UnityEngine.Time.deltaTime;
             
-            var deltas = CalcPersonalizedStatsDeltaOnReceive(new CharacterStats()
+            Receive(new CharacterStats()
             {
                 hungry = -0.1f,
                 fatigue = -0.1f,
@@ -331,9 +343,8 @@ namespace Game.Object.Character
                 rLoneliness = -0.1f,
                 fun = -0.1f,
                 motivation = -0.1f
-            }) * delta;
+            } * delta);
             
-            Receive(deltas);
             UpdateRelations();
             
             curTime += delta;
@@ -434,12 +445,15 @@ namespace Game.Object.Character
         public void SetVar(string name, float val) => _data.SetVar(name, val);
 
 
+        private readonly Dictionary<string, float> _attrCache = new();
         public float PersonalAttractionFrom(Character other)
         {
             const float M = 1.1f;
 
             if (other == null) return 0;
 
+            if (_attrCache.TryGetValue(other.id, out var value)) return value;
+            
             var angle = Vector3.Angle(_data.beauty, other._data.beauty) * Mathf.PI / 180;
             var b = Mathf.Pow(M, other.Data.attraction);
 
@@ -452,10 +466,12 @@ namespace Game.Object.Character
             var ret = strikeZone.Priority;
             if (other.Data.gender == _data.gender) ret *= 0.5f;
 
+            _attrCache[other.id] = ret;
+            
             return ret;
         }
-
-        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(CharacterStats s)
+        
+        public void CalcPersonalizedStatsDeltaOnReceive(CharacterStats s, ref DeltaResult result)
         {
             var mbti = Data.mbti;
 
@@ -482,26 +498,25 @@ namespace Game.Object.Character
             // 실질적 기술(S) 선호
             if (mbti.CheckComponent(MBTIComponent.S))
             {
-                s += s * sModifier;
+                result.Stats += s * sModifier;
             }
             // 추상적 이론(N) 선호
             else
             {
-                s += s * nModifier;
+                result.Stats += s * nModifier;
             }
             
             // 2. T(사고) : 성취(Motivation)에서 즐거움을 얻음
             if (mbti.CheckComponent(MBTIComponent.T))
-                s += s * tModifier;
-
-            return s;
+                result.Stats += s * tModifier;
         }
 
-        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(CharacterRelation s, float v)
+        public void CalcPersonalizedStatsDeltaOnReceive(CharacterRelation s, float v, ref DeltaResult result)
         {
-            var ret = new CharacterStats();
+            ref var ret = ref result.Stats;
             var other = ObjectManager.Instance.Find(s.ID) as Character;
-            if (other == null) return ret;
+            
+            if (other == null) return ;
 
             var mbti = Data.mbti;
             var attr = PersonalAttractionFrom(other);
@@ -548,21 +563,29 @@ namespace Game.Object.Character
                     
                     break;
             }
-
-            return ret;
         }
 
-        public CharacterStats CalcPersonalizedStatsDeltaOnReceive(RelationFloatDict delta)
+        public void CalcPersonalizedStatsDeltaOnReceive(RelationFloatDict rel, ref DeltaResult result)
         {
-            var ret = new CharacterStats();
-            if (delta == null) return ret;
+            if (result.Relation != null)
             
-            foreach (var (s, v) in delta)
-            { 
-                ret += CalcPersonalizedStatsDeltaOnReceive(s, v);
-            }
+             foreach (var (s, v) in result.Relation)
+             {
+                CalcPersonalizedStatsDeltaOnReceive(s, v, ref result);
+             }
+        }
 
-            return ret;
+        public void CalcPersonalizedStatsDeltaOnReceive(ref DeltaResult result)
+        {
+            if (result.Relation != null)
+            {
+                foreach (var (s, v) in result.Relation)
+                {
+                    CalcPersonalizedStatsDeltaOnReceive(s, v, ref result);
+                }
+                CalcPersonalizedStatsDeltaOnReceive(result.Stats, ref result);
+            }
+            
         }
 
         public void UpdateRelations()

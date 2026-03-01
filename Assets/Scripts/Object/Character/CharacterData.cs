@@ -106,22 +106,22 @@ namespace Game.Object.Character
                 switch (comp)
                 {
                     case MBTIComponent.E or MBTIComponent.I:
-                        fix[0] = true;
-
+                        fix[3] = true;
+                        
                         ret |= (comp == MBTIComponent.I) ? 0b1000 : 0;
                         break;
                     case MBTIComponent.S or MBTIComponent.N:
-                        fix[1] = true;
+                        fix[2] = true;
 
                         ret |= (comp == MBTIComponent.N) ? 0b0100 : 0;
                         break;
                     case MBTIComponent.T or MBTIComponent.F:
-                        fix[2] = true;
+                        fix[1] = true;
 
                         ret |= (comp == MBTIComponent.F) ? 0b0010 : 0;
                         break;
                     case MBTIComponent.J or MBTIComponent.P:
-                        fix[3] = true;
+                        fix[0] = true;
 
                         ret |= (comp == MBTIComponent.P) ? 0b0001 : 0;
                         break;
@@ -307,13 +307,6 @@ namespace Game.Object.Character
         {
             stats += x;
         }
-        
-        
-        public void Set(CharacterRelation rel, float v)
-        {
-            relations[rel] = v;
-            relations[rel] = Mathf.Clamp(relations[rel], -100, 100);
-        }
 
         public void Receive(CharacterRelation rel, float v)
         {
@@ -321,6 +314,21 @@ namespace Game.Object.Character
                 UnityEngine.Debug.Log($"TOO BIG {v}");
             
             this[rel] += v;
+        }
+
+        public void Receive(DeltaResult result)
+        {
+            Receive(result.Stats);
+            foreach (var (k, v) in result.Relation)
+            {
+                Receive(k, v);
+            }
+        }
+        
+        public void Set(CharacterRelation rel, float v)
+        {
+            relations[rel] = v;
+            relations[rel] = Mathf.Clamp(relations[rel], -100, 100);
         }
 
         public float this[CharacterRelation key]

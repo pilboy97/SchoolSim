@@ -14,11 +14,11 @@ namespace Game.Event.Talk
         public class StringTopicDict : UnitySerializedDictionary<string, Topic> { }
         
         [Header("Weights")]
-        [SerializeField] private float baseLoneliness = 5f;  // R-욕구 (결핍)
+        [SerializeField] private float baseLoneliness = 0.2f;  // R-욕구 (결핍)
         [SerializeField] private float baseFriendly = 1f;    // R-욕구 (관계)
         [SerializeField] private float baseRomance = 1f;     // R-욕구 (로맨스)
-        [SerializeField] private float baseTeach = 1f;     // G-욕구 (성장 - 양성 피드백 대상)
-        [SerializeField] private float baseInfluence = 1f;   // 평판 변화량
+        [SerializeField] private float baseTeach = 0.2f;     // G-욕구 (성장 - 양성 피드백 대상)
+        [SerializeField] private float baseInfluence = 2f;   // 평판 변화량
 
         [Header("State")]
         [SerializeField] private bool waitForSelect;
@@ -32,7 +32,7 @@ namespace Game.Event.Talk
         public StringFloatDict shareOfInfluence = new();
 
         private (Topic topic, float score)[] _bestTopics;
-        private int _bestSize = 6;
+        private int _bestSize = 4;
 
         public float AverageScore
         {
@@ -45,24 +45,17 @@ namespace Game.Event.Talk
                     sum += v;
                 }
 
-                return sum / members.Count;
+                return Mathf.Max(1, sum) / members.Count;
             }
         }
 
         public float DesiredShare => 1f / members.Count;
         public static List<Topic> Topics;
 
-        // 결과값을 담기 위한 구조체 (할당 최적화)
-        public struct DeltaResult
-        {
-            public CharacterStats Stats;
-            public RelationFloatDict Relation;
-        }
-
         public TalkEvent()
         {
             minMember = 2;
-            maxMember = 8;
+            maxMember = 4;
             
             eventName = "Talk";
             busy = false;
@@ -99,25 +92,27 @@ namespace Game.Event.Talk
             }
         }
 
-        // --- 핵심 계산 로직 ---
+        private DeltaResult _result = new DeltaResult()
+        {
+            Stats = default,
+            Relation = new ()
+        };
 
-        public override (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c)
+        public override void CalcDeltaStats(Character c, ref DeltaResult result)
         {
             // 이 캐릭터에게 가장 점수가 높은 주제를 찾아 그 변화량을 반환
             Topic best = GetBestTopicForCharacter(c);
-            var result = CalcStatusDelta(c, best);
+
+            result.Reset();
+            
+            CalcStatusDelta(c, best, ref result);
 
             if (members.Contains(c) && status == EventStatus.Run)
             {
-                result = CalcStatsDeltaWithShare(result, c);
+                InternalCalcStatsDeltaWithShare(ref result, c);
             }
             
-            var ret = result.Stats;
-            var rel = result.Relation;
-            
-            ret += c.CalcPersonalizedStatsDeltaOnReceive(rel);
-
-            return (ret, rel);
+            c.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
 
         private Topic GetBestTopicForCharacter(Character ch)
@@ -141,14 +136,15 @@ namespace Game.Event.Talk
                 _bestTopics[i].score = -1;
             }
 
-            for (int i = 0; i < Topics.Count; i++)
+            foreach (var topic in Topics)
             {
-                Topic t = Topics[i];
+                var t = topic;
                 t.speaker = ch;
 
-                DeltaResult delta = CalcStatusDelta(ch, t);
-
-                float score = controller.CalcScore((delta.Stats, delta.Relation), null);
+                _result.Reset();
+                
+                CalcStatusDelta(ch, t, ref _result);
+                float score = controller.CalcScore(null, ref _result);
 
                 int j = _bestSize - 1;
                 
@@ -173,13 +169,17 @@ namespace Game.Event.Talk
                 scores.Add(_bestTopics[cnt].score);
             }
 
+            if (scores.Count == 0) return default;
+
             var x = Random.SelectWithMultiplier(scores);
             return _bestTopics[x].topic;
         }
 
-        private DeltaResult CalcStatsDeltaWithShare(DeltaResult delta, Character ch)
+        private void InternalCalcStatsDeltaWithShare(ref DeltaResult delta, Character ch)
         {
             var modifier = shareOfInfluence.GetValueOrDefault(ch.ID) / DesiredShare;
+            if (modifier < 0.3f) modifier = 0;
+            
             delta.Stats *= modifier;
 
             if (delta.Relation != null)
@@ -191,41 +191,35 @@ namespace Game.Event.Talk
                     delta.Relation[key] *= modifier;
                 }
             }
-            return delta;
         }
         
-        private DeltaResult CalcStatusDelta(Character listener, Topic topic)
+        private void CalcStatusDelta(Character listener, Topic topic, ref DeltaResult result)
         {
-            var resStats = new CharacterStats(){
-                loneliness = baseLoneliness // 대화 자체로 고독감 해소
-            };
-            var resRel = new RelationFloatDict();
+            ref var resRel = ref result.Relation;
+            ref var resStats = ref result.Stats;
 
             Character speaker = topic.speaker;
-            if (speaker == null) return default;
+            if (speaker?.ID == null) return;
 
             switch (topic.type)
             {
                 case Topic.Type.General:
-                    (resStats, resRel) = CalcStatsDeltaForGeneral(listener, speaker);
+                   CalcStatsDeltaForGeneral(listener, speaker, ref result);
                     break;
 
                 case Topic.Type.Romance:
-                    (resStats, resRel) = CalcStatsDeltaForRomance(listener, speaker);
+                   CalcStatsDeltaForRomance(listener, speaker, ref result);
                     break;
 
                 case Topic.Type.Teach:
-                    // G-욕구: 상대방의 숙련도가 높을수록 배울 점이 많아 점수가 높아짐
-                    (resStats, resRel) = CalcStatsDeltaTeachEffect(listener, topic);
+                  CalcStatsDeltaTeachEffect(listener, topic, ref result);
                     break;
 
                 case Topic.Type.RelationUp:
                 case Topic.Type.RelationDown:
-                    (resStats, resRel) =  CalcStatsDeltaReputationEffect(listener, topic);
+                   CalcStatsDeltaReputationEffect(listener, topic, ref result);
                     break;
             }
-            
-            return new DeltaResult { Stats = resStats, Relation = resRel };
         }
 
         // --- 실행 및 상태 관리 ---
@@ -261,6 +255,7 @@ namespace Game.Event.Talk
             if (!alreadySelect)
             {
                 Character player = GameManager.Instance.Player;
+                
                 bool playerInEvent = false;
 
                 for (int i = 0; i < members.Count; i++)
@@ -270,7 +265,8 @@ namespace Game.Event.Talk
                     {
                         playerInEvent = true;
                     }
-                    
+
+                    _result.Reset();
                     selected[m.ID] = GetBestTopicForCharacter(m);
                 }
 
@@ -295,30 +291,45 @@ namespace Game.Event.Talk
 
         private void UpdateShare()
         {
-            // 대화가 진행될수록 과거의 점수 비중을 살짝 줄임 (예: 20% 감쇠)
-            var keys = new List<string>(scoreBySpeaker.Keys);
-            foreach(var key in keys) {
-                scoreBySpeaker[key] *= 0.8f; 
-            }
-    
             shareOfInfluence.Clear();
 
             float sum = 0;
             foreach (var member in members)
             {
-                shareOfInfluence.TryAdd(member.ID, 0);
-                scoreBySpeaker.TryAdd(member.ID, 0);
-                sum +=  Mathf.Max(1, scoreBySpeaker.GetValueOrDefault(member.ID) );
+                shareOfInfluence.TryAdd(member.ID, DesiredShare);
+                scoreBySpeaker.TryAdd(member.ID, AverageScore);
+                
+                sum += scoreBySpeaker.GetValueOrDefault(member.ID);
             }
 
             foreach (var member in members)
             {
-                shareOfInfluence[member.ID] = Mathf.Max(1, scoreBySpeaker[member.ID]) / sum;
-                
+                shareOfInfluence[member.ID] = scoreBySpeaker[member.ID] / sum;
             }
         }
+
+        private Dictionary<Character, DeltaResult> _applyCache = new ();
+        
         private void ApplyAllSelectedTopics()
         {
+
+            foreach (var member in members)
+            {
+                if (_applyCache.TryGetValue(member, out var value))
+                {
+                    value.Reset();
+                    _applyCache[member] = value;
+                }
+                else
+                {
+                    _applyCache.TryAdd(member, new DeltaResult()
+                    {
+                        Stats = default,
+                        Relation = new RelationFloatDict()
+                    });
+                }
+            }
+            
             foreach (var entry in selected)
             {
                 Character speaker = ObjectManager.Instance.Find(entry.Key) as Character;
@@ -326,72 +337,75 @@ namespace Game.Event.Talk
 
                 Topic topic = entry.Value;
                 topic.speaker = speaker;
+                scoreBySpeaker.TryAdd(speaker.ID, AverageScore);
                 
                 for (int i = 0; i < members.Count; i++)
                 {
                     Character listener = members[i];
-    
-                    // 1. 화자가 준비한 순수한 변화량 계산 (영향력 깎이기 전!)
-                    DeltaResult rawRes = CalcStatusDelta(listener, topic);
-    
-                    scoreBySpeaker.TryAdd(speaker.ID, 0);
 
-                    // 2. ★ 핵심 수정 ★ 
-                    // 영향력이 곱해져서 딕셔너리가 오염되기 전에, '순수 델타(rawRes)'를 기반으로 화자의 가치를 평가합니다.
-                    float relScore = listener.AI.CalcScore(rawRes.Relation, null);
-                    float statsScore = listener.AI.CalcScore(
-                        rawRes.Stats + listener.CalcPersonalizedStatsDeltaOnReceive(rawRes.Stats), null);
-    
-                    // 화자는 정당한 점수를 받습니다.
-                    scoreBySpeaker[speaker.ID] += (relScore + statsScore);
+                    if (!_applyCache.TryGetValue(listener, out DeltaResult res))
+                        res.Reset();
+                    
+                    CalcStatusDelta(listener, topic, ref res);
+                    InternalCalcStatsDeltaWithShare(ref res, speaker);
 
-                    // 3. 이제 현재 영향력(Share)을 곱해서 리스너에게 실제로 적용될 수치로 깎습니다.
-                    DeltaResult finalRes = CalcStatsDeltaWithShare(rawRes, speaker);
+                    scoreBySpeaker[speaker.ID] += listener.AI.CalcScore(ref res);
 
-                    // 4. 리스너에게는 깎인 수치(finalRes)만 실제 적용합니다. (반환되는 깎인 점수는 버림)
-                    listener.Receive((finalRes.Stats, finalRes.Relation), false);
+                    _applyCache.TryAdd(listener, res);
                 }
+
+            }
+            
+            foreach (var (ch, r) in _applyCache)
+            {
+                var res = r;
+                ch.Receive(ref res, false);
             }
             
             UpdateShare();
         }
         
-        private (CharacterStats, RelationFloatDict) CalcStatsDeltaForGeneral(Character listener, Character speaker)
+        private void CalcStatsDeltaForGeneral(Character listener, Character speaker, ref DeltaResult result)
         {
-            var s = new CharacterStats();
-            var r = new RelationFloatDict();
+            ref var s = ref result.Stats;
+            ref var r = ref result.Relation;
             
             if (listener.ID == speaker.ID)
             {
                 for (int i = 0; i < members.Count; i++)
                 {
                     if (members[i].ID == listener.ID) continue;
-                    
-                    r.Add(new CharacterRelation()
+                    var f = new CharacterRelation()
                     {
                         ID = members[i].ID,
                         relType = CharacterRelation.Type.Friend,
-                    }, baseFriendly);
-                    s.loneliness += baseFriendly;
+                    };
+                    
+                    r.TryAdd(f, 0);
+                    r[f] += baseFriendly;
+                    s.loneliness += baseLoneliness;
                 }
             }
             else
             {
-                r.Add(new CharacterRelation()
+                var f = new CharacterRelation()
                 {
                     ID = speaker.ID,
                     relType = CharacterRelation.Type.Friend,
-                }, baseFriendly);
+                };
+                
+                r.TryAdd(f, 0);
+                r[f] += baseFriendly;
+                s.loneliness += baseLoneliness;
             }
 
-            s += listener.CalcPersonalizedStatsDeltaOnReceive(r);
-            return (s, r);
+            listener.CalcPersonalizedStatsDeltaOnReceive(r, ref result);
         }
 
-        private (CharacterStats, RelationFloatDict)  CalcStatsDeltaForRomance(Character listener, Character speaker)
+        private void CalcStatsDeltaForRomance(Character listener, Character speaker, ref DeltaResult result)
         {
-            var s = new CharacterStats();
-            var r = new RelationFloatDict();
+            ref var s = ref result.Stats;
+            ref var r = ref result.Relation;
             
             
             if (listener.ID == speaker.ID)
@@ -403,13 +417,14 @@ namespace Game.Event.Talk
                     var attr = speaker.PersonalAttractionFrom(members[i]);
                     float attractionMod = Mathf.Max(0, 2 * attr - 1);
                     var val = baseRomance * attractionMod;
-                    
-                    r.Add(new CharacterRelation()
+                    var ro = new CharacterRelation()
                     {
                         ID = members[i].ID,
                         relType = CharacterRelation.Type.Romance,
-                    }, val);
+                    };
                     
+                    r.TryAdd(ro, 0);
+                    r[ro] += val;
                     s.rLoneliness+= baseRomance;
                 }
             }
@@ -418,22 +433,23 @@ namespace Game.Event.Talk
                 var attr = listener.PersonalAttractionFrom(speaker);
                 float attractionMod = Mathf.Max(0, 2 * attr - 1);
                 var val = baseRomance * attractionMod;
-                
-                r.Add(new CharacterRelation()
+                var ro = new CharacterRelation()
                 {
                     ID = speaker.ID,
                     relType = CharacterRelation.Type.Romance,
-                }, val);
+                };
+                
+                r.TryAdd(ro, 0);
+                r[ro] += val;
             }
 
-            s += listener.CalcPersonalizedStatsDeltaOnReceive(r);
-            return (s, r);
+            listener.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
         
-        private (CharacterStats, RelationFloatDict)  CalcStatsDeltaTeachEffect(Character listener, Topic topic)
+        private void CalcStatsDeltaTeachEffect(Character listener, Topic topic, ref DeltaResult result)
         {
-            var s = new CharacterStats();
-            var r = new RelationFloatDict();
+            ref var s = ref result.Stats;
+            ref var r = ref result.Relation;
 
             var speaker = topic.speaker;
 
@@ -451,26 +467,28 @@ namespace Game.Event.Talk
             else
             {
                 s[topic.knowledge] += effect;
-                r.Add(new CharacterRelation()
+                var f = new CharacterRelation()
                 {
                     ID = speaker.ID,
                     relType = CharacterRelation.Type.Friend
-                }, effect);
+                };
+                
+                r.TryAdd(f, 0);
+                r[f] += effect;
             }
 
-            s += listener.CalcPersonalizedStatsDeltaOnReceive(r);
-            return (s, r);
+            listener.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
 
-        private (CharacterStats, RelationFloatDict)  CalcStatsDeltaReputationEffect(Character listener, Topic topic)
+        private void  CalcStatsDeltaReputationEffect(Character listener, Topic topic, ref DeltaResult result)
         {
-            var s = new CharacterStats();
-            var r = new RelationFloatDict();
+            ref var s = ref result.Stats;
+            ref var r = ref result.Relation;
             
             Character target = ObjectManager.Instance.Find(topic.target.ID) as Character;
             var speaker = topic.speaker;
-            
-            if (target == null || topic.speaker.ID == topic.target.ID) return default;
+
+            if (target == null || topic.speaker.ID == topic.target.ID) return;
 
             bool isUp = topic.type == Topic.Type.RelationUp;
             float finalInf = isUp ? baseInfluence : -baseInfluence;
@@ -479,11 +497,14 @@ namespace Game.Event.Talk
             {
                 if (!(isUp && !members.Contains(target)))
                 {
-                    r.Add(new CharacterRelation()
+                    var f = new CharacterRelation()
                     {
                         ID = topic.target.ID,
                         relType = CharacterRelation.Type.Friend
-                    }, finalInf * 4);
+                    };
+                    
+                    r.TryAdd(f, 0);
+                    r[f] += finalInf * 4;
                 }
 
                 foreach (var member in members)
@@ -492,53 +513,63 @@ namespace Game.Event.Talk
                     
                     var currentRel = listener.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
                     var effect = (isUp ? 1 : -1) * (currentRel / 100f);
-                    
-                    r.Add(new CharacterRelation()
+                    var f = new CharacterRelation()
                     {
                         ID = member.ID,
                         relType = CharacterRelation.Type.Friend
-                    }, effect);
+                    };
+                    
+                    r.TryAdd(f, 0);
+                    r[f] += effect;
                 }
             }
             else if (listener.ID == target.ID)
             {
-               r.Add(new CharacterRelation()
-               {
-                   ID = topic.speaker.ID,
-                   relType = CharacterRelation.Type.Friend
-               }, finalInf * 4);
+                var f = new CharacterRelation()
+                {
+                    ID = topic.speaker.ID,
+                    relType = CharacterRelation.Type.Friend
+                };
+                
+               r.TryAdd(f, 0);
+               r[f] += finalInf * 4;
             }
             else
             {
-                var currentRelToSpeaker = listener.Data[new CharacterRelation { ID = topic.speaker.ID, relType = CharacterRelation.Type.Friend }];
-                var currentRelToTarget = listener.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
+                var currentRelToSpeaker = listener.Data[new CharacterRelation { ID = speaker.ID, relType = CharacterRelation.Type.Friend }];
+                var currentRelToTarget = listener.Data[new CharacterRelation { ID = target.ID, relType = CharacterRelation.Type.Friend }];
                 
                 var effectToSpeaker = (isUp ? 1 : -1) * (currentRelToTarget / 100f);
                 var effectToTarget = finalInf * (currentRelToSpeaker / 100f);
 
                 if (listener.IsRival(speaker) )
                 {
-                    return default;
+                    effectToTarget *= 0.1f;
                 }
                 if (listener.IsFriend(speaker))
                 {
                     effectToTarget *= 4;
                 }
 
-                r.Add(new CharacterRelation()
+                var sp = new CharacterRelation()
                 {
                     ID = speaker.ID,
                     relType = CharacterRelation.Type.Friend
-                }, effectToSpeaker);
-                r.Add(new CharacterRelation()
+                };
+                var ta = new CharacterRelation()
                 {
-                    ID = topic.target.ID,
+                    ID = target.ID,
                     relType = CharacterRelation.Type.Friend
-                }, effectToTarget);
+                };
+                
+                r.TryAdd(sp, 0);
+                r.TryAdd(ta, 0);
+
+                r[sp] += effectToSpeaker;
+                r[ta] += effectToTarget;
             }
 
-            s += listener.CalcPersonalizedStatsDeltaOnReceive(r);
-            return (s, r);
+           listener.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
 
         protected override void OnEnter(Character who)
@@ -550,8 +581,7 @@ namespace Game.Event.Talk
             who.Busy = true;
             
             selected.TryAdd(who.ID, defaultTopic);
-            scoreBySpeaker.TryAdd(who.ID, 0);
-            scoreBySpeaker[who.ID] = AverageScore;
+            scoreBySpeaker.TryAdd(who.ID, AverageScore);
             
             UpdateShare();
             
@@ -576,6 +606,14 @@ namespace Game.Event.Talk
         {
             base.OnDone();
             if (TalkWindow.Instance.EventID == id) TalkWindow.Instance.Close();
+        }
+
+        protected override void OnStart()
+        {
+            scoreBySpeaker.Clear();
+            shareOfInfluence.Clear();
+            
+            UpdateShare();
         }
 
         public override bool Equals(Event other) => other is TalkEvent;

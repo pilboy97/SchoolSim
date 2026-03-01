@@ -1,5 +1,6 @@
 using System;
 using Game.Object.Character;
+using Unity.Android.Types;
 using Action = Game.Task.Action;
 
 namespace Game.Event
@@ -25,14 +26,13 @@ namespace Game.Event
             busy = data.busy;
         }
 
-        public override (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c)
+        public override void CalcDeltaStats(Character c, ref DeltaResult result)
         {
-            if (c == null) return default;
+            if (c == null) return;
 
-            var (s, r) = data.effect.DeltaStats(c, null);
+            data.effect.DeltaStats(c, null, ref result);
             
-            s += c.CalcPersonalizedStatsDeltaOnReceive(r);
-            return (c.CalcPersonalizedStatsDeltaOnReceive(s), r);
+            c.CalcPersonalizedStatsDeltaOnReceive(ref result);
         }
 
         protected override void OnStart()
@@ -50,16 +50,20 @@ namespace Game.Event
             data.onLeave?.Do(who, null, this);
         }
 
+        private DeltaResult _result;
+        
         protected override void OnRun()
         {
             base.OnRun();
             if (status != EventStatus.Run) return;
 
+
             foreach (var ch in members)
             {
-                var (s, r) = CalcDeltaStats(ch);
-                
-                ch.Receive((s, r));
+                _result.Reset();
+                CalcDeltaStats(ch, ref _result);
+
+                ch.Receive(ref _result);
             }
         }
 

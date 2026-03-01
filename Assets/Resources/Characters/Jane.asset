@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cc20be1a65448687deb33ea25e2be6, type: 3}
+  m_Name: Jane
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Object.Character.CharacterData
+  ID: 
+  position: {x: 0, y: 0, z: 0}
+  charName: 
+  gender: 0
+  mbti: 0
+  beauty: {x: 0, y: 0, z: 0}
+  attraction: 0
+  e: 0
+  eModifier: 0
+  rModifier: 0
+  gModifier: 0
+  stats:
+    logic: 0
+    language: 0
+    aesthetics: 0
+    social: 0
+    athletic: 0
+    comedy: 0
+    conversation: 0
+    attractive: 0
+    literature: 0
+    math: 0
+    sociology: 0
+    science: 0
+    sports: 0
+    art: 0
+    hungry: 0
+    fatigue: 0
+    toilet: 0
+    hygiene: 0
+    loneliness: 0
+    rLoneliness: 0
+    fun: 0
+    motivation: 0
+  relations:
+    keyData: []
+    valueData: []
+  friends: []
+  rivals: []
+  genData:
+    rid: 160170288287056220
+  classroom: {fileID: 11400000, guid: 1c27ec29485044a0da84355101a0da62, type: 2}
+  eventID: 
+  friendDistribution:
+    mean: 0
+    stddev: 0
+  rivalDistribution:
+    mean: 0
+    stddev: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 160170288287056220
+      type: {class: CharacterGenData, ns: Game.Object.Character, asm: Assembly-CSharp}
+      data:
+        charName: July
+        initPos: {x: 2147483647, y: 2147483647, z: 0}
+        gender: 0
+        mbtiCond: 
+        attractionLevel: 0
+        friends: []
+        rivals: []

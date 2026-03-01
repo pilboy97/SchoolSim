@@ -181,7 +181,8 @@ namespace Game
 
         public (Vector3Int[], int) FindPath(Vector3Int st, Vector3Int ed)
         {
-            if (st == ed) return (Array.Empty<Vector3Int>(), 0);
+            if (st == ed) return (new[] { st }, 0);
+            if (!WalkableCells.Contains(st) || !WalkableCells.Contains(ed)) return (Array.Empty<Vector3Int>(), INF);
 
             if (_pathCache.TryGetValue((st, ed), out var mem))
             {
@@ -321,7 +322,7 @@ namespace Game
                 {
                     var neighbor = next + d;
 
-                    if (!WalkableCells.Contains(neighbor) && neighbor != ed) continue;
+                    if (!WalkableCells.Contains(neighbor)) continue;
 
                     int tentative_gScore = gScore.GetValueOrDefault(next, INF) + 1;
 
@@ -410,6 +411,8 @@ namespace Game
         {
             int minDist = INF;
             Vector3Int[] minPath = null;
+
+            if (dst == null) return (Array.Empty<Vector3Int>(), 0);
 
             foreach (var d in dst)
             {

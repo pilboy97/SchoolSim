@@ -182,9 +182,6 @@ namespace Game.Object.Character.Player
                 
                 string str = $"{who.charName} asked {character.charName} to join {e.eventName}";
                 
-                var timescale = UnityEngine.Time.timeScale;
-                TimeManager.Instance.SetTimeScale0_1();
-                
                 var panel = RequestView.Instance.Get();
                 panel.Init(str);
 

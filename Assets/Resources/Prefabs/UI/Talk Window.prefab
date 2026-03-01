@@ -750,6 +750,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 3234723086673849060, guid: acf14a9e7fb1647778d000a0b334105b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234723086673849060, guid: acf14a9e7fb1647778d000a0b334105b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234723086673849060, guid: acf14a9e7fb1647778d000a0b334105b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 4645679219319101568, guid: acf14a9e7fb1647778d000a0b334105b, type: 3}
       propertyPath: m_Name
       value: Talk Window

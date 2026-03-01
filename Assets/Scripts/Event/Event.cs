@@ -83,7 +83,7 @@ namespace Game.Event
         {
         }
 
-        public abstract (CharacterStats, RelationFloatDict) CalcDeltaStats(Character c);
+        public abstract void CalcDeltaStats(Character c, ref DeltaResult result);
         
 
         protected virtual bool CheckRun() => members.Count >= minMember;
@@ -109,8 +109,8 @@ namespace Game.Event
 
         public void Leave(Character who)
         {
-            OnLeave(who);
             members.Remove(who);
+            OnLeave(who);
         }
 
         public void Finish(bool forced = false)
