@@ -79,3 +79,6 @@ crashlytics-build.properties
 
 .DS_Store
 */.DS_Store
+Assets/Scripts/.DS_Store
+/Assets/Log
+Assets/.DS_Store
