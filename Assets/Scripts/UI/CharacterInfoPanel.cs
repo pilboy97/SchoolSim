@@ -15,6 +15,7 @@ namespace Game.UI
         [SerializeField] private TextMeshProUGUI classText;
         [SerializeField] private TextMeshProUGUI clubText;
         [SerializeField] private TextMeshProUGUI MBTIText;
+        [SerializeField] private Portrait portrait;
         [SerializeField] private Button returnToPlayerBtn;
 
         public Action OnChangeTarget = () => { };
@@ -53,10 +54,12 @@ namespace Game.UI
                 return;
             }
             
-            gameObject.SetActive(false);
+            gameObject.SetActive(who != null);
             
             nameText.text = Target.charName;
             MBTIText.text = Target.Data.mbti.ToString();
+
+            portrait.Init(who.Data);
             
             GameManager.Instance.OnSetPlayer += (ch) => gameObject.SetActive(ch != null);
         }

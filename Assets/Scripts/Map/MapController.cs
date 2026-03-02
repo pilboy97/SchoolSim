@@ -12,7 +12,7 @@ namespace Game.Map
         [SerializeField] public Map wallMap;
         [SerializeField] public Map jumpMap;
         
-        private Grid _grid;
+        [SerializeField] private Grid grid;
 
         public Dictionary<string, Map> maps;
 
@@ -47,15 +47,10 @@ namespace Game.Map
                 return new BoundsInt(new Vector3Int(pos.x, pos.y, 0), new Vector3Int(size.x, size.y, 1));
             }
         }
-
-        private void Awake()
-        {
-            Init(true);
-        }
         
         public Vector3Int WorldToCell(Vector3 pos)
         {
-            var p = _grid.WorldToCell(pos);
+            var p = grid.WorldToCell(pos);
             p.z = (int)pos.z;
 
             return p;
@@ -63,7 +58,7 @@ namespace Game.Map
 
         public Vector3 CellToWorld(Vector3Int cPos)
         {
-            var ret = _grid.GetCellCenterWorld(cPos);
+            var ret = grid.GetCellCenterWorld(cPos);
             ret.z = cPos.z;
 
             return ret;
@@ -85,7 +80,6 @@ namespace Game.Map
         
         public void Init(bool clearMap)
         {
-            _grid = GetComponent<Grid>();
             InputManager.Instance.OnClickHandler += OnClick;
 
             maps = new Dictionary<string, Map>();

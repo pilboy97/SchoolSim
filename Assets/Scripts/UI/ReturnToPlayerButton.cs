@@ -7,7 +7,7 @@ namespace Game.UI
     {
         public void ReturnToPlayer()
         {
-            UIManager.Instance.State = UIManager.UIState.Default;
+            UIManager.Instance.state = UIManager.UIState.Default;
         }
     }
 }

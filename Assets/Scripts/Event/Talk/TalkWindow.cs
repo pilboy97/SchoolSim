@@ -42,27 +42,24 @@ namespace Game.Event.Talk
                     panel.gameObject.SetActive(true);
                     panel.transform.SetParent(participant);
                 },
-                actionOnRelease: panel => 
+                actionOnRelease: panel =>
                 {
                     panel.gameObject.SetActive(false);
                     panel.transform.SetParent(GameManager.TEMP);
                 }
             );
-            
-            GameManager.Instance.afterInit += () =>
-            {
-                TalkEvent.StaticInit();
-                
-                for (var i = 0; i < Topics.Count; i++)
-                {
-                    var btn = Instantiate(topicButtonPrefab, content);
-                    btn.Init(i, Topics[i]);
-                }
-            };
         }
 
-        public void Start()
+        public void Init()
         {
+            TalkEvent.StaticInit();
+                
+            for (var i = 0; i < Topics.Count; i++)
+            {
+                var btn = Instantiate(topicButtonPrefab, content);
+                btn.Init(i, Topics[i]);
+            }
+            
             Instance.Close();
         }
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -10,7 +11,7 @@ namespace Game.UI
         
         private ObjectPool<RequestPanel> _requestPanelPool;
 
-        private void Awake()
+        protected void Awake()
         {
             _requestPanelPool = new ObjectPool<RequestPanel>(
                 createFunc: () => Instantiate(requestPanelPrefab, GameManager.TEMP),
@@ -28,7 +29,12 @@ namespace Game.UI
             
             Instance.gameObject.SetActive(false);
         }
-        
+
+        private void LateUpdate()
+        {
+            if (root.childCount == 0) gameObject.SetActive(false);
+        }
+
         public RequestPanel Get()
         {
             gameObject.SetActive(true);

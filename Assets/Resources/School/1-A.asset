@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1fdf22971a4646be25aae3ff2512b1, type: 3}
   m_Name: 1-A
   m_EditorClassIdentifier: 
-  groupName: 1-A
-  members: []
+  className: 1-A
   map: {fileID: 11400000, guid: 7cb04b8b1ed4f4964a73c8dfcb179b48, type: 2}
+  grp: []

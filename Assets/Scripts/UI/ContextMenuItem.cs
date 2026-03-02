@@ -29,7 +29,11 @@ namespace Game.UI
                 var player = GameManager.Instance.Player;
                 var task = new ActionTask(player, _obj, onClick);
                 var c = player.controller as PlayerControl;
-                if (c == null) return;
+                if (c == null)
+                {
+                    UnityEngine.Debug.Log("ASDF");
+                    return;
+                }
                 
                 if (!onClick.indirect)
                     task.Prev = new ActionTask(player, null, new Action()

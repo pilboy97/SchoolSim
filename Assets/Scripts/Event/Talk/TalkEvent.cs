@@ -594,6 +594,8 @@ namespace Game.Event.Talk
 
         protected override void OnLeave(Character who)
         {
+            if (GameManager.IsQuitting) return;
+            
             base.OnLeave(who);
             
             if (GameManager.Instance.Player != null && who.ID == GameManager.Instance.Player.ID) 

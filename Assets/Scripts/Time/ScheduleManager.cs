@@ -36,25 +36,25 @@ namespace Game.Time
         [SerializeField] private ulong last = 0;
         [SerializeReference] private List<Event.Event> activated = new();
 
-        private void Awake()
+        public void Init()
         {
             for (int i = 0; i < 12; i++)
             {
-                monthCache.Add((MonthFlag)(1<<i), new List<Schedule>());
+                monthCache.TryAdd((MonthFlag)(1<<i), new List<Schedule>());
             }
             for (int i = 0; i < 7; i++)
             {
-                dayCache.Add((DayFlag)(1<<i), new List<Schedule>());
+                dayCache.TryAdd((DayFlag)(1<<i), new List<Schedule>());
             }
 
             for (int i = 0; i < 31; i++)
             {
-                dateCache.Add(i, new List<Schedule>());
+                dateCache.TryAdd(i, new List<Schedule>());
             }
 
             for (int i = 0; i < 5; i++)
             {
-                weekCache.Add(i, new List<Schedule>());
+                weekCache.TryAdd(i, new List<Schedule>());
             }
         }
 

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Event.Talk;
 using Game.Map;
 using Game.Object;
 using Game.Object.Character;
 using Game.Room;
 using Game.School;
 using Game.Time;
+using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Game
 {
     public class GameManager : Singleton<GameManager>
     {
-        [SerializeField] private Character player;
+        private Character _player;
         [SerializeField] private CharacterData initPlayer;
         [SerializeField] private StringFloatDict vars = new();
 
@@ -22,18 +23,17 @@ namespace Game
 
         [SerializeField] public Camera mainCamera;
 
-        public Action afterInit = () => { };
-
-        public Character Player => player;
+        public Character Player => _player;
 
         public static Transform TEMP => GameObject.Find("TEMP")?.transform ?? new GameObject("TEMP").transform;
 
         public Action OnGameStart = () => { };
-        public Action<Character> OnSetPlayer = (_) => { };
+        public Action<Character> OnSetPlayer = (ch) => { UnityEngine.Debug.Log($"player changed {ch.charName}"); };
 
-        private void Awake()
+        protected void Awake()
         {
             Global.RegisterRaiseCancelOnDestroy(gameObject);
+            Init();
         }
 
         public void Init()
@@ -42,26 +42,36 @@ namespace Game
             RoomManager.Instance.Init();
             ObjectManager.Instance.Init();
             NavManager.Instance.Init();
+
+            ScheduleManager.Instance.Init();
             
             SchoolManager.Instance.Init();
             
-            player = ObjectManager.Instance.Find(initPlayer?.ID ?? "") as Character;
+            var player = ObjectManager.Instance.Find(initPlayer?.ID ?? "") as Character;
             SetPlayer(player);
 
             UIManager.Instance.Init();
             
-            afterInit();
+            TalkWindow.Instance.Init();
+
+            foreach (Transform t in transform)
+            {
+                t.gameObject.SetActive(true);
+            }
         }
 
         public void SetPlayer(Character newPlayer)
         {
-            player = newPlayer;
             
-            if (player == null) return;
+            if (_player != null)
+                _player.ControllerType = ControllerType.AI;
+            _player = newPlayer;
             
-            player.ControllerType = ControllerType.Player;
+            if (_player == null) return;
             
-            OnSetPlayer(player);
+            _player.ControllerType = ControllerType.Player;
+            
+            OnSetPlayer(_player);
         }
 
         private void Update()
@@ -122,6 +132,15 @@ namespace Game
 
             vars = newVars;
         }
+
+        private static bool _isQuitting = false;
+        public static bool IsQuitting => _isQuitting;
+
+        protected void OnApplicationQuit()
+        {
+            _isQuitting = true;
+        }
+
 #if UNITY_EDITOR
         public void InitOnEditorMode(bool clearRoom)
         {

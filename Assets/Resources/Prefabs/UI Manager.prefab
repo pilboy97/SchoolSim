@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b1d5d6e4534ec0b29abc8bc8588076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  btn: {fileID: 1025203188748269471}
+  resetCameraBtn: {fileID: 0}
+  changePlayerBtn: {fileID: 0}
+  changeRoomBtn: {fileID: 0}
   playerCamera: {fileID: 0}
   mainCanvas: {fileID: 5763806106926495393}
   state: 0
@@ -245,7 +247,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6918236886463944593}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752608322471650410, guid: 342772a1bc0cf7646a488cb605442a65, type: 3}
+        m_TargetAssemblyTypeName: Game.GameManager, Assembly-CSharp
+        m_MethodName: ChangePlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1190722085424109654
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +605,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 891441831552261365}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752608322471650410, guid: 342772a1bc0cf7646a488cb605442a65, type: 3}
+        m_TargetAssemblyTypeName: Game.GameManager, Assembly-CSharp
+        m_MethodName: ChangeRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2145961397223865144
 GameObject:
   m_ObjectHideFlags: 0
@@ -2287,13 +2313,46 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4613245390021772648, guid: 7b60e8b86efd24fc19a571829ba87624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 721324903400491558}
   m_SourcePrefab: {fileID: 100100000, guid: 7b60e8b86efd24fc19a571829ba87624, type: 3}
+--- !u!114 &1308943822951682099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 454773839680602998, guid: 7b60e8b86efd24fc19a571829ba87624, type: 3}
+  m_PrefabInstance: {fileID: 1469830567145476933}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6079975085245158957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5267269482127432546 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6736534788552886311, guid: 7b60e8b86efd24fc19a571829ba87624, type: 3}
   m_PrefabInstance: {fileID: 1469830567145476933}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6079975085245158957 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4613245390021772648, guid: 7b60e8b86efd24fc19a571829ba87624, type: 3}
+  m_PrefabInstance: {fileID: 1469830567145476933}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &721324903400491558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6079975085245158957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056aaa5cb19244bdbd4269188d74d0e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.UI.Portrait
+  img: {fileID: 1308943822951682099}
+  who: {fileID: 0}
 --- !u!1001 &3351003878826522305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2404,17 +2463,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3447503797128861505, guid: 96550d2333ff048fc8ee4f182636e82d, type: 3}
   m_PrefabInstance: {fileID: 3351003878826522305}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1025203188748269471 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2358593847767400798, guid: 96550d2333ff048fc8ee4f182636e82d, type: 3}
-  m_PrefabInstance: {fileID: 3351003878826522305}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a41c7215994311a604a649f5cdd118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4608249695979526344
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ namespace Game.School
     [CreateAssetMenu(menuName = "School/School")]
     public class School : ScriptableObject
     {
+        [SerializeField] public string schoolName;
         [SerializeField] public int randomGenCharacter;
         [SerializeField] public List<CharacterData> characters = new();
         [SerializeReference] public List<Session> timeTable;

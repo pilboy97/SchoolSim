@@ -9,6 +9,7 @@ namespace Game.School
     [CreateAssetMenu(menuName = "School/Class")]
     public class Class : ScriptableObject
     {
+        public string className;
         public RoomData map;
         public List<CharacterData> grp = new();
     }

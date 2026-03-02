@@ -10,6 +10,7 @@ using UnityEngine.Tilemaps;
 
 #if UNITY_EDITOR
 using Game.School;
+using Game.Time;
 using UnityEditor;
 #endif
 
@@ -37,15 +38,10 @@ namespace Game.Room
             }
         }
 
-        private void Awake()
-        {
-            GameManager.Instance.OnSetPlayer += OnSetPlayer;
-        }
-
         private void OnSetPlayer(Character player)
         {
             if (player == null) return;
-            if(UIManager.Instance.State == UIManager.UIState.Move) return;
+            if(UIManager.Instance.state == UIManager.UIState.Move) return;
 
             var z = player.ZIndex;
             currentRoomIndex = z;
@@ -54,6 +50,8 @@ namespace Game.Room
 
         public void Init()
         {
+            currentRoomIndex = 0;
+            
             for (var i = 0;i < roomDatas.Count;i++)
             {
                 LoadRoomData(roomDatas[i], i);
@@ -74,7 +72,6 @@ namespace Game.Room
         {
             if (GameManager.Instance?.Player == null)
             {
-                LoadRoomData(roomDatas[0], 0);
                 return;
             }
             
@@ -218,6 +215,7 @@ namespace Game.Room
 
             LoadRoomData(CurrentRoom, currentRoomIndex);
             ObjectManager.Instance.Init();
+            ScheduleManager.Instance.Init();
             SchoolManager.Instance.Init();
         }
 

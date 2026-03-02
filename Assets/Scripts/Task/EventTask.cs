@@ -49,9 +49,12 @@ namespace Game.Task
 
                 await UniTask.NextFrame();
             }
-            
-            invitedEvent.Leave(sub);
-            GameManager.Instance.ClearValue(ID);
+
+            if (!GameManager.IsQuitting)
+            {
+                invitedEvent.Leave(sub);
+                GameManager.Instance.ClearValue(ID);
+            }
         }
 
         public void CalcDeltaForScore(ref DeltaResult result)

@@ -16,7 +16,7 @@ namespace Game.UI
         {
             var delta = eventData.delta;
 
-            UIManager.Instance.State = UIManager.UIState.Move;
+            UIManager.Instance.state = UIManager.UIState.Move;
             var pos = GameManager.Instance.mainCamera.transform.position;
             var screenPos = GameManager.Instance.mainCamera.WorldToScreenPoint(pos);
             

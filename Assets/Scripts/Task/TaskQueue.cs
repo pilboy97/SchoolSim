@@ -46,43 +46,36 @@ namespace Game.Task
         {
             while (true)
             {
-                if (_base.IsCancellationRequested) return;
-                
+                if (GameManager.IsQuitting || _base.IsCancellationRequested) return;
+
                 if (list.Count == 0)
                 {
                     await UniTask.NextFrame();
                     continue;
                 }
-                
-                Current = PopFront();
-                
-                try
-                {
-                    using (_cts = CancellationTokenSource.CreateLinkedTokenSource(_base.Token))
-                    {
-                        if (Current == null)
-                        {
-                            await UniTask.NextFrame();
-                            continue;
-                        }
-                        
-                        owner.Busy = Current.Busy;
 
-                        await Current.DoAsync(_cts.Token);
-                    }
-                }
-                catch (Exception e)
+                Current = PopFront();
+
+                using (_cts = CancellationTokenSource.CreateLinkedTokenSource(_base.Token))
                 {
-                    UnityEngine.Debug.Log(e);
+                    if (Current == null)
+                    {
+                        await UniTask.NextFrame();
+                        continue;
+                    }
+
+                    owner.Busy = Current.Busy;
+
+                    await Current.DoAsync(_cts.Token).SuppressCancellationThrow();
                 }
 
                 _cts = null;
                 Current = null;
-            
+
                 owner.Busy = false;
             }
         }
-        
+
         public ITask PushBack(Action action, IInteractable other)
         {
             var ret = new ActionTask(owner, other, action);

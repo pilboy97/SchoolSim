@@ -16,13 +16,15 @@ namespace Game.UI
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI fvalueText;
         [SerializeField] private TextMeshProUGUI rvalueText;
-        [SerializeField] private TextMeshProUGUI attractionText;
+        [SerializeField] private Portrait portrait;
 
         public void Init(string id)
         {
             ID = id;
             who = ObjectManager.Instance.Find(ID) as Character;
 
+            if (who == null) return;
+            
             Draw();
         }
 
@@ -51,8 +53,8 @@ namespace Game.UI
 
             rvalueText.text = $"{rvalue:000} / 100";
             rbar.value = rvalue;
-
-            attractionText.text = $"{who.PersonalAttractionFrom(target)}";
+            
+            portrait.Init(who.Data);
         }
 
         public void OnPointerClick(PointerEventData eventData)

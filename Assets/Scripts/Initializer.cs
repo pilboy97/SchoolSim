@@ -1,6 +1,7 @@
 ﻿using System;
 using Game.Debug;
 using Game.Event;
+using Game.Map;
 using Game.Object;
 using Game.Room;
 using Game.School;
@@ -14,6 +15,7 @@ namespace Game
         [SerializeField] private GameManager gameManger;
         [SerializeField] private InputManager inputManager;
         [SerializeField] private TimeManager timeManager;
+        [SerializeField] private MapController mapController;
         [SerializeField] private RoomManager roomManager;
         [SerializeField] private ObjectManager objectManager;
         [SerializeField] private DebugSystem debugSystem;
@@ -26,26 +28,26 @@ namespace Game
 
         private void Awake()
         {
-            var c = Instantiate(mainCamera);
-            var g = Instantiate(gameManger);
-            Instantiate(inputManager);
-            Instantiate(timeManager);
-            Instantiate(roomManager);
-            Instantiate(objectManager);
+            
+            Instantiate(inputManager).Init();
+            Instantiate(timeManager).Init();
             Instantiate(debugSystem);
             Instantiate(eventManager);
-            Instantiate(navManager);
-            Instantiate(uiManager);
-            Instantiate(schoolManager);
             Instantiate(scheduleManager);
-
-            g.mainCamera = c;
+            
+            Instantiate(mapController).Init();
+            Instantiate(roomManager).Init();
+            Instantiate(objectManager).Init();
+            Instantiate(navManager).Init();
+            Instantiate(schoolManager).Init();
+            Instantiate(uiManager).Init();
+            
+            Instantiate(gameManger).Init(); 
+            Instantiate(mainCamera);
         }
 
         private void Start()
         {
-            GameManager.Instance.Init();
-            
             Destroy(gameObject);
         }
     }

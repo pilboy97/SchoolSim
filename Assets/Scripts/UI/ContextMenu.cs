@@ -47,8 +47,6 @@ namespace Game.UI
                 actionOnGet: x=> { x.transform.SetParent(content);x.gameObject.SetActive(true); },
                 actionOnRelease: x => { x.transform.SetParent(GameManager.TEMP); x.gameObject.SetActive(false);}
                 );
-            
-            Instance.Init(Vector2.zero, null);
         }
 
         public void Init(Vector2 pos, Item[] items)

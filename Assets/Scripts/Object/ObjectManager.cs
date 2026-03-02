@@ -25,14 +25,6 @@ namespace Game.Object
         public List<IInteractable> Objects => _objects;
         public Character.Character[] Characters => _objects.Where(x=>x is Character.Character).Cast<Character.Character>().ToArray();
 
-        private void Awake()
-        {
-            Clear();
-            Init();
-            
-            RoomManager.Instance.OnRoomLoad += ActiveObjectsAtZIndex;
-        }
-
         private void Update()
         {
             foreach (var obj in _objects)
@@ -73,6 +65,7 @@ namespace Game.Object
         public void Init()
         {
             Clear();
+            RoomManager.Instance.OnRoomLoad += ActiveObjectsAtZIndex;
             
             var mapO = new List<MapObject>();
             for(int i = 0;i < RoomManager.Instance.roomDatas.Count;i++)

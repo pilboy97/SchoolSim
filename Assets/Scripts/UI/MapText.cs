@@ -10,7 +10,7 @@ namespace Game.UI
     {
         private TextMeshProUGUI _text;
 
-        protected override void Awake()
+        protected override void Start()
         {
             base.Awake();
 
