@@ -32,12 +32,28 @@ namespace Game.SchoolEditor
         public Action OnLoadTitleSceneHandler = () => { };
         public Action OnLoadPlaySceneHandler = () => { };
 
+        public void RenameStudentList(CharacterData x)
+        {
+            foreach (Transform t in studentRoot)
+            {
+                var elem = t.GetComponent<ListElem>();
+                if (elem == null) continue;
+
+                if (elem.ch == x)
+                {
+                    elem.SetName(x.charName);
+                    break;
+                }
+            }
+        }
+        
         private void Awake()
         {
             schoolNameField.onValueChanged.AddListener((str) => OnInputSchoolNameHandler(str));
             
             playButton.onClick.AddListener(() => OnLoadPlaySceneHandler());
             backToTitleButton.onClick.AddListener(()=>OnLoadTitleSceneHandler());
+            
         }
 
         private void Start()
@@ -62,7 +78,7 @@ namespace Game.SchoolEditor
                 var elem = Instantiate(elemPrefab,classRoot);
 
                 elem.cl = cl;
-                elem.Init(cl.className);
+                elem.SetName(cl.className);
                 elem.OnClick += () =>
                 {
                     selectedClass = cl;
@@ -111,7 +127,7 @@ namespace Game.SchoolEditor
                 var elem = Instantiate(elemPrefab, studentRoot);
                 
                 elem.ch = ch;
-                elem.Init(ch.genData.charName);
+                elem.SetName(ch.genData.charName);
                 elem.OnClick += () =>
                 {
                     selectedStudent = ch;

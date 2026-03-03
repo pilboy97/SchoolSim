@@ -141,6 +141,11 @@ namespace Game
             _isQuitting = true;
         }
 
+        public void Exit()
+        {
+            Application.Quit();
+        }
+
 #if UNITY_EDITOR
         public void InitOnEditorMode(bool clearRoom)
         {

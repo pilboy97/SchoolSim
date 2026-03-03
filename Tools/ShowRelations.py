@@ -1,8 +1,24 @@
 import json
 import numpy as np
 import plotly.graph_objects as go
+import os
+import json
 
-def plot_relationship_network_custom_colors(json_file_path):
+company_name = "DefaultCompany"
+product_name = "School Sim"
+log_filename = "log.json"
+
+if os.name == 'nt': 
+    base_path = os.path.join(os.environ['USERPROFILE'], 'AppData', 'LocalLow')
+else: 
+    print("Sorry. Windows Support Only.")
+    exit(0)
+
+file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
+
+print(f"불러올 경로: {file_path}")
+
+def plot_relationship_network_safe(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
@@ -13,116 +29,86 @@ def plot_relationship_network_custom_colors(json_file_path):
     char_ids = sorted(list(set(e['id'] for e in ch_datas)))
     id_to_name = {e['id']: e['charName'] for e in ch_datas}
     
-    # 모든 가능한 관계 쌍 고정 (애니메이션 안정성)
     all_pairs = []
     for i in range(len(char_ids)):
         for j in range(i + 1, len(char_ids)):
             all_pairs.append((char_ids[i], char_ids[j]))
 
+    pos = {cid: np.array([np.cos(2*np.pi*i/len(char_ids)), 
+                          np.sin(2*np.pi*i/len(char_ids))]) * 0.5 + np.random.normal(0, 0.01, 2)
+           for i, cid in enumerate(char_ids)}
+
     frames = []
     for tick in ticks:
         tick_entries = {e['id']: e for e in ch_datas if e['tick'] == tick}
         
-        # 위치 계산 (원형 배치 + 친밀도 기반 인력/척력)
-        pos = {cid: np.array([np.cos(2*np.pi*i/len(char_ids)), 
-                              np.sin(2*np.pi*i/len(char_ids))]) * 2.5
-               for i, cid in enumerate(char_ids)}
+        for _ in range(5):
+            for cid in char_ids:
+                center_dist = np.linalg.norm(pos[cid])
+                if center_dist > 0.01:
+                    pos[cid] -= (pos[cid] / center_dist) * (center_dist * 0.1)
 
-        tick_rel_map = {}
-        for cid in char_ids:
-            if cid in tick_entries and 'relations' in tick_entries[cid]:
-                for r_entry in tick_entries[cid]['relations']:
-                    target_id = r_entry['rel']['ID']
-                    pair = tuple(sorted((cid, target_id)))
-                    tick_rel_map[pair] = r_entry
+            for i in range(len(char_ids)):
+                for j in range(i + 1, len(char_ids)):
+                    id1, id2 = char_ids[i], char_ids[j]
+                    diff = pos[id1] - pos[id2]
+                    dist = np.linalg.norm(diff) + 0.1 
                     
-                    # 물리 효과 보정
-                    val = r_entry['val']
-                    if cid in pos and target_id in pos:
-                        force = val / 200.0
-                        pos[cid] = pos[cid] + (pos[target_id] - pos[cid]) * force
+                    force_mag = min(0.1, 0.05 / (dist**2)) 
+                    force = (diff / dist) * force_mag
+                    pos[id1] += force
+                    pos[id2] -= force
 
-        frame_data = []
+            for cid in char_ids:
+                if cid in tick_entries:
+                    for rel in tick_entries[cid].get('relations', []):
+                        target_id = rel['rel']['ID']
+                        if target_id not in pos: continue
+                        
+                        val = rel['val']
+                        diff = pos[target_id] - pos[cid]
+                        dist = np.linalg.norm(diff) + 0.01
+                        
+                        is_romance = (rel['rel']['relType'] == 1)
+                        strength = np.clip(val / 5000.0, -0.05, 0.05) 
+                        if is_romance: strength *= 2.0
+                        
+                        pos[cid] += diff * strength
+
+            for cid in char_ids:
+                pos[cid] = np.clip(pos[cid], -10, 10)
+
+        lines = {'romance': {'x': [], 'y': []}, 'friend': {'x': [], 'y': []}, 'negative': {'x': [], 'y': []}}
         for p1, p2 in all_pairs:
-            rel = tick_rel_map.get((p1, p2))
-            
-            if rel and (abs(rel['val']) > 0.1): # 유의미한 관계가 있을 때
-                val = rel['val']
-                # 로맨스 수치 가져오기 (만약 데이터에 로맨스 수치가 별도로 있다면 사용, 
-                # 여기서는 C# relType이 1이면 로맨스 수치가 높다고 가정하거나 별도 필드 확인)
-                # 요청하신 규칙: 로맨스 >= 친밀도 * 0.5
-                # C# 코드 구조상 Romance 타입인 경우를 로맨스 점수가 높은 것으로 판별
-                is_romance_type = (rel['rel']['relType'] == 1)
-                
-                # 색상 규칙 적용
-                if is_romance_type: # 로맨스 관계일 때
-                    color = 'rgba(255, 0, 0, 0.8)' # 빨강
-                    label = "Romance"
-                elif val > 0: # 친밀도 양수
-                    color = 'rgba(0, 255, 0, 0.7)' # 초록
-                    label = "Friend"
-                else: # 친밀도 음수
-                    color = 'rgba(0, 0, 0, 0.6)' # 검정
-                    label = "Negative"
-                
-                width = abs(val)/10 + 2
-                opacity = 1.0
-                hover_text = f"{id_to_name[p1]} - {id_to_name[p2]}<br>Status: {label}<br>Value: {val:.1f}"
-            else:
-                color = 'rgba(0,0,0,0)'
-                width = 0
-                opacity = 0
-                hover_text = ""
+            rel = None
+            if p1 in tick_entries:
+                rel = next((r for r in tick_entries[p1].get('relations', []) if r['rel']['ID'] == p2), None)
+            if rel and abs(rel['val']) > 0.1:
+                cat = 'romance' if rel['rel']['relType'] == 1 else ('friend' if rel['val'] > 0 else 'negative')
+                lines[cat]['x'].extend([pos[p1][0], pos[p2][0], None])
+                lines[cat]['y'].extend([pos[p1][1], pos[p2][1], None])
 
-            frame_data.append(go.Scatter(
-                x=[pos[p1][0], pos[p2][0], None],
-                y=[pos[p1][1], pos[p2][1], None],
-                mode='lines',
-                line=dict(width=width, color=color),
-                hoverinfo='text' if width > 0 else 'skip',
-                text=hover_text,
-                showlegend=False
-            ))
+        frame_traces = [
+            go.Scatter(x=lines['romance']['x'], y=lines['romance']['y'], mode='lines', line=dict(width=4, color='#FF1744')),
+            go.Scatter(x=lines['friend']['x'], y=lines['friend']['y'], mode='lines', line=dict(width=2, color='#00C853')),
+            go.Scatter(x=lines['negative']['x'], y=lines['negative']['y'], mode='lines', line=dict(width=1, color='#9E9E9E')),
+            go.Scatter(x=[pos[cid][0] for cid in char_ids], y=[pos[cid][1] for cid in char_ids],
+                       mode='markers+text', text=[id_to_name[cid] for cid in char_ids],
+                       textposition="top center", marker=dict(size=18, color='white', line=dict(width=2, color='#333')))
+        ]
+        frames.append(go.Frame(data=frame_traces, name=str(tick)))
 
-        # 노드 추가
-        node_trace = go.Scatter(
-            x=[pos[cid][0] for cid in char_ids],
-            y=[pos[cid][1] for cid in char_ids],
-            mode='markers+text',
-            text=[id_to_name[cid] for cid in char_ids],
-            textposition="top center",
-            marker=dict(size=25, color='white', line=dict(width=2, color='#333')),
-            hoverinfo='none'
-        )
-        frame_data.append(node_trace)
-        frames.append(go.Frame(data=frame_data, name=str(tick)))
-
-    # 레이아웃
     fig = go.Figure(
         data=frames[0].data if frames else [],
         layout=go.Layout(
-            title="Character Social Network (Red: Romance, Green: Friend, Black: Negative)",
+            template="plotly_white",
             xaxis=dict(range=[-5, 5], showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(range=[-5, 5], showgrid=False, zeroline=False, showticklabels=False),
-            hovermode='closest',
-            updatemenus=[{
-                "type": "buttons",
-                "buttons": [
-                    {"label": "▶ Play", "method": "animate", "args": [None, {"frame": {"duration": 500, "redraw": True}}]},
-                    {"label": "Pause", "method": "animate", "args": [[None], {"frame": {"duration": 0, "redraw": False}}]}
-                ],
-                "x": 0.05, "y": 0
-            }],
-            sliders=[{
-                "steps": [{"args": [[f.name], {"frame": {"duration": 300, "redraw": True}}],
-                           "label": f.name, "method": "animate"} for f in frames],
-                "x": 0.15, "y": 0, "len": 0.85
-            }]
+            updatemenus=[{"type": "buttons", "buttons": [{"label": "▶ Play", "method": "animate", "args": [None, {"frame": {"duration": 40, "redraw": False}}]}]}]
         ),
         frames=frames
     )
-
     fig.show()
 
 if __name__ == "__main__":
-    plot_relationship_network_custom_colors('../Assets/Log/log.json')
+    plot_relationship_network_safe(file_path)

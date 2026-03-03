@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Game.Object.Character;
 using TMPro;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -3,7 +3,22 @@ import json
 import statistics
 from collections import defaultdict
 from common import *
+import os
+import json
 
+company_name = "DefaultCompany"
+product_name = "School Sim"
+log_filename = "Log.json"
+
+if os.name == 'nt': 
+    base_path = os.path.join(os.environ['USERPROFILE'], 'AppData', 'LocalLow')
+else:  
+    print("Sorry. Windows Support Only.")
+    exit(0)
+
+file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
+
+print(f"불러올 경로: {file_path}")
 def decode_mbti(mbti_val):
     is_I = (mbti_val & 0b1000) != 0
     is_N = (mbti_val & 0b0100) != 0
@@ -47,13 +62,12 @@ def analyze_all_mbti(json_file_path):
             avg_rel = sum(r.get('val', 0) for r in relations) / len(relations)
             analysis[char_name]['relations'].append(avg_rel)
 
-    # 결과 취합용 리스트
     stats_E, stats_I = [], []
     stats_S, stats_N = [], []
     stats_T, stats_F = [], []
     stats_J, stats_P = [], []
 
-    print("=== 📊 캐릭터별 지표 분석 ===")
+    print("=== 캐릭터별 지표 분석 ===")
     for char_name, metrics in analysis.items():
         traits = decode_mbti(char_mbti_map[char_name])
         
@@ -69,20 +83,19 @@ def analyze_all_mbti(json_file_path):
         print(f"  - (T/F) 평균 관계도 점수: {avg_relation:.2f}")
         print(f"  - (J/P) 위급도 총합 분산: {variance:,.0f}\n")
         
-        # 그룹 매핑
         if traits['E_I'] == 'E': stats_E.append(avg_r)
         else: stats_I.append(avg_r)
             
-        if traits['S_N'] == 'S': stats_S.append(avg_e) # S는 E-Need가 낮아야 함
-        else: stats_N.append(avg_g)                    # N은 G-Need가 낮아야 함
+        if traits['S_N'] == 'S': stats_S.append(avg_e)
+        else: stats_N.append(avg_g)
             
         if traits['T_F'] == 'T': stats_T.append(avg_relation)
-        else: stats_F.append(avg_relation)             # F는 관계도가 높아야 함
+        else: stats_F.append(avg_relation) 
             
         if traits['J_P'] == 'J': stats_J.append(variance)
         else: stats_P.append(variance)
 
-    print("=== 🎯 MBTI 4대 지표 그룹별 통계 검증 ===")
+    print("=== MBTI 4대 지표 그룹별 통계 검증 ===")
     
     print("\n1. [E vs I] 외향 vs 내향 (관계 욕구 불만족도)")
     if stats_E and stats_I:
@@ -103,5 +116,5 @@ def analyze_all_mbti(json_file_path):
         print(f"   J({sum(stats_J)/len(stats_J):,.0f}) vs P({sum(stats_P)/len(stats_P):,.0f})  => J가 더 낮으면(계획적이면) 성공")
 
 if __name__ == "__main__":
-    analyze_all_mbti('../Assets/Log/Log.json')
+    analyze_all_mbti(file_path)
     pass

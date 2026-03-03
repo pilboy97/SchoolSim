@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Game.Object.Character;
 using UnityEngine;
 
 namespace Game
 {
-    public static class NameGenerator
+    public class NameGenerator : Singleton<NameGenerator>
     {
-        private static string[] _fNames;
-        private static string[] _mNames;
-        private static readonly string path = Application.dataPath + "/Resources/CommonNames.csv";
+        [SerializeField] private string[] fNames;
+        [SerializeField] private string[] mNames;
+        [SerializeField] private TextAsset nameFile;
         
         
-        static NameGenerator()
+        public void Init()
         {
-            var lines = File.ReadAllLines(path);
+            var lines = nameFile.text.Split('\n');
 
-            _mNames = lines[0].Split(",");
-            _fNames = lines[1].Split(",");
+            mNames = lines[0].Split(",");
+            fNames = lines[1].Split(",");
         }
-        public static string RandomName(Gender gender)
+        
+        public string RandomName(Gender gender)
         {
             return gender switch
             {
-                Gender.Male => Random.Choose(_mNames),
-                Gender.Female => Random.Choose(_fNames),
+                Gender.Male => Random.Choose(mNames),
+                Gender.Female => Random.Choose(fNames),
                 _ => throw new ArgumentOutOfRangeException(nameof(gender), gender, null)
             };
         }

@@ -72,7 +72,7 @@ namespace Game.Object.Character
 
             gender = Random.ChooseEnum<Gender>();
             mbti = MBTIHelper.RandomMBTI();
-            charName = NameGenerator.RandomName(gender);
+            charName = NameGenerator.Instance.RandomName(gender);
 
             position = MapController.Instance?.CellToWorld(NavManager.Instance?.RandomPos ?? Vector3Int.zero) ?? Vector3.zero;
             attraction = DistributionNormalDistribution.GetTruncatedNormal(-2f, 2f);
@@ -208,7 +208,7 @@ namespace Game.Object.Character
         {
             GameManager.Instance.SetVar(ID, name, value);
         }
-
+#if UNITY_EDITOR
         [Button("generate")]
         private void GenerateCharacterOnEditor()
         {
@@ -217,5 +217,6 @@ namespace Game.Object.Character
 
             GenerateCharacter();
         }
+#endif
     }
 }

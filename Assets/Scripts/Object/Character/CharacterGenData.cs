@@ -25,7 +25,7 @@ namespace Game.Object.Character
             attractionLevel = 0;
 
             gender = Random.ChooseEnum<Gender>();
-            charName = NameGenerator.RandomName(gender);
+            charName = NameGenerator.Instance.RandomName(gender);
 
             rivals = new List<CharacterData>();
             friends = new List<CharacterData>();

@@ -2,7 +2,26 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.io as pio
 from common import * # calc_e_need_multiplier 등 욕구 점수 함수 임포트
+import os
+import json
 
+# 유니티 프로젝트 설정에 맞게 수정하세요
+company_name = "DefaultCompany"
+product_name = "School Sim"
+log_filename = "log.json"
+
+# OS에 따라 자동으로 AppData 또는 Application Support 경로를 찾아줍니다
+if os.name == 'nt':  # Windows
+    base_path = os.path.join(os.environ['USERPROFILE'], 'AppData', 'LocalLow')
+else:  # macOS / Linux
+    print("Sorry. Windows Support Only.")
+    exit(0)
+    
+file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
+
+print(f"불러올 경로: {file_path}")
+
+    
 # 웹 브라우저 렌더러 설정
 pio.renderers.default = "browser"
 
@@ -64,4 +83,4 @@ def plot_need_urgency_functions():
     fig.show()
 
 if __name__ == "__main__":
-    plot_need_urgency_functions()
+    plot_need_urgency_functions(file_path)

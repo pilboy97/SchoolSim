@@ -20,6 +20,7 @@ namespace Game.SchoolEditor
 
         private CharacterData target;
 
+
         private void Awake()
         {
             SchoolEditorUI.Instance.OnSelectStudentHandler += Init;
@@ -108,6 +109,8 @@ namespace Game.SchoolEditor
         {
             target.genData.charName = nameInput.text;
             OnSet();
+            
+            SchoolEditorUI.Instance.RenameStudentList(target);
         }
 
         public void OnSetGender()

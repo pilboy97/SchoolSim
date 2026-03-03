@@ -19,7 +19,7 @@ namespace Game.SchoolEditor
         public Action OnClick = () => { };
         public Action OnRightClick = () => { };
         
-        public void Init(string str)
+        public void SetName(string str)
         {
             txt.text = str;
         }

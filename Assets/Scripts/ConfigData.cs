@@ -33,9 +33,10 @@ namespace Game
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            schoolData = Instance.schoolData;
             
             if (schoolData == null) return;
+            
+            NameGenerator.Instance.Init();
             
             var d = ScriptableObject.CreateInstance<School.School>();
             d.schoolName = schoolData.schoolName;
@@ -51,9 +52,6 @@ namespace Game
             {
                 var c = ScriptableObject.CreateInstance<CharacterData>();
                 c.genData = ch.genData;
-                
-                c.genData.rivals = new List<CharacterData>();
-                c.genData.friends = new List<CharacterData>();
                 
                 c.Init();
                 

@@ -76,7 +76,7 @@ namespace Game.Debug
 
         private void Awake()
         {
-            logFolder = Path.Combine(Application.dataPath, "Log");
+            logFolder = Path.Combine(Application.persistentDataPath, "Log");
 
             Directory.CreateDirectory(logFolder);
 
@@ -100,10 +100,12 @@ namespace Game.Debug
             }
         }
 
-        private void OnApplicationQuit()
+        private void OnDestroy()
         {
             var str = JsonUtility.ToJson(data);
             File.WriteAllText(LogPath,str);
+
+            UnityEngine.Debug.Log($"{LogPath}");
         }
     }
 }

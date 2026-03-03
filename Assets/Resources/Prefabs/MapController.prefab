@@ -63,6 +63,7 @@ MonoBehaviour:
   groundMap: {fileID: 6573388739613819587}
   wallMap: {fileID: 5888758166687543019}
   jumpMap: {fileID: 7830656462494832940}
+  grid: {fileID: 0}
 --- !u!1 &1067250949021085544
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,5 +34,10 @@ namespace Game
         {
             LoadScene(editScene);
         }
+
+        public void Exit()
+        {
+            Application.Quit();
+        }
     }
 }

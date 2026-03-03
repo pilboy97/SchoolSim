@@ -4,15 +4,29 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 from collections import defaultdict
+import os
+import json
 
-# 웹 브라우저 렌더러 설정
+company_name = "DefaultCompany"
+product_name = "School Sim"
+log_filename = "log.json"
+
+if os.name == 'nt':  
+    base_path = os.path.join(os.environ['USERPROFILE'], 'AppData', 'LocalLow')
+else: 
+    print("Sorry. Windows Support Only.")
+    exit(0)
+
+file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
+
+print(f"불러올 경로: {file_path}")
+
 pio.renderers.default = "browser"
 
 def analyze_strike_zone_impact(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # 마지막 프레임(Tick)의 데이터만 사용하여 최종 관계망 분석
     if not data.get('chDatas'):
         print("데이터가 없습니다.")
         return
@@ -21,7 +35,7 @@ def analyze_strike_zone_impact(json_file_path):
     final_data = [e for e in data['chDatas'] if e['tick'] == last_tick]
 
     char_stats = {}
-    rel_matrix = defaultdict(dict) # rel_matrix[A][B] = A가 B를 생각하는 호감도
+    rel_matrix = defaultdict(dict)
 
     # 1. 데이터 파싱
     for entry in final_data:
@@ -29,35 +43,30 @@ def analyze_strike_zone_impact(json_file_path):
         char_id = entry['id']
         char_stats[char_id] = {
             'name': name,
-            'attraction': entry.get('attraction', 0.0), # 타원의 장축 (절대적 매력)
-            'e': entry.get('e', 0.0),                   # 이심률 (까다로움)
+            'attraction': entry.get('attraction', 0.0),
+            'e': entry.get('e', 0.0),                  
         }
         
         for rel in entry.get('relations', []):
             target_id = rel['rel']['ID']
-            # Friend 관계(일반 친밀도)만 분석 (relType == 0 이 Friend라고 가정)
             if rel['rel']['relType'] == 0: 
                 rel_matrix[char_id][target_id] = rel['val']
 
-    # 2. 분석용 데이터 배열 구축
     names, attractions, e_values = [], [], []
-    incoming_rels = [] # 수신 호감도 (남들이 나를 얼마나 좋아하는가 = 인기)
-    outgoing_rels = [] # 발신 호감도 (내가 남들을 얼마나 좋아하는가 = 수용력)
+    incoming_rels = [] 
+    outgoing_rels = [] 
     
     for c_id, stats in char_stats.items():
         names.append(stats['name'])
         attractions.append(stats['attraction'])
         e_values.append(stats['e'])
         
-        # Incoming (남 -> 나)
         incoming = [rel_matrix[o_id].get(c_id, 0) for o_id in char_stats if o_id != c_id]
         incoming_rels.append(np.mean(incoming) if incoming else 0)
         
-        # Outgoing (나 -> 남)
         outgoing = [rel_matrix[c_id].get(o_id, 0) for o_id in char_stats if o_id != c_id]
         outgoing_rels.append(np.mean(outgoing) if outgoing else 0)
 
-    # 3. 통계 및 상관계수(Pearson) 계산
     corr_attr_incoming = np.corrcoef(attractions, incoming_rels)[0, 1] if len(attractions) > 1 else 0
     corr_e_outgoing = np.corrcoef(e_values, outgoing_rels)[0, 1] if len(e_values) > 1 else 0
 
@@ -68,7 +77,6 @@ def analyze_strike_zone_impact(json_file_path):
     print(f"2. [주관적 취향] 까다로움(e) vs 발신 호감도(수용력) 상관계수: {corr_e_outgoing:.2f}")
     print(f"   -> 음수(-)여야 정상! (e가 1에 가까울수록 타원 폭이 바늘처럼 좁아져 남을 쉽게 안 좋아함)")
 
-    # 짝사랑(비대칭성) 수치 계산
     asymmetry_scores = []
     char_ids = list(char_stats.keys())
     for i in range(len(char_ids)):
@@ -81,7 +89,6 @@ def analyze_strike_zone_impact(json_file_path):
     print(f"3. [비대칭성] 평균 짝사랑 격차(관계도 차이): {np.mean(asymmetry_scores):.2f}")
     print(f"   -> 0보다 확연히 커야 정상! (각자의 이상형 각도와 e 값이 다르기 때문)")
 
-    # 4. 시각화 (Plotly)
     fig = make_subplots(
         rows=1, cols=2, 
         subplot_titles=(
@@ -90,7 +97,6 @@ def analyze_strike_zone_impact(json_file_path):
         )
     )
 
-    # 그래프 1: 매력(Attraction) vs 인기(Incoming)
     fig.add_trace(go.Scatter(
         x=attractions, y=incoming_rels,
         mode='markers+text',
@@ -101,7 +107,6 @@ def analyze_strike_zone_impact(json_file_path):
         hovertemplate="<b>%{text}</b><br>Attraction: %{x:.2f}<br>Popularity: %{y:.2f}<extra></extra>"
     ), row=1, col=1)
 
-    # 그래프 1 추세선
     if len(attractions) > 1:
         z1 = np.polyfit(attractions, incoming_rels, 1)
         p1 = np.poly1d(z1)
@@ -114,7 +119,6 @@ def analyze_strike_zone_impact(json_file_path):
             hoverinfo='skip'
         ), row=1, col=1)
 
-    # 그래프 2: 까다로움(e) vs 수용력(Outgoing)
     fig.add_trace(go.Scatter(
         x=e_values, y=outgoing_rels,
         mode='markers+text',
@@ -125,7 +129,6 @@ def analyze_strike_zone_impact(json_file_path):
         hovertemplate="<b>%{text}</b><br>Eccentricity (e): %{x:.2f}<br>Pickiness (Outgoing): %{y:.2f}<extra></extra>"
     ), row=1, col=2)
 
-    # 그래프 2 추세선
     if len(e_values) > 1:
         z2 = np.polyfit(e_values, outgoing_rels, 1)
         p2 = np.poly1d(z2)
@@ -138,7 +141,6 @@ def analyze_strike_zone_impact(json_file_path):
             hoverinfo='skip'
         ), row=1, col=2)
 
-    # 전체 레이아웃 설정
     fig.update_layout(
         title_text="⚾ Strike Zone System Impact Analysis",
         template="plotly_white",
@@ -147,7 +149,6 @@ def analyze_strike_zone_impact(json_file_path):
         hovermode="closest"
     )
 
-    # 축 설정
     fig.update_xaxes(title_text="Attraction (Ellipsis b-axis)", row=1, col=1)
     fig.update_yaxes(title_text="Avg Incoming Relation (Popularity)", row=1, col=1)
     
@@ -157,6 +158,5 @@ def analyze_strike_zone_impact(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
-    # 로그 파일 경로를 입력하여 실행하세요.
-    analyze_strike_zone_impact('../Assets/Log/Log.json')
+    analyze_strike_zone_impact(file_path)
     pass

@@ -2,6 +2,22 @@ import json
 import numpy as np
 import plotly.graph_objects as go
 from collections import defaultdict
+import os
+import json
+
+company_name = "DefaultCompany"
+product_name = "School Sim"
+log_filename = "log.json"
+
+if os.name == 'nt': 
+    base_path = os.path.join(os.environ['USERPROFILE'], 'AppData', 'LocalLow')
+else:  
+    print("Sorry. Windows Support Only.")
+    exit(0)
+
+file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
+
+print(f"불러올 경로: {file_path}")
 
 def analyze_motivation_anomaly(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
@@ -10,17 +26,14 @@ def analyze_motivation_anomaly(json_file_path):
     ch_datas = data.get('chDatas', [])
     char_history = defaultdict(list)
 
-    # 성적에 포함될 과목 리스트
     subject_keys = ['attractive', 'conversation', 'comedy', 'literature', 
                     'math', 'sociology', 'science', 'sports', 'art']
 
     for entry in ch_datas:
         char_id = entry['id']
-        # 성적 합산 로직 (직접 필드에 있거나 stats 안에 있는 경우 모두 대응)
         total_score = 0
         stats = entry.get('stats', {})
         for key in subject_keys:
-            # entry 바로 아래 있거나, stats 딕셔너리 안에 있는 값을 합산
             val = entry.get(key) if entry.get(key) is not None else stats.get(key, 0)
             total_score += val
 
@@ -40,7 +53,6 @@ def analyze_motivation_anomaly(json_file_path):
         motivations = [h['motivation'] for h in history]
         name = history[0]['name']
 
-        # 기울기 계산
         score_gradient = np.gradient(scores) if len(scores) > 1 else np.zeros(len(scores))
         mot_gradient = np.gradient(motivations) if len(motivations) > 1 else np.zeros(len(motivations))
         
@@ -48,12 +60,10 @@ def analyze_motivation_anomaly(json_file_path):
         anomalies_y = []
         
         for i in range(len(score_gradient)):
-            # 조건: 성적 변화는 거의 없는데(정체), 모티베이션 변화량은 클 때(요동침)
             if abs(score_gradient[i]) < 0.1 and abs(mot_gradient[i]) > 1.0:
                 anomalies_x.append(ticks[i])
                 anomalies_y.append(motivations[i])
 
-        # 모티베이션 기본 선
         fig.add_trace(go.Scatter(
             x=ticks, y=motivations,
             mode='lines',
@@ -62,7 +72,6 @@ def analyze_motivation_anomaly(json_file_path):
             text=scores
         ))
 
-        # 이상 징후 마커 (X 표시)
         if anomalies_x:
             fig.add_trace(go.Scatter(
                 x=anomalies_x, y=anomalies_y,
@@ -84,5 +93,4 @@ def analyze_motivation_anomaly(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
-    plot_path = '../Assets/Log/log.json' # 경로 확인 필요
-    analyze_motivation_anomaly(plot_path)
+    analyze_motivation_anomaly(file_path)
