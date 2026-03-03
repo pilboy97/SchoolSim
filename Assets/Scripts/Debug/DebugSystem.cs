@@ -5,6 +5,7 @@ using System.Linq;
 using Game.Object;
 using Game.Object.Character;
 using Game.Time;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Game.Debug
@@ -24,6 +25,8 @@ namespace Game.Debug
         public MBTI mbti;
         public string charName;
         public string eventId;
+        public float attraction;
+        public float e;
         public List<string> friends;
         public List<string> rivals;
         public CharacterStats stats;
@@ -37,6 +40,8 @@ namespace Game.Debug
             ret.id = data.ID;
             ret.mbti = data.mbti;
             ret.charName = data.charName;
+            ret.attraction = data.attraction;
+            ret.e = data.e;
             ret.friends = data.friends.Select(x => x.ID).ToList();
             ret.rivals = data.rivals.Select(x => x.ID).ToList();
             ret.stats = data.stats;
@@ -59,7 +64,7 @@ namespace Game.Debug
 
     public class DebugSystem : Singleton<DebugSystem>
     {
-        [SerializeField] private bool isLogEnabled;
+        [ShowInInspector] private bool IsLogEnabled => ConfigData.Instance.isLogEnabled;
         [SerializeField] private string logFolder;
         [SerializeField] private string logFile = "log.json";
         
@@ -71,7 +76,6 @@ namespace Game.Debug
 
         private void Awake()
         {
-            isLogEnabled = ConfigData.Instance.isLogEnabled;
             logFolder = Path.Combine(Application.dataPath, "Log");
 
             Directory.CreateDirectory(logFolder);
@@ -81,7 +85,7 @@ namespace Game.Debug
 
         private void LateUpdate()
         {
-            if (!isLogEnabled) return;
+            if (!IsLogEnabled) return;
             
             int currentTick = TimeManager.Instance.Ticks;
 

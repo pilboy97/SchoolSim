@@ -15,7 +15,6 @@ namespace Game.Object.Character
         /*-------------------------------*/
         public float comedy;
         public float conversation;
-
         public float attractive;
 
         /*-------------------------------*/
@@ -24,7 +23,6 @@ namespace Game.Object.Character
         public float sociology;
         public float science;
         public float sports;
-
         public float art;
 
         /*-------------------------------*/

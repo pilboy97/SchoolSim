@@ -33,25 +33,25 @@ namespace Game.Object.Character
         [SerializeField] public Action[] actions = Array.Empty<Action>();
         public bool IsVisible => RoomManager.Instance.currentRoomIndex == CPosition.z;
 
-        public AIControl AI { get; private set; }
-        
-        [SerializeField] private float curTime = 0;
-        [SerializeField] private float coolTime = 0.5f;
-        
-        [SerializeField] private float I_E_Modifier = 5f;
-        [SerializeField] private float N_S_Modifier = 5f;
-        [SerializeField] private float F_T_Modifier = 5f;
-        [SerializeField] private float P_J_Modifier = 5f;
-
         public bool Busy
         {
             get => busy;
             set
             {
                 busy = value;
-                curTime = (busy) ? 0 : coolTime;
+                curTime = 0;
             }
         }
+
+        public AIControl AI { get; private set; }
+        
+        [SerializeField] private float curTime = 0;
+        [SerializeField] private float coolTime = 0.5f;
+        
+        [ShowInInspector] private float I_E_Modifier => ConfigData.Instance.I_E_modifier;
+        [ShowInInspector] private float N_S_Modifier => ConfigData.Instance.N_S_modifier;
+        [ShowInInspector] private float F_T_Modifier => ConfigData.Instance.F_T_modifier;
+        [ShowInInspector] private float P_J_Modifier => ConfigData.Instance.P_J_modifier;
 
         public Action[] Actions => actions;
 
@@ -130,7 +130,7 @@ namespace Game.Object.Character
         public TaskQueue TaskQueue => taskQueue;
 
         public float Receive(
-            ref DeltaResult result,
+            DeltaResult result,
             bool perSec = true, bool withSideEffect = true)
         {
             if (perSec)
@@ -475,6 +475,13 @@ namespace Game.Object.Character
             
             return ret;
         }
+
+        public float AttractionModifier(Character other)
+        {
+            var attr = PersonalAttractionFrom(other);
+
+            return 2 * attr - 1;
+        }
         
         public void CalcPersonalizedStatsDeltaOnReceive(CharacterStats s, ref DeltaResult result)
         {
@@ -545,31 +552,27 @@ namespace Game.Object.Character
             switch (s.relType)
             {
                 case CharacterRelation.Type.Friend:
-                    funModifier = (attr * 2);
-                    
                     // 4. F(감정) : 관계 형성에 대해 더 큰 정서적 만족(Fun)을 느낌
-                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= F_T_Modifier;
-                    else funModifier /= F_T_Modifier;
-
-                    fun *= (funModifier * socialEfficiency);
+                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= F_T_Modifier;
+                    else socialEfficiency /= F_T_Modifier;
 
                     ret += new CharacterStats()
                     {
-                        fun = fun,
-                        loneliness = v * socialEfficiency,
+                        fun = attr * 2 * v * socialEfficiency,
+                        loneliness = attr * 2 * v * socialEfficiency,
                     };
                     
                     break;
 
                 case CharacterRelation.Type.Romance:
-                    funModifier = Mathf.Max(0, attr * 2 - 1);
-                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= F_T_Modifier;
-                    else funModifier /= F_T_Modifier;
+                    
+                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= F_T_Modifier;
+                    else socialEfficiency /= F_T_Modifier;
 
                     ret += new CharacterStats()
                     {
-                        fun = funModifier * v * socialEfficiency,
-                        rLoneliness = v
+                        fun = attr * 2 * v * socialEfficiency,
+                        rLoneliness = v * attr * 2 * socialEfficiency
                     };
                     
                     break;
@@ -594,9 +597,9 @@ namespace Game.Object.Character
                 {
                     CalcPersonalizedStatsDeltaOnReceive(s, v, ref result);
                 }
+
                 CalcPersonalizedStatsDeltaOnReceive(result.Stats, ref result);
             }
-            
         }
 
         public void UpdateRelations()

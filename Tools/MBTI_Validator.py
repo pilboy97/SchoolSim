@@ -2,10 +2,8 @@
 import json
 import statistics
 from collections import defaultdict
+from common import *
 
-# ==========================================
-# 1. MBTI 디코더 (JSON 정수 -> 문자열)
-# ==========================================
 def decode_mbti(mbti_val):
     is_I = (mbti_val & 0b1000) != 0
     is_N = (mbti_val & 0b0100) != 0
@@ -20,25 +18,10 @@ def decode_mbti(mbti_val):
         'Full': f"{'I' if is_I else 'E'}{'N' if is_N else 'S'}{'F' if is_F else 'T'}{'P' if is_P else 'J'}"
     }
 
-# ==========================================
-# 2. 위급도 (Disutility) 계산기
-# ==========================================
-def calc_r_need_multiplier(val):
-    return max(0.0, 2.0 * (100.0 - val))
-def calc_e_need_multiplier(val):
-    return 0.3 ** ((val - 64.0) / 4.0)
-def calc_g_need_multiplier(val):
-    ratio = (100.0 - val) / 100.0
-    return 10.0 + ((ratio ** 3) * 2500.0)
-
-# ==========================================
-# 3. 전체 MBTI 분석
-# ==========================================
 def analyze_all_mbti(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # 지표 저장용 딕셔너리
     analysis = defaultdict(lambda: {
         'r_needs': [], 'e_needs': [], 'g_needs': [], 
         'total_disutilities': [], 'relations': []
@@ -50,7 +33,6 @@ def analyze_all_mbti(json_file_path):
         stats = entry.get('stats', {})
         char_mbti_map[char_name] = entry.get('mbti', 0)
         
-        # 각 욕구별 위급도(불만족도) 계산
         r_score = sum(calc_r_need_multiplier(stats.get(k, 100)) for k in ['fun', 'loneliness', 'rLoneliness'])
         e_score = sum(calc_e_need_multiplier(stats.get(k, 100)) for k in ['hungry', 'fatigue', 'toilet', 'hygiene'])
         g_score = sum(calc_g_need_multiplier(stats.get(k, 100)) for k in ['motivation'])
@@ -60,7 +42,6 @@ def analyze_all_mbti(json_file_path):
         analysis[char_name]['g_needs'].append(g_score)
         analysis[char_name]['total_disutilities'].append(e_score + r_score + g_score)
         
-        # 관계도(Relations) 평균 수집
         relations = entry.get('relations', [])
         if relations:
             avg_rel = sum(r.get('val', 0) for r in relations) / len(relations)
@@ -122,5 +103,5 @@ def analyze_all_mbti(json_file_path):
         print(f"   J({sum(stats_J)/len(stats_J):,.0f}) vs P({sum(stats_P)/len(stats_P):,.0f})  => J가 더 낮으면(계획적이면) 성공")
 
 if __name__ == "__main__":
-    analyze_all_mbti('Assets/Log/Log.json')
+    analyze_all_mbti('../Assets/Log/Log.json')
     pass

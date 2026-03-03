@@ -32,7 +32,8 @@ namespace Game
             {
                 var cos = Mathf.Cos(angle);
                 var sin = Mathf.Sin(angle);
-                var r = (A * b) / Mathf.Sqrt(b * b * cos * cos + A * A * sin * sin);
+                
+                var r = (A * b) / Mathf.Sqrt(A * A * cos * cos + b * b * sin * sin);
 
                 return (float)MathNet.Numerics.Distributions.Normal.CDF(0,1,(r - 1) / 0.1);
             }

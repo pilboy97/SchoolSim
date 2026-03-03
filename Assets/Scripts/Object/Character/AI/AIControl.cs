@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Game.Debug;
 using Game.Event;
 using Game.Task;
+using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 using Action = Game.Task.Action;
@@ -15,12 +16,11 @@ namespace Game.Object.Character.AI
     public class AIControl : IController
     {
         [SerializeField] private Character character;
-        [SerializeField] private float inertia = 5f;
+        [ShowInInspector] private float inertia => ConfigData.Instance.inertia;
 
         public AIControl(Character character)
         {
             this.character = character;
-            inertia = ConfigData.Instance.inertia;
         }
 
         public Character Character => character;
@@ -55,7 +55,7 @@ namespace Game.Object.Character.AI
                     _result.Reset();
 
                     action.DeltaStats(character, o, ref _result);
-                    var score = CalcScore(o, ref _result);
+                    var score = CalcScore(o, _result);
 
                     // 관성 보너스
                     if (currentTask is ActionTask actionTask &&
@@ -148,9 +148,9 @@ namespace Game.Object.Character.AI
             e.CalcDeltaStats(character, ref _result);
             
             _result.Reset();
-            var y = CalcScore(null, ref _result) ; 
+            var y = CalcScore(null, _result) ; 
 
-            if (TryInterrupt() && x > y)
+            if (TryInterrupt() && x * inertia > y)
             {
                 var front = character.TaskQueue.Front;
 
@@ -171,6 +171,23 @@ namespace Game.Object.Character.AI
             return !character.Busy;
         }
         
+        private float CalcENeedScoreMultiplier(float val)
+        {
+            var diff = (100 - val > 0) ? 100 - val : 0;
+            return Mathf.Pow(0.3f, -diff / 3);
+        }
+        private float CalcRNeedScoreMultiplier(float val)
+        {
+            var diff = (100 - val > 0) ? 100 - val : 0;
+            return 1000f + diff * diff * diff;
+        }
+
+        private float CalcGNeedScoreMultiplier(float val)
+        {
+            var diff = (100 - val > 0) ? 100 - val : 0;
+            return 2000f * (diff) + 100;
+        }
+        
         private CharacterStats CalcENeedScoreMultiplier(CharacterStats val)
         {
             return new CharacterStats()
@@ -180,10 +197,6 @@ namespace Game.Object.Character.AI
                 hygiene = CalcENeedScoreMultiplier(val.hygiene),
                 toilet = CalcENeedScoreMultiplier(val.toilet),
             };
-        }
-        private float CalcENeedScoreMultiplier(float val)
-        {
-            return Mathf.Pow(0.3f, (val - 64f) / 3);
         }
 
         private CharacterStats CalcRNeedScoreMultiplier(CharacterStats val)
@@ -195,10 +208,6 @@ namespace Game.Object.Character.AI
                 rLoneliness = CalcRNeedScoreMultiplier(val.rLoneliness),
             };
         }
-        private float CalcRNeedScoreMultiplier(float val)
-        {
-            return Mathf.Max(0, 2f * (100f - val));
-        }
 
         private CharacterStats CalcGNeedScoreMultiplier(CharacterStats val)
         {
@@ -206,19 +215,6 @@ namespace Game.Object.Character.AI
             {
                 motivation = CalcGNeedScoreMultiplier(val.motivation)
             };
-        }
-
-        // 수정된 G-Need 계산식 (값이 낮을수록 위급도가 높아짐)
-        private float CalcGNeedScoreMultiplier(float val)
-        {
-            float baseWill = 10f; 
-    
-            // (100 - val)을 사용하여, 동기가 낮을수록 위급도를 높게 만듭니다.
-            float ratio = (100f - val) / 100f; 
-    
-            float passionUrgency = (ratio * ratio * ratio) * 2500f;
-
-            return baseWill + passionUrgency;
         }
 
         public float CalcScore(ref DeltaResult result)
@@ -233,10 +229,19 @@ namespace Game.Object.Character.AI
 
             return 0;
         }
-
-        public float CalcScore(IInteractable o, ref DeltaResult result)
+        
+        public float CalcScore(IInteractable o, DeltaResult result)
         {
-            return CalcScore(result.Relation, o, ref result) + CalcScore(result.Stats, o, ref result);
+            // 1. 관계(Relation) 변화로 인해 얻는 스탯(외로움 해소 등)을 result.Stats에 누적합니다.
+            if (result.Relation != null)
+            {
+                foreach (var (rel, v) in result.Relation)
+                {
+                    character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref result); // _result가 아님!
+                }
+            }
+            // 2. 최종적으로 합산된 스탯을 바탕으로 점수를 계산합니다.
+            return CalcScore(result.Stats, o, ref result);
         }
         
         public float CalcScore(RelationFloatDict deltas, IInteractable o, ref DeltaResult result)
@@ -245,7 +250,7 @@ namespace Game.Object.Character.AI
             
             foreach (var (rel, v) in deltas)
             {
-                character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref _result);
+                character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref result);
             }
 
             return CalcScore(result.Stats, o, ref result);
@@ -255,9 +260,9 @@ namespace Game.Object.Character.AI
         public float CalcScore(CharacterStats deltas, IInteractable o, ref DeltaResult result)
         {
             // 기본 모디파이어
-            float eMod = character.Data.eModifier;
-            float rMod = character.Data.rModifier;
-            float gMod = character.Data.gModifier;
+            float eMod = ConfigData.Instance.eModifier;
+            float rMod = ConfigData.Instance.rModifier;
+            float gMod = ConfigData.Instance.gModifier;
 
             var i_e_mod = ConfigData.Instance.I_E_modifier;
             var n_s_mod = ConfigData.Instance.N_S_modifier;
@@ -280,13 +285,14 @@ namespace Game.Object.Character.AI
             
             var score =
                 (deltas *
-                 (CalcENeedScoreMultiplier(character.Data.stats) * character.Data.eModifier +
-                  CalcRNeedScoreMultiplier(character.Data.stats) * character.Data.rModifier +
-                  CalcGNeedScoreMultiplier(character.Data.stats) * character.Data.gModifier)).SumNeeds();
+                 (CalcENeedScoreMultiplier(character.Data.stats) * eMod +
+                  CalcRNeedScoreMultiplier(character.Data.stats) * rMod +
+                  CalcGNeedScoreMultiplier(character.Data.stats) * gMod)).SumNeeds();
             
             var dist = NavManager.Instance.FindPathAround(character.Position, o?.Positions).Item2;
+            float distancePenalty = 1f + (dist * 0.1f); 
 
-            return score / math.max(dist, 1f);
+            return score / distancePenalty;
         }
 
 
@@ -298,7 +304,7 @@ namespace Game.Object.Character.AI
                 addDeltaEffect.DeltaStats(task.Sub, task.Obj, ref _result);
             else if (task.action.effect is InviteSimpleEventEffect inviteEventEffect)
                 inviteEventEffect.DeltaStats(task.Sub, task.Obj, ref _result);
-            return CalcScore(task.Obj, ref _result);
+            return CalcScore(task.Obj, _result);
         }
         
         protected void CalcDeltaStats(Character c, ref DeltaResult result)

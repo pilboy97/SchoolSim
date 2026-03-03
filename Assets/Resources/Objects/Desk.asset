@@ -123,7 +123,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 435771701689319939
@@ -154,7 +154,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 435771701689319941
@@ -185,7 +185,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 435771701689319943
@@ -216,7 +216,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 3831317788552855639
@@ -247,7 +247,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 5080777858774991084
@@ -278,7 +278,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 5080777858774991086
@@ -309,7 +309,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 5080777858774991088
@@ -337,7 +337,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 5080777858774991089
@@ -365,7 +365,7 @@ MonoBehaviour:
           loneliness: 0
           rLoneliness: 0
           fun: 0
-          motivation: 0
+          motivation: 1
         perSec: 1
         noSideEffect: 0
     - rid: 5080777858774991300
