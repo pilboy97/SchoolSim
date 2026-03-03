@@ -545,9 +545,6 @@ namespace Game.Object.Character
                 socialEfficiency = -4 * socialEfficiency;
             else if (IsFriend(s.ID))
                 socialEfficiency = 4 * socialEfficiency;
-            
-            var funModifier = 0f;
-            var fun = v;
 
             switch (s.relType)
             {

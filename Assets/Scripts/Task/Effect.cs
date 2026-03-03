@@ -48,7 +48,7 @@ namespace Game.Task
             };
             
             DeltaStats(subject, other, ref result);
-            subject.Receive(ref result, perSec, !noSideEffect);
+            subject.Receive(result, perSec, !noSideEffect);
         }
 
         public override bool Equals(Effect other)
