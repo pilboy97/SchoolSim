@@ -62,7 +62,7 @@ namespace Game.Event
                 _result.Reset();
                 CalcDeltaStats(ch, ref _result);
 
-                ch.Receive(ref _result);
+                ch.Receive(_result);
             }
         }
 
