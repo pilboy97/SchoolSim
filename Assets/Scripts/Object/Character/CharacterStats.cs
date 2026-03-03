@@ -208,6 +208,21 @@ namespace Game.Object.Character
 
         #region 점수 계산
 
+        public float SumIntl()
+        {
+            return logic + language + aesthetics + social + athletic;
+        }
+
+        public float SumSkill()
+        {
+            return comedy + conversation + attractive;
+        }
+
+        public float SumSubject()
+        {
+            return  literature + math + sociology + science + sports + art;
+        }
+
         public float SumENeeds()
         {
             return hungry + fatigue + toilet + hygiene;

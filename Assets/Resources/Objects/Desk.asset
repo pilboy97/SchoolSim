@@ -68,9 +68,129 @@ MonoBehaviour:
     busy: 0
     notOnce: 1
     allowSelf: 0
+  - actionName: Practice Attraction
+    effect:
+      rid: 435771701689319938
+    cond:
+      rid: 435771701689319939
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: Practice Conversation
+    effect:
+      rid: 435771701689319940
+    cond:
+      rid: 435771701689319941
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
+  - actionName: Practice Comedy
+    effect:
+      rid: 435771701689319942
+    cond:
+      rid: 435771701689319943
+    indirect: 0
+    busy: 0
+    notOnce: 1
+    allowSelf: 0
   references:
     version: 2
     RefIds:
+    - rid: 435771701689319938
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          comedy: 0
+          conversation: 0
+          attractive: 1
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
+        noSideEffect: 0
+    - rid: 435771701689319939
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 435771701689319940
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          comedy: 0
+          conversation: 1
+          attractive: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
+        noSideEffect: 0
+    - rid: 435771701689319941
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
+    - rid: 435771701689319942
+      type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
+      data:
+        deltas:
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          comedy: 1
+          conversation: 0
+          attractive: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: -5
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
+        perSec: 1
+        noSideEffect: 0
+    - rid: 435771701689319943
+      type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
+      data: 
     - rid: 3831317788552855630
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
@@ -80,22 +200,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 1
           math: 0
           sociology: 0
@@ -111,6 +218,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 3831317788552855639
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -123,22 +231,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 0
           math: 0
           sociology: 0
@@ -154,6 +249,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 5080777858774991084
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -166,22 +262,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 0
           math: 0
           sociology: 1
@@ -197,6 +280,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 5080777858774991086
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 
@@ -209,22 +293,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 0
           math: 1
           sociology: 0
@@ -240,6 +311,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 5080777858774991088
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
@@ -249,22 +321,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 0
           math: 0
           sociology: 0
@@ -280,6 +339,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 5080777858774991089
       type: {class: AddDeltaEffect, ns: Game.Task, asm: Assembly-CSharp}
       data:
@@ -289,22 +349,9 @@ MonoBehaviour:
           aesthetics: 0
           social: 0
           athletic: 0
-          craft: 0
-          speech: 0
-          writing: 0
           comedy: 0
-          painting: 0
-          music: 0
-          dance: 0
-          swim: 0
-          soccer: 0
           conversation: 0
           attractive: 0
-          cook: 0
-          combat: 0
-          run: 0
-          gym: 0
-          coding: 0
           literature: 0
           math: 0
           sociology: 0
@@ -320,6 +367,7 @@ MonoBehaviour:
           fun: 0
           motivation: 0
         perSec: 1
+        noSideEffect: 0
     - rid: 5080777858774991300
       type: {class: AlwaysTrueCond, ns: Game.Task, asm: Assembly-CSharp}
       data: 

@@ -33,7 +33,7 @@ namespace Game.Time
         [SerializeReference] private IntScheduleListDict dateCache = new ();
         [SerializeReference] private DayFlagScheduleListDict dayCache = new ();
         
-        [SerializeField] private ulong last = 0;
+        [SerializeField] private int last = 0;
         [SerializeReference] private List<Event.Event> activated = new();
 
         public void Init()
@@ -196,7 +196,7 @@ namespace Game.Time
             activated.Clear();
         }
         
-        private void LoadTodaySchedule(ulong t)
+        private void LoadTodaySchedule(int t)
         {
             var (_, m, w, d, day) = Calendar.ToDate(t);
 

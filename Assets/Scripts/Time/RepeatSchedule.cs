@@ -21,8 +21,8 @@ namespace Game.Time
                 };
                 var tCond = new DailyTimeRangeCond()
                 {
-                    begin = (ulong)start,
-                    end = (ulong)end,
+                    begin = start,
+                    end = end,
                 };
                 var cond = new AndCond()
                 {

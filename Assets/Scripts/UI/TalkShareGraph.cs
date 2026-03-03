@@ -20,10 +20,10 @@ namespace Game.UI
         private ObjectPool<GraphBar> _pool;
         private readonly Dictionary<string, Color> _colors = new();
 
-        private void Awake()
+        private void Init()
         {
             _rectTransform = GetComponent<RectTransform>();
-            _pool =new ObjectPool<GraphBar>(
+            _pool = new ObjectPool<GraphBar>(
                 createFunc: () => Instantiate(rectPrefab, GameManager.TEMP),
                 actionOnGet: (x) =>
                 {
@@ -40,6 +40,8 @@ namespace Game.UI
 
         public void Init(TalkEvent target)
         {
+            if (_pool == null) Init();
+            
             _event = target;
             
             Draw();

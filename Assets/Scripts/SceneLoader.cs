@@ -8,6 +8,12 @@ namespace Game
     {
         [SerializeField] private int titleScene = 0;
         [SerializeField] private int playScene = 1;
+        [SerializeField] private int editScene = 2;
+
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
 
         public void LoadScene(int idx)
         {
@@ -22,6 +28,11 @@ namespace Game
         public void LoadPlay()
         {
             LoadScene(playScene);
+        }
+
+        public void LoadEdit()
+        {
+            LoadScene(editScene);
         }
     }
 }

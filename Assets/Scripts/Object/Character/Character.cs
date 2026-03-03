@@ -37,6 +37,11 @@ namespace Game.Object.Character
         
         [SerializeField] private float curTime = 0;
         [SerializeField] private float coolTime = 0.5f;
+        
+        [SerializeField] private float I_E_Modifier = 5f;
+        [SerializeField] private float N_S_Modifier = 5f;
+        [SerializeField] private float F_T_Modifier = 5f;
+        [SerializeField] private float P_J_Modifier = 5f;
 
         public bool Busy
         {
@@ -345,17 +350,6 @@ namespace Game.Object.Character
                 motivation = -0.1f
             } * delta);
             
-            UpdateRelations();
-            
-            curTime += delta;
-
-            if (curTime < coolTime) return;
-
-            delta = curTime;
-
-            curTime = 0;
-            coolTime = _distribution.Sample;
-            
             _data.stats = _data.stats.Clamp(0, 100);
             foreach (var ch in ObjectManager.Instance.Characters)
             {
@@ -379,6 +373,17 @@ namespace Game.Object.Character
                     _data[romanceRel] = Mathf.Clamp(_data[romanceRel], 0, friendshipVal);
 
             }
+            
+            UpdateRelations();
+            
+            curTime += delta;
+
+            if (curTime < coolTime) return;
+
+            delta = curTime;
+
+            curTime = 0;
+            coolTime = _distribution.Sample;
 
             if (Busy) return;
             if (controller == null) return;
@@ -477,34 +482,38 @@ namespace Game.Object.Character
 
             var sModifier = new CharacterStats()
             {
-                comedy = 0.2f,
-                conversation = 0.2f,
-                attractive = 0.2f,
-            };
+                comedy = 1f,
+                conversation = 1f,
+                attractive = 1f,
+            } * N_S_Modifier;
             var nModifier = new CharacterStats()
             {
-                literature = 0.2f,
-                math = 0.2f,
-                sociology = 0.2f,
-                science = 0.2f,
-                sports = 0.2f,
-                art = 0.2f,
-            };
+                literature = 1f,
+                math = 1f,
+                sociology = 1f,
+                science = 1f,
+                sports = 1f,
+                art = 1f,
+            } * N_S_Modifier;
             var tModifier = new CharacterStats()
             {
-                motivation = 0.2f
-            };
+                motivation = 1f
+            } * F_T_Modifier;
 
+            var d = s;
             // 실질적 기술(S) 선호
             if (mbti.CheckComponent(MBTIComponent.S))
             {
-                result.Stats += s * sModifier;
+                d = s * sModifier;
             }
             // 추상적 이론(N) 선호
             else
             {
-                result.Stats += s * nModifier;
+                d = s * nModifier;
             }
+
+            d.motivation += d.SumSkill() + d.SumSubject();
+            result.Stats += d;
             
             // 2. T(사고) : 성취(Motivation)에서 즐거움을 얻음
             if (mbti.CheckComponent(MBTIComponent.T))
@@ -523,7 +532,7 @@ namespace Game.Object.Character
 
             // 3. E(외향) vs I(내향) : 사회적 활동의 에너지 효율
             // 외향인은 사교로 고독감이 더 빨리 해소됨(1.2x), 내향인은 효율이 낮음(0.8x)
-            var socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? 1.2f : 0.8f;
+            var socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? I_E_Modifier : 1 / I_E_Modifier;
 
             if (IsRival(s.ID))
                 socialEfficiency = -4 * socialEfficiency;
@@ -539,7 +548,8 @@ namespace Game.Object.Character
                     funModifier = (attr * 2);
                     
                     // 4. F(감정) : 관계 형성에 대해 더 큰 정서적 만족(Fun)을 느낌
-                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= 1.25f;
+                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= F_T_Modifier;
+                    else funModifier /= F_T_Modifier;
 
                     fun *= (funModifier * socialEfficiency);
 
@@ -553,7 +563,8 @@ namespace Game.Object.Character
 
                 case CharacterRelation.Type.Romance:
                     funModifier = Mathf.Max(0, attr * 2 - 1);
-                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= 1.4f;
+                    if (mbti.CheckComponent(MBTIComponent.F)) funModifier *= F_T_Modifier;
+                    else funModifier /= F_T_Modifier;
 
                     ret += new CharacterStats()
                     {

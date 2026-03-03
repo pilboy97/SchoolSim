@@ -23,7 +23,7 @@ namespace Game.Event.Talk
         [Header("State")]
         [SerializeField] private bool waitForSelect;
         [SerializeField] private bool alreadySelect;
-        [SerializeField] public float selectTime = 5f;
+        [SerializeField] public float selectTime = 1f;
         [SerializeField] public float curTime = 0f;
         [SerializeField] public StringTopicDict selected = new StringTopicDict();
 
@@ -56,7 +56,7 @@ namespace Game.Event.Talk
         {
             minMember = 2;
             maxMember = 4;
-            
+
             eventName = "Talk";
             busy = false;
             _bestTopics = new (Topic topic, float score)[_bestSize];
@@ -616,6 +616,12 @@ namespace Game.Event.Talk
 
         protected override void OnStart()
         {
+            baseLoneliness = ConfigData.Instance.talk_baseLoneliness; // R-욕구 (결핍)
+            baseFriendly = ConfigData.Instance.talk_baseFriendly; // R-욕구 (관계)
+            baseRomance = ConfigData.Instance.talk_baseRomance; // R-욕구 (로맨스)
+            baseTeach = ConfigData.Instance.talk_baseTeach; // G-욕구 (성장 - 양성 피드백 대상)
+            baseInfluence = ConfigData.Instance.talk_baseInfluence; // 평판 변화량
+            
             scoreBySpeaker.Clear();
             shareOfInfluence.Clear();
             

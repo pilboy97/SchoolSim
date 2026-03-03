@@ -10,24 +10,24 @@ namespace Game.Time
     {
         [SerializeField] private float secPerTick = 0.5f;
         [SerializeField] private float time;
-        [SerializeField] private ulong ticks; //1 tick = 1 sec in game
+        [SerializeField] private int ticks; //1 tick = 1 sec in game
         [SerializeField] private float scale = 1f;
         [SerializeField] private float maxTimeScale = 100f;
         [SerializeField] private float minTimeScale = 0.16f;
         [SerializeField] public bool isPaused;
-        [SerializeField] public ulong deltaScale = 1;
+        [SerializeField] public int deltaScale = 1;
 
         public float TickForSecs(float sec)
         {
             return sec / secPerTick;
         }
 
-        public float SecForTicks(ulong ticks)
+        public float SecForTicks(int ticks)
         {
             return ticks * secPerTick;
         }
         
-        public ulong Ticks => ticks;
+        public int Ticks => ticks;
 
         private void Start()
         {
@@ -92,14 +92,14 @@ namespace Game.Time
             }
         }
 
-        public void Jump(ulong dest)
+        public void Jump(int dest)
         {
             if (ticks >= dest) return;
 
             ticks = dest;
         }
 
-        public void Add(ulong delta)
+        public void Add(int delta)
         {
             Jump(ticks + delta);
         }
@@ -109,7 +109,7 @@ namespace Game.Time
             Add(1440);
         }
         
-        public static async UniTask WaitForTicks(CancellationToken token, ulong ticks)
+        public static async UniTask WaitForTicks(CancellationToken token, int ticks)
         {
             if (token.IsCancellationRequested) return;
 

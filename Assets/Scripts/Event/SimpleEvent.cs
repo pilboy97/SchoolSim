@@ -1,6 +1,5 @@
 using System;
 using Game.Object.Character;
-using Unity.Android.Types;
 using Action = Game.Task.Action;
 
 namespace Game.Event

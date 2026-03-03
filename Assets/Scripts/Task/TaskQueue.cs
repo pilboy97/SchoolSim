@@ -55,23 +55,30 @@ namespace Game.Task
                 }
 
                 Current = PopFront();
+                _cts = CancellationTokenSource.CreateLinkedTokenSource(_base.Token);
 
-                using (_cts = CancellationTokenSource.CreateLinkedTokenSource(_base.Token))
+                try
                 {
                     if (Current == null)
                     {
                         await UniTask.NextFrame();
-                        continue;
+                        continue; // continue를 해도 finally 블록이 실행되므로 안전합니다.
                     }
 
                     owner.Busy = Current.Busy;
-
                     await Current.DoAsync(_cts.Token).SuppressCancellationThrow();
                 }
+                finally
+                {
+                    // 참조를 먼저 끊어서 외부(Cancel 메서드 등)에서 접근하지 못하게 만듭니다.
+                    var tempCts = _cts;
+                    _cts = null;        
+    
+                    // 그 다음 안전하게 Dispose를 수행합니다.
+                    tempCts?.Dispose(); 
+                }
 
-                _cts = null;
                 Current = null;
-
                 owner.Busy = false;
             }
         }
@@ -181,9 +188,18 @@ namespace Game.Task
 
         public void Cancel()
         {
-            if (_cts?.IsCancellationRequested ?? false) return;
-            
-            _cts?.Cancel();
+            try
+            {
+                // _cts가 null이 아니고, 아직 취소되지 않았다면 취소
+                if (_cts != null && !_cts.IsCancellationRequested)
+                {
+                    _cts.Cancel();
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                // 타이밍 문제로 이미 Dispose된 경우, 무시하고 넘어갑니다.
+            }
         }
 
         private void OnDestroy()

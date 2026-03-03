@@ -45,7 +45,7 @@ namespace Game
 
         private void LateUpdate()
         {
-            var isDefault = state != UIState.Move;
+            var isDefault = state != UIState.Move || GameManager.Instance.Player == null;
             
             playerCamera.GetComponent<TrackPlayer>().enabled = isDefault;
 

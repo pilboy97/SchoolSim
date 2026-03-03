@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Yukino
   m_EditorClassIdentifier: Assembly-CSharp::Game.Object.Character.CharacterData
   ID: a61iokniM.
-  position: {x: -1.5, y: -1.5, z: 0}
+  position: {x: 8.5, y: 1.5, z: 0}
   charName: Yukino
   gender: 1
-  mbti: 10
-  beauty: {x: 0.20038202, y: 0.70990735, z: 0.6751878}
-  attraction: 2.2962513
-  e: 0.41977403
+  mbti: 13
+  beauty: {x: 0.19697182, y: 0.71555907, z: 0.6702069}
+  attraction: 2.2413259
+  e: 0.38211685
   eModifier: 1
   rModifier: 1
   gModifier: 1
@@ -38,27 +38,36 @@ MonoBehaviour:
     science: 0
     sports: 0
     art: 0
-    hungry: 0
-    fatigue: 0
-    toilet: 0
-    hygiene: 0
-    loneliness: 0
-    rLoneliness: 0
-    fun: 0
+    hungry: 38.242733
+    fatigue: 58.469193
+    toilet: 57.328045
+    hygiene: 52.097374
+    loneliness: 99.39881
+    rLoneliness: 2.8975992
+    fun: 99.39881
     motivation: 0
   relations:
     keyData:
     - relType: 0
-      ID: XsJxTow3Ci
+      ID: Kc5h45oYLF
+    - relType: 1
+      ID: Kc5h45oYLF
+    - relType: 0
+      ID: a61iokniM.
+    - relType: 1
+      ID: a61iokniM.
     valueData:
-    - -36.24618
-  friends: []
-  rivals:
+    - 100
+    - 0
+    - 0
+    - 0
+  friends:
   - {fileID: 11400000, guid: eb9f0af639f734fd7a2fa2a7b593e358, type: 2}
+  rivals: []
   genData:
-    rid: 5080777906326339761
+    rid: 435771694611169802
   classroom: {fileID: 11400000, guid: 1c27ec29485044a0da84355101a0da62, type: 2}
-  eventID: 
+  eventID: kLbMSKbgAX
   friendDistribution:
     mean: 50
     stddev: 10
@@ -68,14 +77,37 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5080777906326339761
+    - rid: 435771694611169802
       type: {class: CharacterGenData, ns: Game.Object.Character, asm: Assembly-CSharp}
       data:
+        ID: 
         charName: Yukino
+        stats:
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          comedy: 0
+          conversation: 0
+          attractive: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: 0
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
         initPos: {x: 2147483647, y: 2147483647, z: 0}
         gender: 1
-        mbtiCond: 01000000
+        mbtiCond: 02000000000000000000000000000000
         attractionLevel: 5
         friends: []
-        rivals:
-        - {fileID: 11400000, guid: eb9f0af639f734fd7a2fa2a7b593e358, type: 2}
+        rivals: []

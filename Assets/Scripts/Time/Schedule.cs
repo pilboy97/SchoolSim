@@ -13,8 +13,8 @@ namespace Game.Time
     {
         public string desc;
 
-        public ulong start;
-        public ulong end;
+        public int start;
+        public int end;
 
         public virtual Condition DefaultTimeCond =>
             new TimeRangeCond()

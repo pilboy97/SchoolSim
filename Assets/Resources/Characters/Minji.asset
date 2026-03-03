@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Minji
   m_EditorClassIdentifier: 
   ID: Kc5h45oYLF
-  position: {x: 0.5, y: 1.5, z: 2}
+  position: {x: 7.5, y: 1.5, z: 0}
   charName: Minji
   gender: 1
-  mbti: 12
-  beauty: {x: 0.04418828, y: 0.92609173, z: 0.3747019}
-  attraction: 3.194554
-  e: 0.5856165
+  mbti: 7
+  beauty: {x: 0.39615032, y: 0.91168606, z: 0.10905761}
+  attraction: 2.0977602
+  e: 0.5379057
   eModifier: 1
   rModifier: 1
   gModifier: 1
@@ -38,27 +38,36 @@ MonoBehaviour:
     science: 0
     sports: 0
     art: 0
-    hungry: 0
-    fatigue: 0
-    toilet: 0
-    hygiene: 0
-    loneliness: 0
-    rLoneliness: 0
-    fun: 0
+    hungry: 41.603565
+    fatigue: 41.084557
+    toilet: 54.444527
+    hygiene: 48.59353
+    loneliness: 135.39017
+    rLoneliness: 10.432423
+    fun: 137.44327
     motivation: 0
   relations:
     keyData:
     - relType: 0
+      ID: Kc5h45oYLF
+    - relType: 1
+      ID: Kc5h45oYLF
+    - relType: 0
+      ID: a61iokniM.
+    - relType: 1
       ID: a61iokniM.
     valueData:
-    - -52.68287
-  friends: []
-  rivals:
+    - 0
+    - 0
+    - 100
+    - 0
+  friends:
   - {fileID: 11400000, guid: 1beaaaf510c674d4da7288ff5116ad9a, type: 2}
+  rivals: []
   genData:
-    rid: 5080777906326339762
+    rid: 435771694611169801
   classroom: {fileID: 11400000, guid: 1c27ec29485044a0da84355101a0da62, type: 2}
-  eventID: 
+  eventID: kLbMSKbgAX
   friendDistribution:
     mean: 50
     stddev: 10
@@ -68,14 +77,37 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5080777906326339762
+    - rid: 435771694611169801
       type: {class: CharacterGenData, ns: Game.Object.Character, asm: Assembly-CSharp}
       data:
+        ID: 
         charName: Minji
+        stats:
+          logic: 0
+          language: 0
+          aesthetics: 0
+          social: 0
+          athletic: 0
+          comedy: 0
+          conversation: 0
+          attractive: 0
+          literature: 0
+          math: 0
+          sociology: 0
+          science: 0
+          sports: 0
+          art: 0
+          hungry: 0
+          fatigue: 0
+          toilet: 0
+          hygiene: 0
+          loneliness: 0
+          rLoneliness: 0
+          fun: 0
+          motivation: 0
         initPos: {x: 2147483647, y: 2147483647, z: 0}
         gender: 1
-        mbtiCond: 00000000
+        mbtiCond: 01000000000000000000000000000000
         attractionLevel: 5
         friends: []
-        rivals:
-        - {fileID: 11400000, guid: 1beaaaf510c674d4da7288ff5116ad9a, type: 2}
+        rivals: []

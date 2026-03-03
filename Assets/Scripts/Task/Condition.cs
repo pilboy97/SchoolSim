@@ -211,8 +211,8 @@ namespace Game.Task
     [Serializable]
     public class TimeRangeCond : Condition
     {
-        [SerializeField] public ulong begin = 0;
-        [SerializeField] public ulong end = int.MaxValue;
+        [SerializeField] public int begin = 0;
+        [SerializeField] public int end = int.MaxValue;
 
         public override bool Check(Event.Event e, Action a, Character sub, IInteractable obj)
         {

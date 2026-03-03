@@ -15,10 +15,12 @@ namespace Game.Object.Character.AI
     public class AIControl : IController
     {
         [SerializeField] private Character character;
+        [SerializeField] private float inertia = 5f;
 
         public AIControl(Character character)
         {
             this.character = character;
+            inertia = ConfigData.Instance.inertia;
         }
 
         public Character Character => character;
@@ -60,13 +62,13 @@ namespace Game.Object.Character.AI
                         actionTask.action.Equals(action) &&
                         actionTask.Obj.Equals(o))
                     {
-                        score *= 5f;
+                        score *= inertia;
                     }
                     else if (currentTask is EventTask eventTask && 
                              action.effect is InviteEventEffect invite && 
                              eventTask.invitedEvent.Equals(invite.TargetEvent))
                     {
-                        score *= 5f;
+                        score *= inertia;
                     }
 
                     if (score <= 0) continue;
@@ -181,7 +183,7 @@ namespace Game.Object.Character.AI
         }
         private float CalcENeedScoreMultiplier(float val)
         {
-            return Mathf.Pow(0.5f, (val - 64f) / 3);
+            return Mathf.Pow(0.3f, (val - 64f) / 3);
         }
 
         private CharacterStats CalcRNeedScoreMultiplier(CharacterStats val)
@@ -206,14 +208,17 @@ namespace Game.Object.Character.AI
             };
         }
 
+        // 수정된 G-Need 계산식 (값이 낮을수록 위급도가 높아짐)
         private float CalcGNeedScoreMultiplier(float val)
         {
             float baseWill = 10f; 
-            
-            float ratio = val / 100f;
-            float passion = (ratio * ratio * ratio) * 100;
+    
+            // (100 - val)을 사용하여, 동기가 낮을수록 위급도를 높게 만듭니다.
+            float ratio = (100f - val) / 100f; 
+    
+            float passionUrgency = (ratio * ratio * ratio) * 2500f;
 
-            return baseWill + passion;
+            return baseWill + passionUrgency;
         }
 
         public float CalcScore(ref DeltaResult result)
@@ -249,6 +254,30 @@ namespace Game.Object.Character.AI
         
         public float CalcScore(CharacterStats deltas, IInteractable o, ref DeltaResult result)
         {
+            // 기본 모디파이어
+            float eMod = character.Data.eModifier;
+            float rMod = character.Data.rModifier;
+            float gMod = character.Data.gModifier;
+
+            var i_e_mod = ConfigData.Instance.I_E_modifier;
+            var n_s_mod = ConfigData.Instance.N_S_modifier;
+
+            // [MBTI 적용]: S vs N (감각 vs 직관)
+            if (character.Data.mbti.CheckComponent(MBTIComponent.S))
+            {
+                eMod *= n_s_mod; // S성향: 현실적, 육체적 생존 욕구(E-Need)에 더 민감
+            }
+            else if (character.Data.mbti.CheckComponent(MBTIComponent.N))
+            {
+                gMod *= n_s_mod; // N성향: 이상적, 내적 동기/성취(G-Need)에 더 민감
+            }
+
+            // [MBTI 적용]: E vs I (외향 vs 내향)
+            if (character.Data.mbti.CheckComponent(MBTIComponent.E))
+            {
+                rMod *= i_e_mod; // E성향: 외로움을 더 크게 느낌
+            }
+            
             var score =
                 (deltas *
                  (CalcENeedScoreMultiplier(character.Data.stats) * character.Data.eModifier +

@@ -7,12 +7,12 @@
             0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
         };
 
-        public static ulong ToTick(int hour, int min, int sec)
+        public static int ToTick(int hour, int min, int sec)
         {
-            return (ulong)hour * 3600 + (ulong)min * 60 + (ulong)sec;
+            return (int)hour * 3600 + (int)min * 60 + (int)sec;
         }
         
-        public static (int, int, int) ToTime(ulong tick)
+        public static (int, int, int) ToTime(int tick)
         {
             tick %= 24 * 3600;
 
@@ -24,7 +24,7 @@
             return ToTime(TimeManager.Instance.Ticks);
         }
 
-        public static (int, int, int, int, DayFlag) ToDate(ulong tick)
+        public static (int, int, int, int, DayFlag) ToDate(int tick)
         {
             var days = tick / (24 * 60 * 60);
             var years = days / 365;
@@ -53,7 +53,7 @@
             return (y, m, (d / 7) + 1, d+1, dayFlag);
         }
 
-        public static bool IsAm(ulong ticks)
+        public static bool IsAm(int ticks)
         {
             var (h, _, _) = ToTime(ticks);
             return h < 12;
@@ -64,7 +64,7 @@
             return ToDate(TimeManager.Instance.Ticks);
         }
 
-        public static string CalendarString(ulong ticks)
+        public static string CalendarString(int ticks)
         {
             var (y, m, _, d, dayFlag) = ToDate(ticks);
             var (h, mm, s) = ToTime(ticks);
