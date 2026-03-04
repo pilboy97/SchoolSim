@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 from collections import defaultdict
 from common import *
 import os
+import sys
 import json
 
 company_name = "DefaultCompany"
@@ -78,4 +79,8 @@ def plot_total_disutility_plotly(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+
     plot_total_disutility_plotly(file_path)

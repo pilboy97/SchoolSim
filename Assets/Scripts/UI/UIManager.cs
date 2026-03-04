@@ -85,8 +85,6 @@ namespace Game
         }
         public void ChangeRoom()
         {
-            if(UIManager.Instance.state != UIManager.UIState.Move) return;
-            
             int idx = RoomManager.Instance.currentRoomIndex;
             idx = (idx + 1) % RoomManager.Instance.roomDatas.Count;
 

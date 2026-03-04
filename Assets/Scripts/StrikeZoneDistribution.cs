@@ -26,16 +26,20 @@ namespace Game
 
             return dist2 + dist <= 2 * b;
         }
-
+        
         public float Priority {
             get
             {
                 var cos = Mathf.Cos(angle);
                 var sin = Mathf.Sin(angle);
-                
-                var r = (A * b) / Mathf.Sqrt(A * A * cos * cos + b * b * sin * sin);
+        
+                var denominator = Mathf.Sqrt(b * b * cos * cos + A * A * sin * sin);
+                if (denominator == 0) return 0;
 
-                return (float)MathNet.Numerics.Distributions.Normal.CDF(0,1,(r - 1) / 0.1);
+                var r = (A * b) / denominator;
+
+                double z = (r - 1.0) / 0.1;
+                return (float)MathNet.Numerics.Distributions.Normal.CDF(0, 1, z);
             }
         }
     }

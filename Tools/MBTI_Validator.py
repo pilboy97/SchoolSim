@@ -64,6 +64,7 @@ def analyze_all_mbti(json_file_path):
 
     stats_E, stats_I = [], []
     stats_S, stats_N = [], []
+    anti_S, anti_N = [], []
     stats_T, stats_F = [], []
     stats_J, stats_P = [], []
 
@@ -80,40 +81,35 @@ def analyze_all_mbti(json_file_path):
         print(f"[{char_name} ({traits['Full']})]")
         print(f"  - (E/I) 관계 불만족도: {avg_r:.2f}")
         print(f"  - (S/N) 생존/동기 비율(E/G): {avg_e:.2f} / {avg_g:.2f}")
-        print(f"  - (T/F) 평균 관계도 점수: {avg_relation:.2f}")
-        print(f"  - (J/P) 위급도 총합 분산: {variance:,.0f}\n")
         
         if traits['E_I'] == 'E': stats_E.append(avg_r)
         else: stats_I.append(avg_r)
             
-        if traits['S_N'] == 'S': stats_S.append(avg_e)
-        else: stats_N.append(avg_g)
-            
-        if traits['T_F'] == 'T': stats_T.append(avg_relation)
-        else: stats_F.append(avg_relation) 
-            
-        if traits['J_P'] == 'J': stats_J.append(variance)
-        else: stats_P.append(variance)
+        if traits['S_N'] == 'S':
+            stats_S.append(avg_e)
+            anti_N.append(avg_g)
+        else: 
+            stats_N.append(avg_g)
+            anti_S.append(avg_e)
 
     print("=== MBTI 4대 지표 그룹별 통계 검증 ===")
     
     print("\n1. [E vs I] 외향 vs 내향 (관계 욕구 불만족도)")
     if stats_E and stats_I:
         print(f"   E({sum(stats_E)/len(stats_E):.2f}) vs I({sum(stats_I)/len(stats_I):.2f})  => E가 더 낮으면(사교적이면) 성공")
-        
+        if sum(stats_E)/len(stats_E) < sum(stats_I)/len(stats_I):
+            print("      sucess")
+
+
     print("\n2. [S vs N] 감각 vs 직관 (우선순위 욕구 집중도)")
     if stats_S and stats_N:
         print(f"   S의 생존 불만족도: {sum(stats_S)/len(stats_S):.2f} (낮을수록 현실적)")
+        print(f"      N의 생존 불만족도: {sum(anti_S)/len(anti_S):.2f}")
         print(f"   N의 동기 불만족도: {sum(stats_N)/len(stats_N):.2f} (낮을수록 이상적)")
+        print(f"      S의 동기 불만족도: {sum(anti_N)/len(anti_N):.2f}")
         print("   => S는 E-Need를, N은 G-Need를 더 잘 방어하면 성공")
-
-    print("\n3. [T vs F] 사고 vs 감정 (타인과의 평균 관계도)")
-    if stats_T and stats_F:
-        print(f"   T({sum(stats_T)/len(stats_T):.2f}) vs F({sum(stats_F)/len(stats_F):.2f})  => F가 더 높으면(친목 중시) 성공")
-
-    print("\n4. [J vs P] 판단 vs 인식 (행동의 규칙성/위급도 분산)")
-    if stats_J and stats_P:
-        print(f"   J({sum(stats_J)/len(stats_J):,.0f}) vs P({sum(stats_P)/len(stats_P):,.0f})  => J가 더 낮으면(계획적이면) 성공")
+        if sum(stats_S)/len(stats_S) < sum(anti_S)/len(anti_S) and sum(stats_N)/len(stats_N) < sum(anti_N)/len(anti_N):
+            print("      sucess")
 
 if __name__ == "__main__":
     analyze_all_mbti(file_path)

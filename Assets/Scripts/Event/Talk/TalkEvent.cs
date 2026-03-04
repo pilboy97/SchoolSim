@@ -490,8 +490,8 @@ namespace Game.Event.Talk
             var speaker = topic.speaker;
 
             float speakerSkill = speaker.Data[topic.knowledge];
-            var effect = (speakerSkill / 100) * BaseTeach;
-            var rel = (speakerSkill / 100) * BaseInfluence;
+            var effect = (speakerSkill / 10) * BaseTeach;
+            var rel = (speakerSkill / 10) * BaseInfluence;
             
             if (listener.ID == speaker.ID)
             {
@@ -526,7 +526,7 @@ namespace Game.Event.Talk
                 
                 r.TryAdd(f, 0);
                 r[f] += rel * attr;
-                s[CharacterStatsType.Motivation] += (speakerSkill / 100) * BaseMotivation;
+                s[CharacterStatsType.Motivation] += (speakerSkill / 10) * BaseMotivation;
             }
         }
 
@@ -562,7 +562,7 @@ namespace Game.Event.Talk
                     if (member.ID == speaker.ID || member.ID == target.ID) continue;
                     
                     var currentRel = member.Data[new CharacterRelation { ID = topic.target.ID, relType = CharacterRelation.Type.Friend }];
-                    var effect = finalInf * (currentRel / 100f);
+                    var effect = finalInf * (currentRel / 10f);
                     
                     attrMod = member.AttractionModifier(speaker);
                     attrMod = (attrMod > 0) ? attrMod : 0;
@@ -607,8 +607,8 @@ namespace Game.Event.Talk
                 var currentRelToSpeaker = listener.Data[new CharacterRelation { ID = speaker.ID, relType = CharacterRelation.Type.Friend }];
                 var currentRelToTarget = listener.Data[new CharacterRelation { ID = target.ID, relType = CharacterRelation.Type.Friend }];
                 
-                var effectToSpeaker = finalInf * (currentRelToTarget / 100f) * attrFromSpeaker;
-                var effectToTarget = finalInf * (currentRelToSpeaker / 100f) * attrFromTarget;
+                var effectToSpeaker = finalInf * (currentRelToTarget / 10f) * attrFromSpeaker;
+                var effectToTarget = finalInf * (currentRelToSpeaker / 10f) * attrFromTarget;
 
                 if (listener.IsRival(speaker) )
                 {

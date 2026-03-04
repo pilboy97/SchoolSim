@@ -336,18 +336,19 @@ namespace Game.Object.Character
         
         public void OnUpdate()
         {
+            var decay = ConfigData.Instance.statsDecay;
             float delta = UnityEngine.Time.deltaTime;
             
             Receive(new CharacterStats()
             {
-                hungry = -0.1f,
-                fatigue = -0.1f,
-                toilet = -0.1f,
-                hygiene = -0.1f,
-                loneliness = -0.1f,
-                rLoneliness = -0.1f,
-                fun = -0.1f,
-                motivation = -0.1f
+                hungry = -decay,
+                fatigue = -decay,
+                toilet = -decay,
+                hygiene = -decay,
+                loneliness = -decay,
+                rLoneliness = -decay,
+                fun = -decay,
+                motivation = -decay
             } * delta);
             
             _data.stats = _data.stats.Clamp(0, 100);
@@ -549,9 +550,8 @@ namespace Game.Object.Character
             switch (s.relType)
             {
                 case CharacterRelation.Type.Friend:
-                    // 4. F(감정) : 관계 형성에 대해 더 큰 정서적 만족(Fun)을 느낌
-                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= F_T_Modifier;
-                    else socialEfficiency /= F_T_Modifier;
+                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= I_E_Modifier;
+                    else socialEfficiency /= I_E_Modifier;
 
                     ret += new CharacterStats()
                     {
@@ -563,8 +563,8 @@ namespace Game.Object.Character
 
                 case CharacterRelation.Type.Romance:
                     
-                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= F_T_Modifier;
-                    else socialEfficiency /= F_T_Modifier;
+                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= I_E_Modifier;
+                    else socialEfficiency /= I_E_Modifier;
 
                     ret += new CharacterStats()
                     {

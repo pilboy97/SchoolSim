@@ -16,6 +16,7 @@ namespace Game
         public float rModifier = 1f;
         public float gModifier = 1f;
 
+        public float statsDecay = 0.1f;
         public float inertia = 5f;
 
         public float I_E_modifier = 5f;

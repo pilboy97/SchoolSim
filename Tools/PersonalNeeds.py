@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from common import *
 from collections import defaultdict
-
+import sys
 import os
 import json
 
@@ -114,4 +114,8 @@ def plot_individual_needs_with_dropdown(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+
     plot_individual_needs_with_dropdown(file_path)

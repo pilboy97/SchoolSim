@@ -45,7 +45,7 @@ def plot_need_urgency_functions():
     fig.add_trace(go.Scatter(
         x=vals, y=e_vals,
         mode='lines',
-        name="E-Need (Survival - 5000 Max)",
+        name="E-Need",
         line=dict(width=3, color='crimson')
     ))
 
@@ -53,7 +53,7 @@ def plot_need_urgency_functions():
     fig.add_trace(go.Scatter(
         x=vals, y=g_vals,
         mode='lines',
-        name="G-Need (Motivation - 2500 Max)",
+        name="G-Need",
         line=dict(width=3, color='mediumseagreen')
     ))
 
@@ -61,7 +61,7 @@ def plot_need_urgency_functions():
     fig.add_trace(go.Scatter(
         x=vals, y=r_vals,
         mode='lines',
-        name="R-Need (Relation - 1000 Max)",
+        name="R-Need",
         line=dict(width=3, color='royalblue')
     ))
 
@@ -69,18 +69,17 @@ def plot_need_urgency_functions():
     # 3. 레이아웃(UI) 설정
     # ==========================================
     fig.update_layout(
-        title="Need Urgency Functions (Log Scale)",
+        title="Need Urgency Functions",
         xaxis_title="Need Stat Value (0 = Dying, 100 = Full)",
         yaxis_title="Urgency Score",
-        yaxis_type="log", # Y축 로그 스케일 적용 (값 차이가 커도 한눈에 비교 가능)
         legend_title="Need Types",
         font=dict(size=13),
-        template="plotly_white", # 깔끔한 바탕
-        hovermode="x unified" # 특정 스탯 값에 마우스를 올리면 세 가지 욕구 점수를 동시에 비교
+        template="plotly_white",
+        hovermode="x unified"
     )
 
     # 4. 브라우저에 그래프 출력
     fig.show()
 
 if __name__ == "__main__":
-    plot_need_urgency_functions(file_path)
+    plot_need_urgency_functions()

@@ -3,12 +3,15 @@ def clamp(x, _min, _max) :
 
 def calc_e_need_multiplier(val):
     val = clamp(val, 0, 100)
-    return 0.3 ** ((val - 50.0) / 3.0)
+    diff = 100 - val
+    return 0.3 ** (-(diff - 50) / 3.0)
 
 def calc_r_need_multiplier(val):
     val = clamp(val, 0, 100)
-    return 1000.0 + ((max(0, 100-val) ** 3))
+    diff = 100 - val
+    return diff ** 3
 
 def calc_g_need_multiplier(val):
     val = clamp(val, 0, 100)
-    return 2000 * max(0, 100.0 - val) + 100
+    diff = 100 - val
+    return 2000 * diff + 1000

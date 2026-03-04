@@ -82,3 +82,5 @@ crashlytics-build.properties
 Assets/Scripts/.DS_Store
 /Assets/Log
 Assets/.DS_Store
+*_[Rr]ecovery*
+*.pptx

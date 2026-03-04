@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Debug;
-using Game.Event;
 using Game.Task;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using UnityEngine;
 using Action = Game.Task.Action;
 
@@ -174,18 +171,18 @@ namespace Game.Object.Character.AI
         private float CalcENeedScoreMultiplier(float val)
         {
             var diff = (100 - val > 0) ? 100 - val : 0;
-            return Mathf.Pow(0.3f, -diff / 3);
+            return Mathf.Pow(0.3f, -(diff - 50) / 3);
         }
         private float CalcRNeedScoreMultiplier(float val)
         {
             var diff = (100 - val > 0) ? 100 - val : 0;
-            return 1000f + diff * diff * diff;
+            return diff * diff * diff;
         }
 
         private float CalcGNeedScoreMultiplier(float val)
         {
             var diff = (100 - val > 0) ? 100 - val : 0;
-            return 2000f * (diff) + 100;
+            return 2000f * (diff) + 1000;
         }
         
         private CharacterStats CalcENeedScoreMultiplier(CharacterStats val)

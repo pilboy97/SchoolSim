@@ -11,6 +11,7 @@ namespace Game.UI
         [SerializeField] private RectTransform root;
         
         [SerializeField] private TogglePanel debugMode;
+        [SerializeField] private SliderPanel statsDecay;
         [SerializeField] private SliderPanel inertia;
         [SerializeField] private SliderPanel E_Needs;
         [SerializeField] private SliderPanel R_Needs;
@@ -47,6 +48,9 @@ namespace Game.UI
             debugMode.Init("Debug", ConfigData.Instance.isLogEnabled);
             debugMode.OnValueChanged += b => ConfigData.Instance.isLogEnabled = b;
             
+            statsDecay.Init("decay of stats", ConfigData.Instance.statsDecay);
+            statsDecay.OnValueChanged += x => ConfigData.Instance.statsDecay = x;
+
             inertia.Init("Inertia", ConfigData.Instance.inertia);
             inertia.OnValueChanged += x => ConfigData.Instance.inertia = x;
             
