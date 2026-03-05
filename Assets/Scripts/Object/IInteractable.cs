@@ -5,7 +5,7 @@ namespace Game.Object
 {
     public interface IInteractable : IHasID
     {
-        string charName { get; }
+        string Name { get; }
         Vector3[] Positions { get; }
         Vector3Int[] CPositions { get; }
         Vector3 CenterPosition { get; }

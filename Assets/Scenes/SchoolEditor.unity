@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 203839344}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.74768335
+  m_Size: 0.35051546
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2564,6 +2564,7 @@ GameObject:
   m_Component:
   - component: {fileID: 534999970}
   - component: {fileID: 534999971}
+  - component: {fileID: 534999972}
   m_Layer: 5
   m_Name: Friends
   m_TagString: Untagged
@@ -2606,11 +2607,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.SchoolEditor.RelationSelector
   portraitPrefab: {fileID: 6768773502658383238, guid: 3592147d3079548f886a2583336192bb, type: 3}
-  candidate: []
-  selected: []
   target: {fileID: 0}
   selRoot: {fileID: 678589310}
   canRoot: {fileID: 1187869259}
+--- !u!114 &534999972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534999969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Set friends who help improve relationship levels.
 --- !u!1 &548430093
 GameObject:
   m_ObjectHideFlags: 0
@@ -4045,6 +4058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 715004797}
   - component: {fileID: 715004798}
+  - component: {fileID: 715004799}
   m_Layer: 5
   m_Name: F vs T
   m_TagString: Untagged
@@ -4100,6 +4114,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &715004799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715004796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: F focuses on emotions, T focuses on logic/reason.
 --- !u!1 &724819786
 GameObject:
   m_ObjectHideFlags: 0
@@ -4951,6 +4979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 823527752}
   - component: {fileID: 823527753}
+  - component: {fileID: 823527754}
   m_Layer: 5
   m_Name: Name
   m_TagString: Untagged
@@ -5003,6 +5032,20 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!114 &823527754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823527751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Sets the character's name.
 --- !u!1 &852571059
 GameObject:
   m_ObjectHideFlags: 0
@@ -5630,6 +5673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 965530436}
   - component: {fileID: 965530437}
+  - component: {fileID: 965530438}
   m_Layer: 5
   m_Name: Attractive
   m_TagString: Untagged
@@ -5682,6 +5726,21 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!114 &965530438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965530435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Sets the appearance level. The far left is random; the level increases
+    as you move to the right.
 --- !u!1 &972548960
 GameObject:
   m_ObjectHideFlags: 0
@@ -7633,6 +7692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1371241212}
   - component: {fileID: 1371241213}
+  - component: {fileID: 1371241214}
   m_Layer: 5
   m_Name: P vs J
   m_TagString: Untagged
@@ -7688,6 +7748,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1371241214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371241211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: J is planned and systematic; P is autonomous and spontaneous.
 --- !u!1 &1424183720
 GameObject:
   m_ObjectHideFlags: 0
@@ -8021,6 +8095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1494870282}
   - component: {fileID: 1494870283}
+  - component: {fileID: 1494870284}
   m_Layer: 5
   m_Name: N vs S
   m_TagString: Untagged
@@ -8076,6 +8151,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1494870284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494870281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: N focuses on ideals, S focuses on reality.
 --- !u!1 &1509906264
 GameObject:
   m_ObjectHideFlags: 0
@@ -8352,11 +8441,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 16
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -8755,6 +8844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1598476871}
   - component: {fileID: 1598476872}
+  - component: {fileID: 1598476873}
   m_Layer: 5
   m_Name: I vs E
   m_TagString: Untagged
@@ -8810,6 +8900,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1598476873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598476870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: I is Introverted, E is Extroverted.
 --- !u!1 &1610793598
 GameObject:
   m_ObjectHideFlags: 0
@@ -9862,6 +9966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1803793704}
   - component: {fileID: 1803793705}
+  - component: {fileID: 1803793706}
   m_Layer: 5
   m_Name: Rivals
   m_TagString: Untagged
@@ -9904,11 +10009,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.SchoolEditor.RelationSelector
   portraitPrefab: {fileID: 6768773502658383238, guid: 3592147d3079548f886a2583336192bb, type: 3}
-  candidate: []
-  selected: []
   target: {fileID: 0}
   selRoot: {fileID: 251751733}
   canRoot: {fileID: 98229523}
+--- !u!114 &1803793706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803793703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Set rivals who will attempt to damage each other's reputation.
 --- !u!1 &1846731366
 GameObject:
   m_ObjectHideFlags: 0
@@ -11821,6 +11938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2114043886}
   - component: {fileID: 2114043887}
+  - component: {fileID: 2114043888}
   m_Layer: 5
   m_Name: Male vs Fenale
   m_TagString: Untagged
@@ -11876,6 +11994,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2114043888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114043885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Sets the character's gender.
 --- !u!1 &2125269562
 GameObject:
   m_ObjectHideFlags: 0

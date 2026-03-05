@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Event;
@@ -45,13 +44,8 @@ namespace Game.Object.Character
 
         public AIControl AI { get; private set; }
         
-        [SerializeField] private float curTime = 0;
-        [SerializeField] private float coolTime = 0.5f;
-        
-        [ShowInInspector] private float I_E_Modifier => ConfigData.Instance.I_E_modifier;
-        [ShowInInspector] private float N_S_Modifier => ConfigData.Instance.N_S_modifier;
-        [ShowInInspector] private float F_T_Modifier => ConfigData.Instance.F_T_modifier;
-        [ShowInInspector] private float P_J_Modifier => ConfigData.Instance.P_J_modifier;
+        [SerializeField] public float curTime = 0;
+        [SerializeField] public float coolTime = 0.5f;
 
         public Action[] Actions => actions;
 
@@ -77,8 +71,8 @@ namespace Game.Object.Character
             set => _data.position = value;
         }
 
-        public string charName => _data.charName;
-        public string Desc => $"{charName}:{ID}";
+        public string Name => _data.charName;
+        public string Desc => $"{Name}:{ID}";
 
         public Vector3[] Positions => new[] { Position };
         public Vector3 CenterPosition => Position;
@@ -299,7 +293,7 @@ namespace Game.Object.Character
                     new DistributionNormalDistribution(50, 10).Sample,
             };
 
-            Receive(initStatus);
+            Receive(initStatus, false);
         }
 
         public void Init(CharacterData data)
@@ -394,14 +388,14 @@ namespace Game.Object.Character
             {
                 return;
             }
-
+            
             if (next is ActionTask { action: { indirect: false } } actionTask)
             {
                 actionTask.Prev = new ActionTask(next.Sub,
                     null,
                     new Action()
                     {
-                        actionName = $"Move closer To ${actionTask.Obj.charName}",
+                        actionName = $"Move closer To ${actionTask.Obj.Name}",
                         indirect = false,
                         busy = true,
                         effect = new TractTargetEffect
@@ -486,46 +480,8 @@ namespace Game.Object.Character
         
         public void CalcPersonalizedStatsDeltaOnReceive(CharacterStats s, ref DeltaResult result)
         {
-            var mbti = Data.mbti;
-
-            var sModifier = new CharacterStats()
-            {
-                comedy = 1f,
-                conversation = 1f,
-                attractive = 1f,
-            } * N_S_Modifier;
-            var nModifier = new CharacterStats()
-            {
-                literature = 1f,
-                math = 1f,
-                sociology = 1f,
-                science = 1f,
-                sports = 1f,
-                art = 1f,
-            } * N_S_Modifier;
-            var tModifier = new CharacterStats()
-            {
-                motivation = 1f
-            } * F_T_Modifier;
-
-            var d = s;
-            // 실질적 기술(S) 선호
-            if (mbti.CheckComponent(MBTIComponent.S))
-            {
-                d = s * sModifier;
-            }
-            // 추상적 이론(N) 선호
-            else
-            {
-                d = s * nModifier;
-            }
-
-            d.motivation += d.SumSkill() + d.SumSubject();
-            result.Stats += d;
-            
-            // 2. T(사고) : 성취(Motivation)에서 즐거움을 얻음
-            if (mbti.CheckComponent(MBTIComponent.T))
-                result.Stats += s * tModifier;
+            s.motivation += s.SumSkill() + s.SumSubject();
+            result.Stats += s;
         }
 
         public void CalcPersonalizedStatsDeltaOnReceive(CharacterRelation s, float v, ref DeltaResult result)
@@ -538,38 +494,46 @@ namespace Game.Object.Character
             var mbti = Data.mbti;
             var attr = PersonalAttractionFrom(other);
 
-            // 3. E(외향) vs I(내향) : 사회적 활동의 에너지 효율
-            // 외향인은 사교로 고독감이 더 빨리 해소됨(1.2x), 내향인은 효율이 낮음(0.8x)
-            var socialEfficiency = mbti.CheckComponent(MBTIComponent.E) ? I_E_Modifier : 1 / I_E_Modifier;
+            var socialEfficiency = 1;
 
+            int mod = 0;
             if (IsRival(s.ID))
-                socialEfficiency = -4 * socialEfficiency;
+                mod -= 3;
             else if (IsFriend(s.ID))
-                socialEfficiency = 4 * socialEfficiency;
+                mod += 3;
+            
+            foreach (var rival in _data.rivals)
+            {
+                if (rival.friends.Contains(other._data)) mod -= 1;
+                if (rival.rivals.Contains(other._data)) mod += 1;
+            }
+            
+            foreach (var friend in _data.friends)
+            {
+                if (friend.friends.Contains(other._data)) mod += 1;
+                if (friend.rivals.Contains(other._data)) mod -= 1;
+            }
+
+            if (mod == 0) mod = 1;
+
+            socialEfficiency *= mod;
 
             switch (s.relType)
             {
                 case CharacterRelation.Type.Friend:
-                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= I_E_Modifier;
-                    else socialEfficiency /= I_E_Modifier;
-
                     ret += new CharacterStats()
                     {
-                        fun = attr * 2 * v * socialEfficiency,
-                        loneliness = attr * 2 * v * socialEfficiency,
+                        fun = attr * v * socialEfficiency,
+                        loneliness = attr * v * socialEfficiency,
                     };
                     
                     break;
 
                 case CharacterRelation.Type.Romance:
-                    
-                    if (mbti.CheckComponent(MBTIComponent.F)) socialEfficiency *= I_E_Modifier;
-                    else socialEfficiency /= I_E_Modifier;
-
                     ret += new CharacterStats()
                     {
-                        fun = attr * 2 * v * socialEfficiency,
-                        rLoneliness = v * attr * 2 * socialEfficiency
+                        fun = attr * v * socialEfficiency,
+                        rLoneliness = v * attr * socialEfficiency
                     };
                     
                     break;

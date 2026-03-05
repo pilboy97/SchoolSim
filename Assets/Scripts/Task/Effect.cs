@@ -96,6 +96,8 @@ namespace Game.Task
 
             var e = TargetEvent;
 
+            e.members.Clear();
+            
             e.members.Add(sub);
             e.members.Add(ch);
 

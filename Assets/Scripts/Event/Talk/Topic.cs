@@ -27,8 +27,8 @@ namespace Game.Event.Talk
             {
                 Type.General or Type.Romance  => Enum.GetName(typeof(Type), type),
                 Type.Teach => $"Teach {knowledge}",
-                Type.RelationUp => $"Compliment {target.charName}",
-                Type.RelationDown => $"Put down {target.charName}",
+                Type.RelationUp => $"Compliment {target.Name}",
+                Type.RelationDown => $"Put down {target.Name}",
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

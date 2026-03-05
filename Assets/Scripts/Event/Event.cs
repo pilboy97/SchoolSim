@@ -28,6 +28,8 @@ namespace Game.Event
             {
                 id = IHasID.GenerateID();
             }
+            
+            members.Clear();
         }
         
         public virtual void Update()

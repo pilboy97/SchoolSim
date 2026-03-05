@@ -30,7 +30,7 @@ namespace Game.Event.Talk
             var mod = talkEvent.shareOfInfluence.GetValueOrDefault(character.ID);
             mod /= talkEvent.DesiredShare;
             
-            nameText.text = $"{character.charName} x{mod:F2}";
+            nameText.text = $"{character.Name} x{mod:F2}";
             topicText.text = talkEvent.selected[character.ID].ToString();
         }
     }

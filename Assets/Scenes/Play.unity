@@ -300,6 +300,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 3, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &12787038 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8435339050401439266, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &12787040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12787038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Adjusts the game speed.
 --- !u!114 &22943693 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6517444433146260103, guid: 3df3c9adf389247439bcb2c702feaf8b, type: 3}
@@ -368,6 +387,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de132269841d8c645a136f9780f46758, type: 3}
+--- !u!1 &200718144 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5161361556832206835, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &200718146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200718144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Need for social interaction.
 --- !u!1 &288180838
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +669,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 478740916327355804, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
   m_PrefabInstance: {fileID: 1894693097}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1245712205}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -854,6 +892,25 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!1 &514141133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1889519272464025260, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &514141135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514141133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Drive for personal growth.
 --- !u!1001 &531270198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -968,6 +1025,90 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 201e7279860466241b70c6cbba03bc5c, type: 3}
+--- !u!1 &708274999 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4094841180091710198, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &708275001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708274999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Conversation dominance. Influencing others grants a bonus for high shares
+    and a penalty for low shares.
+--- !u!1 &723467925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5394363439948682935, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &723467927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723467925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Characters involved in the conversation.
+--- !u!1 &791642364 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8438051384158681988, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &821082299 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1905434622105017493, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &821082301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821082299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Need for entertainment/pleasure.
+--- !u!1 &866122184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8486402957403718617, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &866122186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866122184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: "Topics:\n\n\tGeneral: Casual chitchat. Increases intimacy.\n\tRomance:
+    Increases romantic affection.\n\tTeach: Shares skills and increases intimacy.\n\tCompliment
+    / Put Down: Improves or damages the reputation of a third party."
 --- !u!1 &868849698 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 42759639123111526, guid: 1b126107f7481d34cba4468ebf54fc7d, type: 3}
@@ -995,6 +1136,25 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7cb04b8b1ed4f4964a73c8dfcb179b48, type: 2}
   - {fileID: 11400000, guid: ee2aa720e2596408292142971be6bcbb, type: 2}
   currentRoomIndex: 2
+--- !u!1 &913143185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2994423360453700741, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &913143187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913143185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Need for romantic interaction.
 --- !u!1001 &958936811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1776,6 +1936,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 3, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1245712205 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 800562105627953761, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1245712207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245712205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Switches control to a different player character.
 --- !u!1 &1276655475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,6 +2389,25 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!1 &1358268093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2348886253276143380, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1358268095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358268093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Enables automated AI control.
 --- !u!1 &1404506268
 GameObject:
   m_ObjectHideFlags: 0
@@ -2347,28 +2545,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1404506268}
   m_CullTransparentMesh: 1
+--- !u!1 &1418387793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1923606802640661498, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1421928428 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1025203188748269471, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
   m_PrefabInstance: {fileID: 1894693097}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 791642364}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a41c7215994311a604a649f5cdd118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1421928430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791642364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Resets the camera to its default position.
+--- !u!1 &1432018946 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2984920311546598268, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1432018948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432018946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: The time allowed to select a conversation topic.
 --- !u!114 &1551715059 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5668498178277109359, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
   m_PrefabInstance: {fileID: 1894693097}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1418387793}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1551715061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418387793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Moves the camera to a different room.
+--- !u!1 &1570950797 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4614910084873376157, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1570950799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570950797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Need for cleanliness.
 --- !u!1001 &1593157335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2426,6 +2695,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e5d4413a1a2ca64cb5b5bc46e4f4e3e, type: 3}
+--- !u!1 &1803901110 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 669351057754019643, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1803901112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803901110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Urgency to use the restroom.
 --- !u!1 &1827537752
 GameObject:
   m_ObjectHideFlags: 0
@@ -3034,7 +3322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1133708400130222601, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_ScreenMatchMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1133708400130222601, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_EditorClassIdentifier
@@ -3508,6 +3796,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4209758306013950562, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_text
+      value: Camera Reset
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209758306013950562, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_fontSize
+      value: 44.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4546895759051425836, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3732,6 +4028,26 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5214661871748604066, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214661871748604066, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214661871748604066, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214661871748604066, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214661871748604066, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -110
+      objectReference: {fileID: 0}
     - target: {fileID: 5376142625228364790, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -200
@@ -3859,6 +4175,14 @@ PrefabInstance:
     - target: {fileID: 6079975085245158957, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_Name
       value: portrait
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126073563431154157, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_ChildScaleWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126073563431154157, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_ChildScaleHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6139995893557384334, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4184,6 +4508,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8438051384158681988, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      propertyPath: m_Name
+      value: Camera Reset
+      objectReference: {fileID: 0}
     - target: {fileID: 8612587386692895485, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4262,7 +4590,58 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1391908287367123397, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1858328473}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6055585526819075759, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2042682716}
+    - targetCorrespondingSourceObject: {fileID: 3931810807252969870, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1925026846}
+    - targetCorrespondingSourceObject: {fileID: 669351057754019643, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1803901112}
+    - targetCorrespondingSourceObject: {fileID: 4614910084873376157, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1570950799}
+    - targetCorrespondingSourceObject: {fileID: 5161361556832206835, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 200718146}
+    - targetCorrespondingSourceObject: {fileID: 1905434622105017493, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 821082301}
+    - targetCorrespondingSourceObject: {fileID: 2994423360453700741, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 913143187}
+    - targetCorrespondingSourceObject: {fileID: 1889519272464025260, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 514141135}
+    - targetCorrespondingSourceObject: {fileID: 8435339050401439266, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 12787040}
+    - targetCorrespondingSourceObject: {fileID: 8438051384158681988, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1421928430}
+    - targetCorrespondingSourceObject: {fileID: 2348886253276143380, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1358268095}
+    - targetCorrespondingSourceObject: {fileID: 1923606802640661498, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1551715061}
+    - targetCorrespondingSourceObject: {fileID: 800562105627953761, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1245712207}
+    - targetCorrespondingSourceObject: {fileID: 2984920311546598268, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1432018948}
+    - targetCorrespondingSourceObject: {fileID: 4094841180091710198, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 708275001}
+    - targetCorrespondingSourceObject: {fileID: 8486402957403718617, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 866122186}
+    - targetCorrespondingSourceObject: {fileID: 5394363439948682935, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 723467927}
   m_SourcePrefab: {fileID: 100100000, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
 --- !u!224 &1894693098 stripped
 RectTransform:
@@ -4326,6 +4705,44 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3df3c9adf389247439bcb2c702feaf8b, type: 3}
+--- !u!1 &1925026844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3931810807252969870, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1925026846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925026844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Level of tiredness.
+--- !u!1 &2042682714 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6055585526819075759, guid: 843bb61402fe3f04fb149e070b766bcc, type: 3}
+  m_PrefabInstance: {fileID: 1894693097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2042682716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042682714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Level of hunger.
 --- !u!1001 &2047050862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4618,7 +5035,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6246101275642876997, guid: 325365f64b959904ba3e5a2cdb25c80f, type: 3}
       propertyPath: orthographic size
-      value: 8.1171875
+      value: 5.625
       objectReference: {fileID: 0}
     - target: {fileID: 6369541033147304293, guid: 325365f64b959904ba3e5a2cdb25c80f, type: 3}
       propertyPath: m_Pivot.x

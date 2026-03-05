@@ -6,6 +6,7 @@ from plotly.subplots import make_subplots
 from collections import defaultdict
 import os
 import json
+import sys
 
 company_name = "DefaultCompany"
 product_name = "School Sim"
@@ -158,5 +159,9 @@ def analyze_strike_zone_impact(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+
     analyze_strike_zone_impact(file_path)
     pass

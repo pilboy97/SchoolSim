@@ -30,7 +30,7 @@ namespace Game
         public float talk_baseTeach = 1f;     // G-욕구 (성장 - 양성 피드백 대상)
         public float talk_baseInfluence = 1f;
         public float talk_baseMotivation = 1f;
-
+        
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);

@@ -68830,7 +68830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c482c12977184e7cb3a3ddfd61607773, type: 3}
   m_Name: Trinity HighSchool
   m_EditorClassIdentifier: 
-  schoolName: asdf
+  schoolName: Trinity Sougou Gakuin
   randomGenCharacter: 0
   characters:
   - {fileID: 11400000, guid: eb9f0af639f734fd7a2fa2a7b593e358, type: 2}

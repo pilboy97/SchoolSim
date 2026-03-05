@@ -26,23 +26,30 @@ namespace Game.UI
             waitForAnswer = true;
         }
 
-        protected override void Start()
+        public void OnDone()
         {
-            base.Start();
-
-            timer.unscaled = true;
-            timer.curTime = 0;
-            timer.goalTime = timeLimit;
-            timer.onDone += () => { gameObject.SetActive(false); };
-            timer.Init();
+            gameObject.SetActive(false);
+            timer.onDone -= OnDone;
         }
 
         public async UniTask<bool> WaitForAnswer(CancellationToken token)
         {
+            isYes = false;
+            waitForAnswer = true;
+            
+            timer.unscaled = true;
+            timer.curTime = 0;
+            timer.goalTime = timeLimit;
+            timer.onDone += OnDone;
+            timer.Init();
+            
             if (token.IsCancellationRequested) return false;
             await UniTask.WaitUntil(()=>timer.IsDone || !waitForAnswer, cancellationToken:token);
 
             timer.curTime = 0;
+            OnDone();
+            timer.Init();
+            
             return isYes;
         }
         

@@ -28,7 +28,7 @@ namespace Game
         public static Transform TEMP => GameObject.Find("TEMP")?.transform ?? new GameObject("TEMP").transform;
 
         public Action OnGameStart = () => { };
-        public Action<Character> OnSetPlayer = (ch) => { UnityEngine.Debug.Log($"player changed {ch.charName}"); };
+        public Action<Character> OnSetPlayer = (ch) => { UnityEngine.Debug.Log($"player changed {ch.Name}"); };
 
         protected void Awake()
         {
@@ -52,6 +52,7 @@ namespace Game
 
             UIManager.Instance.Init();
             
+            TalkEvent.StaticInit();
             TalkWindow.Instance.Init();
 
             foreach (Transform t in transform)

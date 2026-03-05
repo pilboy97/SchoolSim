@@ -43,6 +43,7 @@ namespace Game.Object.Character.Player
                         name = "Move",
                         onClick = new Action()
                         {
+                            actionName = $"Go to {cpos}",
                             indirect =  true,
                             effect = new WalkToEffect()
                             {
@@ -121,7 +122,7 @@ namespace Game.Object.Character.Player
             ContextMenu.Instance.Init(pos, items.ToArray());
         }
 
-        public PlayerControl(Character character, bool isAutoPilot = true)
+        public PlayerControl(Character character, bool isAutoPilot = false)
         {
             this.character = character;
             this.isAutoPilot = isAutoPilot;
@@ -180,7 +181,7 @@ namespace Game.Object.Character.Player
                 if (front is ActionTask { action: { effect: InviteSimpleEventEffect frontEffect } } && 
                     e.Equals(frontEffect.eventData)) return true;
                 
-                string str = $"{who.charName} asked {character.charName} to join {e.eventName}";
+                string str = $"{who.Name} asked {character.Name} to join {e.eventName}";
                 
                 var panel = RequestView.Instance.Get();
                 panel.Init(str);

@@ -21,7 +21,7 @@ namespace Game.Map
             id ??= IHasID.GenerateID();
         }
 
-        public string charName => "";
+        public string Name => "";
         public Vector3[] Positions => new []{ MapController.Instance.CellToWorld(position) };
         public Vector3Int[] CPositions => new[] { position };
         public Vector3 CenterPosition => Positions[0];

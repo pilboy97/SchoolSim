@@ -52,8 +52,6 @@ namespace Game.Event.Talk
 
         public void Init()
         {
-            TalkEvent.StaticInit();
-                
             for (var i = 0; i < Topics.Count; i++)
             {
                 var btn = Instantiate(topicButtonPrefab, content);

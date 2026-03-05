@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Game.Object.Character;
 using TMPro;
 using UnityEngine;
@@ -96,8 +97,24 @@ namespace Game.SchoolEditor
                 MBTI_P_J_Slider.value = P_J;
             }
 
-            friendSelector.Init(character,SchoolDataController.Instance.data.characters, character.genData.friends);
-            rivalSelector.Init(character,SchoolDataController.Instance.data.characters, character.genData.rivals);
+            friendSelector.Init(character,SchoolDataController.Instance.data.characters.ToHashSet(), character.genData.friends.ToHashSet());
+            friendSelector.OnValueChangedHandler += UpdateRelationSelector;
+            
+            rivalSelector.Init(character,SchoolDataController.Instance.data.characters.ToHashSet(), character.genData.rivals.ToHashSet());
+            rivalSelector.OnValueChangedHandler += UpdateRelationSelector;
+        }
+
+        private void UpdateRelationSelector()
+        {
+            var wholeCharacter = SchoolDataController.Instance.data.characters.ToList();
+            foreach (var ch in wholeCharacter)
+            {
+                if (ch == target) continue;
+                if (rivalSelector.Selected.Contains(ch)) friendSelector.Remove(ch);
+                else friendSelector.AddCandidate(ch);
+                if (friendSelector.Selected.Contains(ch)) rivalSelector.Remove(ch);
+                else rivalSelector.AddCandidate(ch);
+            }
         }
 
         public void OnSet()
@@ -160,13 +177,13 @@ namespace Game.SchoolEditor
 
         public void OnSetFriends()
         {
-            target.genData.friends = friendSelector.Selected;
+            target.genData.friends = friendSelector.Selected.ToList();
             OnSet();
         }
 
         public void OnSetRivals()
         {
-            target.genData.rivals = rivalSelector.Selected;
+            target.genData.rivals = rivalSelector.Selected.ToList();
             OnSet();
         }
     }

@@ -3,6 +3,7 @@ import numpy as np
 import plotly.graph_objects as go
 import os
 import json
+import sys
 
 company_name = "DefaultCompany"
 product_name = "School Sim"
@@ -111,4 +112,8 @@ def plot_relationship_network_safe(json_file_path):
     fig.show()
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+
     plot_relationship_network_safe(file_path)

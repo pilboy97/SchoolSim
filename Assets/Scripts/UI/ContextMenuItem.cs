@@ -31,13 +31,13 @@ namespace Game.UI
                 var c = player.controller as PlayerControl;
                 if (c == null)
                 {
-                    UnityEngine.Debug.Log("ASDF");
                     return;
                 }
                 
                 if (!onClick.indirect)
                     task.Prev = new ActionTask(player, null, new Action()
                     {
+                        actionName = $"track to {_obj.Name}",
                         effect = new TractTargetEffect()
                         {
                             targetID = _obj.ID
@@ -59,7 +59,7 @@ namespace Game.UI
             onClick = item.onClick;
             _obj = obj;
 
-            text.text = $"{_obj?.charName ?? ""} {item.name}";
+            text.text = $"{_obj?.Name ?? ""} {item.name}";
         }
     }
 }

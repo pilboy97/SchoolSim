@@ -56,7 +56,7 @@ namespace Game.UI
             
             gameObject.SetActive(who != null);
             
-            nameText.text = Target.charName;
+            nameText.text = Target.Name;
             MBTIText.text = Target.Data.mbti.ToString();
 
             portrait.Init(who.Data);
@@ -66,7 +66,7 @@ namespace Game.UI
         
         private void LateUpdate()
         {
-            nameText.text = Target.charName;
+            nameText.text = Target.Name;
             MBTIText.text = Target.Data.mbti.ToString();
             
             returnToPlayerBtn.gameObject.SetActive(Target.ID != GameManager.Instance.Player.ID);

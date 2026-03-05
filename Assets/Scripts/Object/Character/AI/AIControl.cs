@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Task;
@@ -74,13 +75,14 @@ namespace Game.Object.Character.AI
                     InsertTopManual((o, action, score));
                 }
             }
-
-            // 룰렛 선택을 위해 점수만 따로 추출 (LINQ Select 대신 반복문 사용)
+            
             var scoresOnly = new List<float>(RandomSize);
             for (int i = 0; i < RandomSize; i++)
             {
                 if (_topActions[i].score > 0)
+                {
                     scoresOnly.Add(_topActions[i].score);
+                }
                 else break;
             }
 
@@ -90,10 +92,10 @@ namespace Game.Object.Character.AI
             _result.Reset();
             
             var selected = _topActions[idx];
-
+            
             // 결정 임계치 체크
-            float idleScore = CalcScore(ref _result);
-            if (selected.score < idleScore * 1.3f) return null;
+            float curScore = CalcScore(ref _result);
+            if (selected.score < curScore * 1.3f) return null;
 
             // 현재 행동과 동일한지 체크
             if (currentTask is ActionTask a &&
@@ -264,20 +266,22 @@ namespace Game.Object.Character.AI
             var i_e_mod = ConfigData.Instance.I_E_modifier;
             var n_s_mod = ConfigData.Instance.N_S_modifier;
 
-            // [MBTI 적용]: S vs N (감각 vs 직관)
             if (character.Data.mbti.CheckComponent(MBTIComponent.S))
             {
-                eMod *= n_s_mod; // S성향: 현실적, 육체적 생존 욕구(E-Need)에 더 민감
+                eMod *= n_s_mod; 
             }
             else if (character.Data.mbti.CheckComponent(MBTIComponent.N))
             {
-                gMod *= n_s_mod; // N성향: 이상적, 내적 동기/성취(G-Need)에 더 민감
+                gMod *= n_s_mod;
             }
 
-            // [MBTI 적용]: E vs I (외향 vs 내향)
             if (character.Data.mbti.CheckComponent(MBTIComponent.E))
             {
-                rMod *= i_e_mod; // E성향: 외로움을 더 크게 느낌
+                rMod *= i_e_mod;
+            }
+            else
+            {
+                rMod /= i_e_mod;
             }
             
             var score =

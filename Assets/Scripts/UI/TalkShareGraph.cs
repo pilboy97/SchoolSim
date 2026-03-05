@@ -78,7 +78,7 @@ namespace Game.UI
                 _activated[i].img.color = value;
                 _activated[i].RectTransform.sizeDelta = new Vector2(w, 0);
 
-                _activated[i].txt.text = $"{member.charName}";
+                _activated[i].txt.text = $"{member.Name}";
             }
         }
 

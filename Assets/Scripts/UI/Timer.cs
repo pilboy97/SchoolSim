@@ -6,6 +6,7 @@ namespace Game.UI
 {
     public class Timer : UIBehaviour
     {
+        public bool stopWhenPause = true;
         public bool unscaled = false;
         public float goalTime = 3f;
         public float curTime = 0f;
@@ -25,13 +26,16 @@ namespace Game.UI
             bar.min = 0;
             bar.max = goalTime;
             bar.value = curTime;
-
+            isDone = false;
+            
             start = true;
         }
 
         public void Update()
         {
             if (!start) return;
+            if (stopWhenPause && UnityEngine.Time.timeScale == 0) return;
+            
             curTime += (!unscaled)?UnityEngine.Time.deltaTime:UnityEngine.Time.unscaledDeltaTime;
             bar.value = curTime;
         }
