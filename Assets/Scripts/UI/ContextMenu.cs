@@ -52,16 +52,11 @@ namespace Game.UI
 
             var active = items != null;
 
-            if (active && !gameObject.activeSelf)
+            if (active && !gameObject.activeSelf || !active)
             {
-                timeScale = UnityEngine.Time.timeScale;
-                TimeManager.Instance.SetTimeScale0_1();
+                TimeManager.Instance.TogglePause();
             }
-            else if(!active)
-            {
-                TimeManager.Instance.SetTimeScale(timeScale);
-            }
-            
+
             gameObject.SetActive(active);
         }
 
