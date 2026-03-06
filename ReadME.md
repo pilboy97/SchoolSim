@@ -4,7 +4,7 @@
 A school life simulation game where 20 NPC students autonomously choose actions based on their dynamic needs (Hunger, Fatigue, Social, etc.) using a **Utility AI** decision-making system. Built with Unity and C#.
 
 [日本語]
-30人のNPC生徒が、自身の欲求（空腹、疲労、社交など）の変化に応じて自律的に行動を選択するシミュレーションゲームです。**Utility AI**アーキテクチャを採用し、UnityとC#で開発しました。
+20人のNPC生徒が、自身の欲求（空腹、疲労、社交など）の変化に応じて自律的に行動を選択するシミュレーションゲームです。**Utility AI**アーキテクチャを採用し、UnityとC#で開発しました。
 
 ---
 
