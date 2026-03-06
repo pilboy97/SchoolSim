@@ -116,11 +116,11 @@ By combining these modifiers (`n_s_mod`, `i_e_mod`), the exact same environment 
 
 Balancing complex AI needs is chaotic. I developed custom Python tools to visualize the AI's behavior, and verify the stability of the simulation objectively.
 
-|  File Name  |                            Explain                           |
-|-------------|--------------------------------------------------------------|
-| NeedsMSD.py | Plots the Mean Squared Deviation (MSD) to analyze the stability of needs. |
-| PersonalNeeds.py | Visualizes changes in individual NPC needs over time.                    |
-| PlottingTypeScoreFunction.py | Graphs the non-linear urgency functions for parameter tuning. |
-| ShowDisutilty.py | Shows the average urgency ratio of needs by type. |
-| Strikezone.py | Simulates the "Strike Zone" mechanic for the interpersonal attraction system. |
-| StrikeZoneImpact.py | Analyzes and proves the impact of the Strike Zone system. |
+|  File Name  |                            Explain                           |                                                   |
+|-------------|--------------------------------------------------------------|---------------------------------------------------|
+| NeedsMSD.py | Plots the Mean Squared Deviation (MSD) to analyze the stability of needs. | <img src="./Img/NeedsMSD.png"> |
+| PersonalNeeds.py | Visualizes changes in individual NPC needs over time.                    |  <img src="./Img/PersonalNeeds.png"> |
+| PlottingTypeScoreFunction.py | Graphs the non-linear urgency functions for parameter tuning. |  <img src="./Img/PlottingTypeScoreFunction.png"> |
+| ShowDisutilty.py | Shows the average urgency ratio of needs by type. |  <img src="./Img/ShowDisutility.png"> |
+| Strikezone.py | Simulates the "Strike Zone" mechanic for the interpersonal attraction system. | <img src="./Img/Strikezone.png"> |
+| StrikeZoneImpact.py | Analyzes and proves the impact of the Strike Zone system. |  <img src="./Img/StrikezoneImpact.png"> |
