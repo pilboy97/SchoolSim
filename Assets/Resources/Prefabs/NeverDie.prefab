@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 1139462706110774753}
   - component: {fileID: 1821534695171400200}
   - component: {fileID: 979936727633935780}
+  - component: {fileID: 728768373982805781}
   m_Layer: 5
   m_Name: F_T
   m_TagString: Untagged
@@ -649,10 +650,10 @@ RectTransform:
   - {fileID: 6101294976081105087}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -800}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1139462706110774753
 CanvasRenderer:
@@ -709,6 +710,20 @@ MonoBehaviour:
   slider: {fileID: 7525932715064708145}
   text: 
   value: 0
+--- !u!114 &728768373982805781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435663073272948189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Not Implemented
 --- !u!1 &442335407710301337
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,6 +1010,7 @@ GameObject:
   - component: {fileID: 2934320956916275447}
   - component: {fileID: 7042630280118002971}
   - component: {fileID: 5542548200698090099}
+  - component: {fileID: 373077724681477933}
   m_Layer: 5
   m_Name: N_S
   m_TagString: Untagged
@@ -1019,10 +1035,10 @@ RectTransform:
   - {fileID: 6146859653741656926}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -700}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2934320956916275447
 CanvasRenderer:
@@ -1079,6 +1095,21 @@ MonoBehaviour:
   slider: {fileID: 4141776586181956990}
   text: 
   value: 0
+--- !u!114 &373077724681477933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531043110076268434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: N values ideals and prefers Growth (G); S values reality and prefers Survival
+    (E).
 --- !u!1 &553921848996867905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,7 +1143,7 @@ RectTransform:
   m_Father: {fileID: 5407196465184770674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1202,6 +1233,7 @@ GameObject:
   - component: {fileID: 9083111235063665741}
   - component: {fileID: 423036478195584156}
   - component: {fileID: 1329464323052596477}
+  - component: {fileID: 7076087970338865739}
   m_Layer: 5
   m_Name: E Needs
   m_TagString: Untagged
@@ -1226,10 +1258,10 @@ RectTransform:
   - {fileID: 5572526744410679158}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -300}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9083111235063665741
 CanvasRenderer:
@@ -1286,6 +1318,112 @@ MonoBehaviour:
   slider: {fileID: 1600827790926493007}
   text: 
   value: 0
+--- !u!114 &7076087970338865739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637207346650368247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Weighting for survival-related needs (Existence).
+--- !u!1 &650122841359584156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3815786568314255418}
+  - component: {fileID: 1993118902056174614}
+  - component: {fileID: 5720191154974146674}
+  - component: {fileID: 3692079571497027786}
+  m_Layer: 5
+  m_Name: Tooltip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3815786568314255418
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650122841359584156}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7929272107915764523}
+  m_Father: {fileID: 3558122299697796956}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 400}
+  m_Pivot: {x: 0, y: 0}
+--- !u!222 &1993118902056174614
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650122841359584156}
+  m_CullTransparentMesh: 1
+--- !u!114 &5720191154974146674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650122841359584156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3692079571497027786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650122841359584156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07b6dab5f794729b95da204e2d942af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.TooltipBox
+  textComp: {fileID: 1545966779549547302}
+  rectTransform: {fileID: 3815786568314255418}
+  text: 
 --- !u!1 &667327516751905655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,7 +1930,7 @@ RectTransform:
   m_Father: {fileID: 8508819633659572676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2120,6 +2258,7 @@ GameObject:
   - component: {fileID: 6643166848467430083}
   - component: {fileID: 1637533490512121662}
   - component: {fileID: 5731085778386311270}
+  - component: {fileID: 776199295475528428}
   m_Layer: 5
   m_Name: G Needs
   m_TagString: Untagged
@@ -2144,10 +2283,10 @@ RectTransform:
   - {fileID: 6559704611874386700}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -500}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &6643166848467430083
 CanvasRenderer:
@@ -2204,6 +2343,21 @@ MonoBehaviour:
   slider: {fileID: 6375266177265674607}
   text: 
   value: 0
+--- !u!114 &776199295475528428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039590235797413414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Weighting for growth-related needs (Growth). Growth refers to skill EXP
+    gains.
 --- !u!1 &1063320375489936508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,6 +2370,7 @@ GameObject:
   - component: {fileID: 8966452904474545732}
   - component: {fileID: 7905102107996743720}
   - component: {fileID: 8203174497316650094}
+  - component: {fileID: 4797614857054399642}
   m_Layer: 5
   m_Name: Talk_base_motivation
   m_TagString: Untagged
@@ -2240,10 +2395,10 @@ RectTransform:
   - {fileID: 4859623123689033109}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1300}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8966452904474545732
 CanvasRenderer:
@@ -2300,6 +2455,20 @@ MonoBehaviour:
   slider: {fileID: 5321060509827144203}
   text: 
   value: 0
+--- !u!114 &4797614857054399642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063320375489936508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Base amount of 'Motivation' gained during conversation events.
 --- !u!1 &1124609199855227932
 GameObject:
   m_ObjectHideFlags: 0
@@ -2782,7 +2951,7 @@ RectTransform:
   m_Father: {fileID: 4830811869520680742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2935,9 +3104,9 @@ RectTransform:
   m_Father: {fileID: 6059888806187291570}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1597094765270211005
 CanvasRenderer:
@@ -3002,6 +3171,7 @@ GameObject:
   - component: {fileID: 7786892074429892043}
   - component: {fileID: 4362749149370974582}
   - component: {fileID: 7265988308698653714}
+  - component: {fileID: 64970403627838582}
   m_Layer: 5
   m_Name: Talk_base_rLoneliness
   m_TagString: Untagged
@@ -3026,10 +3196,10 @@ RectTransform:
   - {fileID: 3528201137497911434}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1200}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7786892074429892043
 CanvasRenderer:
@@ -3086,6 +3256,20 @@ MonoBehaviour:
   slider: {fileID: 8193107402862367447}
   text: 
   value: 0
+--- !u!114 &64970403627838582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512957376292083603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Base amount of 'Romance Loneliness' reduced during conversation events.
 --- !u!1 &1556096499506146877
 GameObject:
   m_ObjectHideFlags: 0
@@ -3256,7 +3440,7 @@ RectTransform:
   m_Father: {fileID: 6499333583152389545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3331,7 +3515,7 @@ RectTransform:
   m_Father: {fileID: 5850772778484117465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3406,7 +3590,7 @@ RectTransform:
   m_Father: {fileID: 124220505565981949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3858,7 +4042,7 @@ RectTransform:
   m_Father: {fileID: 8739449627310696685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3933,7 +4117,7 @@ RectTransform:
   m_Father: {fileID: 5946308931469230664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4271,7 +4455,7 @@ RectTransform:
   m_Father: {fileID: 2872815597314186420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4346,7 +4530,7 @@ RectTransform:
   m_Father: {fileID: 49770655518304193}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4436,8 +4620,9 @@ GameObject:
   - component: {fileID: 4865025963597550058}
   - component: {fileID: 1008991578049087948}
   - component: {fileID: 7910429801787766317}
+  - component: {fileID: 6762666366174659692}
   m_Layer: 5
-  m_Name: Inertia (1)
+  m_Name: Stats Decay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4460,10 +4645,10 @@ RectTransform:
   - {fileID: 8243522553841594625}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -200}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4865025963597550058
 CanvasRenderer:
@@ -4520,6 +4705,20 @@ MonoBehaviour:
   slider: {fileID: 6000895922143897610}
   text: 
   value: 0
+--- !u!114 &6762666366174659692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2847140218516226686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 1
+  message: The rate at which the AI's base stats decrease over time.
 --- !u!1 &2858672806952397733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4532,6 +4731,7 @@ GameObject:
   - component: {fileID: 1104698396031505754}
   - component: {fileID: 8607963856271734466}
   - component: {fileID: 2192781357015603604}
+  - component: {fileID: 263908573953125842}
   m_Layer: 5
   m_Name: I_E
   m_TagString: Untagged
@@ -4556,10 +4756,10 @@ RectTransform:
   - {fileID: 7739593910388856117}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -600}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1104698396031505754
 CanvasRenderer:
@@ -4616,6 +4816,21 @@ MonoBehaviour:
   slider: {fileID: 1426758952344639777}
   text: 
   value: 0
+--- !u!114 &263908573953125842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2858672806952397733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: I (Introvert) prefers less social activity; E (Extrovert) prefers high
+    social activity.
 --- !u!1 &2872521935694695015
 GameObject:
   m_ObjectHideFlags: 0
@@ -5020,7 +5235,7 @@ RectTransform:
   m_Father: {fileID: 9003657659694848508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5405,7 +5620,7 @@ RectTransform:
   m_Father: {fileID: 3566646552353161338}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5480,7 +5695,7 @@ RectTransform:
   m_Father: {fileID: 5303064513493705010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5671,6 +5886,7 @@ GameObject:
   - component: {fileID: 3640538654497404543}
   - component: {fileID: 4524317615777483453}
   - component: {fileID: 1096753464352516705}
+  - component: {fileID: 8685967289376702577}
   m_Layer: 5
   m_Name: P_J
   m_TagString: Untagged
@@ -5695,10 +5911,10 @@ RectTransform:
   - {fileID: 7610222218237679782}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -900}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3640538654497404543
 CanvasRenderer:
@@ -5755,6 +5971,20 @@ MonoBehaviour:
   slider: {fileID: 678012361994728233}
   text: 
   value: 0
+--- !u!114 &8685967289376702577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3559227734970203237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Not Implemented
 --- !u!1 &3572977729174628040
 GameObject:
   m_ObjectHideFlags: 0
@@ -5878,7 +6108,7 @@ RectTransform:
   m_Father: {fileID: 521031547660271587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5920,6 +6150,108 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3592002051023718340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3558122299697796956}
+  - component: {fileID: 5122543205777085094}
+  - component: {fileID: 599677969575101774}
+  - component: {fileID: 6066205727508348921}
+  m_Layer: 0
+  m_Name: Tooltip Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3558122299697796956
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3592002051023718340}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3815786568314255418}
+  m_Father: {fileID: 1475827359395762068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!223 &5122543205777085094
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3592002051023718340}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 9
+  m_TargetDisplay: 0
+--- !u!114 &599677969575101774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3592002051023718340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!114 &6066205727508348921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3592002051023718340}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!1 &3692539841271046222
 GameObject:
   m_ObjectHideFlags: 0
@@ -6079,7 +6411,7 @@ RectTransform:
   m_Father: {fileID: 1293253572090147104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6154,7 +6486,7 @@ RectTransform:
   m_Father: {fileID: 2408488534232325382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6285,7 +6617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7912203796652453691
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6379,7 +6711,7 @@ RectTransform:
   m_Father: {fileID: 6611276403955338714}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6454,7 +6786,7 @@ RectTransform:
   m_Father: {fileID: 6400381719199395424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6603,8 +6935,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8660720801968491559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.41250002}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6953,7 +7285,7 @@ RectTransform:
   m_Father: {fileID: 273246128641479789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7007,6 +7339,7 @@ GameObject:
   - component: {fileID: 1175247198118766193}
   - component: {fileID: 7839815372540786021}
   - component: {fileID: 4241794892449058623}
+  - component: {fileID: 4374620996889105536}
   m_Layer: 5
   m_Name: R Needs
   m_TagString: Untagged
@@ -7031,10 +7364,10 @@ RectTransform:
   - {fileID: 737138871551781847}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -400}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1175247198118766193
 CanvasRenderer:
@@ -7091,6 +7424,20 @@ MonoBehaviour:
   slider: {fileID: 5970545769053967013}
   text: 
   value: 0
+--- !u!114 &4374620996889105536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4355172739597011240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Weighting for social relationships and pleasure (Relatedness).
 --- !u!1 &4474266242792191935
 GameObject:
   m_ObjectHideFlags: 0
@@ -7433,6 +7780,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3558122299697796956}
   - {fileID: 1732503259853154035}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7454,17 +7802,17 @@ MonoBehaviour:
   rModifier: 1
   gModifier: 1
   statsDecay: 0.1
-  inertia: 5
-  I_E_modifier: 5
-  N_S_modifier: 5
-  F_T_modifier: 0
-  P_J_modifier: 0
-  talk_baseFun: 1
-  talk_baseLoneliness: 1
-  talk_baseRLoneliness: 1
+  inertia: 1
+  I_E_modifier: 1
+  N_S_modifier: 1
+  F_T_modifier: 1
+  P_J_modifier: 1
+  talk_baseFun: 0.1
+  talk_baseLoneliness: 0.1
+  talk_baseRLoneliness: 0.1
   talk_baseTeach: 1
   talk_baseInfluence: 1
-  talk_baseMotivation: 1
+  talk_baseMotivation: 0.1
 --- !u!114 &4271714252232549706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7528,7 +7876,7 @@ RectTransform:
   m_Father: {fileID: 53342989284072216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7618,6 +7966,7 @@ GameObject:
   - component: {fileID: 1506159007767360175}
   - component: {fileID: 4317765813390198145}
   - component: {fileID: 6461076152154842135}
+  - component: {fileID: 2454638479790364938}
   m_Layer: 5
   m_Name: Talk_base_loneliness
   m_TagString: Untagged
@@ -7642,10 +7991,10 @@ RectTransform:
   - {fileID: 1437109950532205172}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1100}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1506159007767360175
 CanvasRenderer:
@@ -7702,6 +8051,20 @@ MonoBehaviour:
   slider: {fileID: 8745620765195228098}
   text: 
   value: 0
+--- !u!114 &2454638479790364938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4846566560298594930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Base amount of 'Loneliness' reduced during conversation events.
 --- !u!1 &4881563795729093412
 GameObject:
   m_ObjectHideFlags: 0
@@ -8370,7 +8733,7 @@ RectTransform:
   m_Father: {fileID: 3211185880702790328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8687,6 +9050,7 @@ GameObject:
   - component: {fileID: 3930907005635330259}
   - component: {fileID: 4286118335394750373}
   - component: {fileID: 1420376407642882540}
+  - component: {fileID: 3103266058852254733}
   m_Layer: 5
   m_Name: Talk_base_teach
   m_TagString: Untagged
@@ -8711,10 +9075,10 @@ RectTransform:
   - {fileID: 5378452169820047879}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1500}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3930907005635330259
 CanvasRenderer:
@@ -8771,6 +9135,20 @@ MonoBehaviour:
   slider: {fileID: 8291476464441131602}
   text: 
   value: 0
+--- !u!114 &3103266058852254733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588373148967284858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: The amount of skill EXP gained during conversation events.
 --- !u!1 &5680083430675229042
 GameObject:
   m_ObjectHideFlags: 0
@@ -8821,8 +9199,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00006136548}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000067578876}
+  m_SizeDelta: {x: 17, y: 1600}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1812892988568185855
 MonoBehaviour:
@@ -9071,6 +9449,143 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &5993768443996073443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7929272107915764523}
+  - component: {fileID: 3860286904481392344}
+  - component: {fileID: 1545966779549547302}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7929272107915764523
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5993768443996073443}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3815786568314255418}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: -40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3860286904481392344
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5993768443996073443}
+  m_CullTransparentMesh: 1
+--- !u!114 &1545966779549547302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5993768443996073443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Tooltip
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 48
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 48
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6208354519166359555
 GameObject:
   m_ObjectHideFlags: 0
@@ -9605,7 +10120,7 @@ RectTransform:
   m_Father: {fileID: 5371992004394110032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9806,7 +10321,7 @@ RectTransform:
   m_Father: {fileID: 254528171569397018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10167,7 +10682,7 @@ RectTransform:
   m_Father: {fileID: 8180685545679447097}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10430,6 +10945,7 @@ GameObject:
   - component: {fileID: 7054426113965158986}
   - component: {fileID: 2420628436147987227}
   - component: {fileID: 7755411990752184646}
+  - component: {fileID: 4941639288687798975}
   m_Layer: 5
   m_Name: Debug
   m_TagString: Untagged
@@ -10453,10 +10969,10 @@ RectTransform:
   - {fileID: 2042169151879781251}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: 0}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7054426113965158986
 CanvasRenderer:
@@ -10512,6 +11028,20 @@ MonoBehaviour:
   toggle: {fileID: 2771597046182650471}
   text: Degug Mode
   value: 0
+--- !u!114 &4941639288687798975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7181637395321498224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 1
+  message: Enables logging. You can analyze logs using the tools in the 'Tools' folder.
 --- !u!1 &7208680116119522030
 GameObject:
   m_ObjectHideFlags: 0
@@ -11005,7 +11535,7 @@ RectTransform:
   m_Father: {fileID: 3373559520002200564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11080,7 +11610,7 @@ RectTransform:
   m_Father: {fileID: 5377940788559931827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11389,8 +11919,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5440563912163330522}
   m_HandleRect: {fileID: 2511470565057684324}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.5875
+  m_Value: 1.0000004
+  m_Size: 0.5874244
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11407,6 +11937,7 @@ GameObject:
   - component: {fileID: 4037621026403489660}
   - component: {fileID: 2548380217915456950}
   - component: {fileID: 5492781118203027293}
+  - component: {fileID: 6731956428178632415}
   m_Layer: 5
   m_Name: Inertia
   m_TagString: Untagged
@@ -11431,10 +11962,10 @@ RectTransform:
   - {fileID: 4893823753744840828}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -100}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4037621026403489660
 CanvasRenderer:
@@ -11491,6 +12022,20 @@ MonoBehaviour:
   slider: {fileID: 1739642332160115297}
   text: 
   value: 0
+--- !u!114 &6731956428178632415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7548110107516376868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 1
+  message: The tendency of the AI to repeat its previous actions.
 --- !u!1 &7549344959692959147
 GameObject:
   m_ObjectHideFlags: 0
@@ -12024,6 +12569,7 @@ GameObject:
   - component: {fileID: 8085629338404467757}
   - component: {fileID: 5555957442000926655}
   - component: {fileID: 767254287699622544}
+  - component: {fileID: 6871947553554641677}
   m_Layer: 5
   m_Name: Talk_base_fun
   m_TagString: Untagged
@@ -12048,10 +12594,10 @@ RectTransform:
   - {fileID: 3660476755410330520}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1000}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8085629338404467757
 CanvasRenderer:
@@ -12108,6 +12654,20 @@ MonoBehaviour:
   slider: {fileID: 9052748529194384085}
   text: 
   value: 0
+--- !u!114 &6871947553554641677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832465337240192004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: Base amount of 'Fun' gained during conversation events.
 --- !u!1 &8217200779315579442
 GameObject:
   m_ObjectHideFlags: 0
@@ -12141,7 +12701,7 @@ RectTransform:
   m_Father: {fileID: 2557393263800954384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12285,6 +12845,7 @@ GameObject:
   - component: {fileID: 8066814694053929844}
   - component: {fileID: 5221425910830420154}
   - component: {fileID: 7727267511901355276}
+  - component: {fileID: 9213537968119276722}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -12394,6 +12955,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9213537968119276722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8327267127049429067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 1
+  message: Config About AI Behavior
 --- !u!1 &8445681544436380418
 GameObject:
   m_ObjectHideFlags: 0
@@ -12499,7 +13074,7 @@ RectTransform:
   m_Father: {fileID: 6069664494934612093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12711,7 +13286,7 @@ RectTransform:
   m_Father: {fileID: 4761271430357890666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12765,6 +13340,7 @@ GameObject:
   - component: {fileID: 5068734923028652313}
   - component: {fileID: 7439959428374128362}
   - component: {fileID: 1098051642894327153}
+  - component: {fileID: 2133700100659689014}
   m_Layer: 5
   m_Name: Talk_base_influence
   m_TagString: Untagged
@@ -12789,10 +13365,10 @@ RectTransform:
   - {fileID: 5194832950413195427}
   m_Father: {fileID: 2738370629765315061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400, y: -1400}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5068734923028652313
 CanvasRenderer:
@@ -12849,6 +13425,20 @@ MonoBehaviour:
   slider: {fileID: 2863710864395994903}
   text: 
   value: 0
+--- !u!114 &2133700100659689014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8910101605796308472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1006e19b9306447fb08f23efebf80b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
+  secToOpen: 0.5
+  message: The rate of change in relationship levels during conversation events.
 --- !u!1 &8964454885205847313
 GameObject:
   m_ObjectHideFlags: 0
@@ -12957,7 +13547,7 @@ RectTransform:
   m_Father: {fileID: 6960232888050149363}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

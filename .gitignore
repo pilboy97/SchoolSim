@@ -84,3 +84,4 @@ Assets/Scripts/.DS_Store
 Assets/.DS_Store
 *_[Rr]ecovery*
 *.pptx
+/Tools/__pycache__
