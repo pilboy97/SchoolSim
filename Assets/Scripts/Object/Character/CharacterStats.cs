@@ -308,7 +308,7 @@ namespace Game.Object.Character
                     case CharacterStatsType.Motivation: motivation = value; break;
 
                     default:
-                        throw new ArgumentException($"Unknown name: {typeName}");
+                        break;
                 }
             }
         }

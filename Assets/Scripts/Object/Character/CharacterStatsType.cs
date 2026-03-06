@@ -28,6 +28,7 @@ namespace Game.Object.Character
         SubjectEnd,
 
         /*-------------------------------*/
+        NeedBegin,
         ENeedBegin,
         Hungry,
         Fatigue,
@@ -39,6 +40,9 @@ namespace Game.Object.Character
         RLoneliness,
         Fun, 
         RNeedEnd,
+        GNeedBegin,
         Motivation,
+        GNeedEnd,
+        NeedEnd,
     }
 }

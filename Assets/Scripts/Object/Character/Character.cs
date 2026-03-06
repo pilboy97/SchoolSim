@@ -331,19 +331,28 @@ namespace Game.Object.Character
         public void OnUpdate()
         {
             var decay = ConfigData.Instance.statsDecay;
-            float delta = UnityEngine.Time.deltaTime;
-            
-            Receive(new CharacterStats()
+            float deltaTime = UnityEngine.Time.deltaTime;
+
+            var decayDelta = new CharacterStats();
+
+            for (var s = CharacterStatsType.IntBegin + 1; s < CharacterStatsType.IntEnd; s++)
             {
-                hungry = -decay,
-                fatigue = -decay,
-                toilet = -decay,
-                hygiene = -decay,
-                loneliness = -decay,
-                rLoneliness = -decay,
-                fun = -decay,
-                motivation = -decay
-            } * delta);
+                decayDelta[s] = ConfigData.Instance.intDecayMod * decay;
+            }
+            for (var s = CharacterStatsType.SkillBegin + 1; s < CharacterStatsType.SkillEnd; s++)
+            {
+                decayDelta[s] = ConfigData.Instance.skillDecayMod * decay;
+            }
+            for (var s = CharacterStatsType.SubjectBegin + 1; s < CharacterStatsType.SubjectEnd; s++)
+            {
+                decayDelta[s] = ConfigData.Instance.subjectDecayMod * decay;
+            }
+            for (var s = CharacterStatsType.NeedBegin + 1; s < CharacterStatsType.NeedEnd; s++)
+            {
+                decayDelta[s] = ConfigData.Instance.needsDecayMod * decay;
+            }
+            
+            Receive(decayDelta * -1 * deltaTime);
             
             _data.stats = _data.stats.Clamp(0, 100);
             foreach (var ch in ObjectManager.Instance.Characters)
@@ -359,6 +368,23 @@ namespace Game.Object.Character
                     ID = ch.id
                 };
 
+                var baseRel = 0f;
+                if (_data.friends.Contains(ch._data))
+                {
+                    baseRel = 50f;
+                }
+                else if (_data.rivals.Contains(ch._data))
+                {
+                    baseRel = -50f;
+                }
+
+                if (_data[friendRel] > baseRel)
+                    _data[friendRel] -= ConfigData.Instance.relationDecayMod * deltaTime;
+                else 
+                    _data[friendRel] += ConfigData.Instance.relationDecayMod * deltaTime;
+                
+                _data[romanceRel] -= ConfigData.Instance.relationDecayMod * deltaTime;
+
                 _data[friendRel] = Mathf.Clamp(_data[friendRel], -100, 100);
                 var friendshipVal = _data[friendRel];
                 
@@ -366,16 +392,15 @@ namespace Game.Object.Character
                     _data[romanceRel] = 0;
                 else
                     _data[romanceRel] = Mathf.Clamp(_data[romanceRel], 0, friendshipVal);
-
             }
             
             UpdateRelations();
             
-            curTime += delta;
+            curTime += deltaTime;
 
             if (curTime < coolTime) return;
 
-            delta = curTime;
+            deltaTime = curTime;
 
             curTime = 0;
             coolTime = _distribution.Sample;
@@ -480,7 +505,8 @@ namespace Game.Object.Character
         
         public void CalcPersonalizedStatsDeltaOnReceive(CharacterStats s, ref DeltaResult result)
         {
-            s.motivation += s.SumSkill() + s.SumSubject();
+            var motivation = s.SumSkill() + s.SumSubject();
+            s.motivation += (motivation > 0) ? motivation : 0;
             result.Stats += s;
         }
 

@@ -12,6 +12,11 @@ namespace Game.UI
         
         [SerializeField] private TogglePanel debugMode;
         [SerializeField] private SliderPanel statsDecay;
+        [SerializeField] private SliderPanel needsDecayMod;
+        [SerializeField] private SliderPanel subjectDecayMod;
+        [SerializeField] private SliderPanel skillDecayMod;
+        [SerializeField] private SliderPanel intDecayMod;
+        [SerializeField] private SliderPanel relationDecayMod;
         [SerializeField] private SliderPanel inertia;
         [SerializeField] private SliderPanel E_Needs;
         [SerializeField] private SliderPanel R_Needs;
@@ -50,7 +55,18 @@ namespace Game.UI
             
             statsDecay.Init("decay of stats", ConfigData.Instance.statsDecay);
             statsDecay.OnValueChanged += x => ConfigData.Instance.statsDecay = x;
-
+            
+            intDecayMod.Init("decay modifier of intelligence stats", ConfigData.Instance.intDecayMod);
+            intDecayMod.OnValueChanged += x => ConfigData.Instance.intDecayMod = x;
+            skillDecayMod.Init("decay modifier of skill stats", ConfigData.Instance.skillDecayMod);
+            skillDecayMod.OnValueChanged += x => ConfigData.Instance.skillDecayMod = x;
+            subjectDecayMod.Init("decay modifier of subject stats", ConfigData.Instance.subjectDecayMod);
+            subjectDecayMod.OnValueChanged += x => ConfigData.Instance.subjectDecayMod = x;
+            needsDecayMod.Init("decay modifier of need stats", ConfigData.Instance.needsDecayMod);
+            needsDecayMod.OnValueChanged += x => ConfigData.Instance.needsDecayMod = x;
+            relationDecayMod.Init("decay modifier of relation", ConfigData.Instance.relationDecayMod);
+            relationDecayMod.OnValueChanged += x => ConfigData.Instance.relationDecayMod = x;
+            
             inertia.Init("Inertia", ConfigData.Instance.inertia);
             inertia.OnValueChanged += x => ConfigData.Instance.inertia = x;
             
