@@ -1,21 +1,14 @@
 ﻿# School sim
 
-a simple implementation of utility AI. this project is under GPL v3 license. ([view license](./LICENSE))
-
-## Overview
-Utility AI based agent
-
-## Tech
-Unity
-C#
-
-## Features
-- Action scoring
+a simple implementation of utility AI. this project is under GPL v3 license. ([view license](../LICENSE))
 
 please read this documentation.
 
-[Korean](./Doc/Utility%20AI의%20구현과%20검증.pdf), [Japanese](./Doc/Utility%20AIの実装と確認.pdf)
+|                    explain                    |                  manual                   |
+|:---------------------------------------------:|:-----------------------------------------:|
+|   [Japanese](./Doc/Utility%20AIの実装と確認.pdf)   |  [Japanese_manual](./Doc/ゲームのマニュアル.pdf)  |
+| [Korean](./Doc/Utility%20AI의%20구현과%20검증.pdf) | [Korean_manual](./Doc/게임의%20조작%20방법.pdf) |
 
----
+まだ、日本語の勉強中なので、機械翻訳をつかています。
 
-AIの行動を分析できるツールも添付しています。「Tools」のフォルダーを確認してください。
+この動画をご覧ください。[動画](./この動画をご覧ください.mp4)
