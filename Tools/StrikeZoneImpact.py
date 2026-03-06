@@ -20,7 +20,7 @@ else:
 
 file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
 
-print(f"불러올 경로: {file_path}")
+print(f"Load File: {file_path}")
 
 pio.renderers.default = "browser"
 
@@ -29,7 +29,7 @@ def analyze_strike_zone_impact(json_file_path):
         data = json.load(f)
 
     if not data.get('chDatas'):
-        print("데이터가 없습니다.")
+        print("No Data to analyze.")
         return
 
     last_tick = max(entry['tick'] for entry in data['chDatas'])
@@ -38,7 +38,6 @@ def analyze_strike_zone_impact(json_file_path):
     char_stats = {}
     rel_matrix = defaultdict(dict)
 
-    # 1. 데이터 파싱
     for entry in final_data:
         name = entry['charName']
         char_id = entry['id']
@@ -71,12 +70,12 @@ def analyze_strike_zone_impact(json_file_path):
     corr_attr_incoming = np.corrcoef(attractions, incoming_rels)[0, 1] if len(attractions) > 1 else 0
     corr_e_outgoing = np.corrcoef(e_values, outgoing_rels)[0, 1] if len(e_values) > 1 else 0
 
-    print("=== ⚾ 스트라이크 존(Strike Zone) 시스템 검증 ===")
-    print(f"1. [객관적 매력] 매력도(Attraction) vs 수신 호감도(인기) 상관계수: {corr_attr_incoming:.2f}")
-    print(f"   -> 양수(+)여야 정상! (타원의 장축이 길수록 타인의 스트라이크 존에 들어가기 쉬움)")
+    print("=== ⚾ Proof of Concept : Impact of Strike Zone ===")
+    print(f"1. Attraction (b) vs Population Correlation: {corr_attr_incoming:.2f}")
+    print(f"   -> positive value is expected. The more attractive, the more popular.")
     
-    print(f"2. [주관적 취향] 까다로움(e) vs 발신 호감도(수용력) 상관계수: {corr_e_outgoing:.2f}")
-    print(f"   -> 음수(-)여야 정상! (e가 1에 가까울수록 타원 폭이 바늘처럼 좁아져 남을 쉽게 안 좋아함)")
+    print(f"2. pickiness (e) vs atttactive of others 상관계수: {corr_e_outgoing:.2f}")
+    print(f"   -> negative is expected. The more closer e value is to 1, the less probablity to like others.")
 
     asymmetry_scores = []
     char_ids = list(char_stats.keys())
@@ -87,8 +86,8 @@ def analyze_strike_zone_impact(json_file_path):
             b_to_a = rel_matrix[id2].get(id1, 0)
             asymmetry_scores.append(abs(a_to_b - b_to_a))
     
-    print(f"3. [비대칭성] 평균 짝사랑 격차(관계도 차이): {np.mean(asymmetry_scores):.2f}")
-    print(f"   -> 0보다 확연히 커야 정상! (각자의 이상형 각도와 e 값이 다르기 때문)")
+    print(f"3. asymmetry: {np.mean(asymmetry_scores):.2f}")
+    print(f"   -> expected bigger than zero. (we have difference of the level of attraction and the ideal type of relation)")
 
     fig = make_subplots(
         rows=1, cols=2, 

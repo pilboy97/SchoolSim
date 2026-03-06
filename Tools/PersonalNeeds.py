@@ -19,7 +19,7 @@ else:
 
 file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
 
-print(f"불러올 경로: {file_path}")
+print(f"Load File: {file_path}")
 
 
 pio.renderers.default = "browser"
@@ -29,7 +29,7 @@ def plot_individual_needs_with_dropdown(json_file_path):
         with open(json_file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
     except FileNotFoundError:
-        print(f"파일을 찾을 수 없습니다: {json_file_path}")
+        print(f"Not Found File: {json_file_path}")
         return
 
     stat_keys = [
@@ -53,7 +53,7 @@ def plot_individual_needs_with_dropdown(json_file_path):
 
     characters = list(char_data.keys())
     if not characters:
-        print("그래프를 그릴 캐릭터 데이터가 없습니다.")
+        print("No Character Data to plot")
         return
 
     fig = go.Figure()

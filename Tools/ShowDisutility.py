@@ -18,7 +18,7 @@ else:
 
 file_path = os.path.join(base_path, company_name, product_name, "Log", log_filename)
 
-print(f"불러올 경로: {file_path}")
+print(f"Load File: {file_path}")
 
 def plot_total_disutility_plotly(json_file_path):
     with open(json_file_path, 'r', encoding='utf-8') as f:
