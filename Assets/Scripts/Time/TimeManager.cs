@@ -82,12 +82,12 @@ namespace Game.Time
             isPaused = val;
             if (isPaused)
             {
-                DOTween.PauseAll();
+                DOTween.TogglePauseAll();
                 UnityEngine.Time.timeScale = 0;
             }
             else
             {
-                DOTween.PauseAll();
+                DOTween.TogglePauseAll();
                 UnityEngine.Time.timeScale = scale;
             }
         }

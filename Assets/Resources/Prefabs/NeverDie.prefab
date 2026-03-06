@@ -7802,7 +7802,7 @@ MonoBehaviour:
   rModifier: 1
   gModifier: 1
   statsDecay: 0.1
-  inertia: 1
+  inertia: 5
   I_E_modifier: 1
   N_S_modifier: 1
   F_T_modifier: 1
