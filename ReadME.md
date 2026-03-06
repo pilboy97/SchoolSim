@@ -110,7 +110,7 @@ To make agents behave more like real humans, I integrated an **MBTI-based person
 | **T/F , J/P** | Others | *In Development (拡張予定)* |
 
 By combining these modifiers (`n_s_mod`, `i_e_mod`), the exact same environment produces entirely different outcomes. For example, an **EN** student will prioritize socializing and learning, while an **IS** student will prioritize resting alone or fulfilling immediate physical needs.
-これらの補正値（モディファイア）を組み合わせることで、同じ状況下でも**「EN型の生徒は友達と話し、IS型の生徒は一人で休む」**といった創発的なドラマが自然に発生します。
+これらの補正値（モディファイア）を組み合わせることで、同じ状況下でも **「EN型の生徒は友達と話し、IS型の生徒は一人で休む」**といった創発的なドラマが自然に発生します。
 
 ## Proof with Plotting Tool
 
