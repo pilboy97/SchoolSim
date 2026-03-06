@@ -159,7 +159,6 @@ namespace Game.Object.Character.Player
                 
             next = null;
             return ret;
-
         }
 
         public Character Character => character;

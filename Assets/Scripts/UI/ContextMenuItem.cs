@@ -32,17 +32,6 @@ namespace Game.UI
                 {
                     return;
                 }
-                
-                if (!onClick.indirect)
-                    task.Prev = new ActionTask(player, null, new Action()
-                    {
-                        actionName = $"track to {_obj.Name}",
-                        effect = new TractTargetEffect()
-                        {
-                            targetID = _obj.ID
-                        },
-                        indirect = true
-                    });
 
                 c.Character.TaskQueue.Cancel();
                 c.SetNext(task);

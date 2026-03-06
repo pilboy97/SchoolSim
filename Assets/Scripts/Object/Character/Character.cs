@@ -380,7 +380,7 @@ namespace Game.Object.Character
             curTime = 0;
             coolTime = _distribution.Sample;
 
-            if (Busy) return;
+            if (Busy&&ControllerType == ControllerType.AI) return;
             if (controller == null) return;
 
             var next = controller.Select();
