@@ -112,30 +112,6 @@ To make agents behave more like real humans, I integrated an **MBTI-based person
 By combining these modifiers (`n_s_mod`, `i_e_mod`), the exact same environment produces entirely different outcomes. For example, an **EN** student will prioritize socializing and learning, while an **IS** student will prioritize resting alone or fulfilling immediate physical needs.
 これらの補正値（モディファイア）を組み合わせることで、同じ状況下でも**「EN型の生徒は友達と話し、IS型の生徒は一人で休む」**といった創発的なドラマが自然に発生します。
 
-```csharp
-    if (character.Data.mbti.CheckComponent(MBTIComponent.S))
-    {
-        // MBTI S
-        eMod *= n_s_mod; // more weight for existance needs
-    }
-    else if (character.Data.mbti.CheckComponent(MBTIComponent.N))
-    {
-        // MBTI N
-        gMod *= n_s_mod; // more weight for growth needs
-    }
-
-    if (character.Data.mbti.CheckComponent(MBTIComponent.E))
-    {
-        // MBTI E
-        rMod *= i_e_mod; // more weight for relation needs
-    }
-    else
-    {
-        // MBTI I
-        rMod /= i_e_mod; // less weight for relation needs
-    }
-```
-
 ## Proof with Plotting Tool
 
 Balancing complex AI needs is chaotic. I developed custom Python tools to visualize the AI's behavior, and verify the stability of the simulation objectively.
@@ -148,7 +124,3 @@ Balancing complex AI needs is chaotic. I developed custom Python tools to visual
 | ShowDisutilty.py | Shows the average urgency ratio of needs by type. |
 | Strikezone.py | Simulates the "Strike Zone" mechanic for the interpersonal attraction system. |
 | StrikeZoneImpact.py | Analyzes and proves the impact of the Strike Zone system. |
-
-## Current Phase
-I am currently addressing "Priority Inversion" edge cases (e.g., an NPC prioritizing a social chat over severe hunger). I am actively using my Python visualization tools to fine-tune the parameter "sweet spot" to ensure both logical survival and emergent human-like drama.
-（現在、極度の空腹時でも会話を優先してしまうような「優先度逆転」の課題に取り組んでいます。自作のPython分析ツールを活用し、生存のための論理的行動と、人間らしいドラマが両立するパラメータの「スイートスポット」をデータ駆動で調整中です。）
