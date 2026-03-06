@@ -1,9 +1,6 @@
-using System;
 using Game.Event.Talk;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Game.UI
 {

@@ -17,12 +17,12 @@ namespace Game.Event.Talk
         public class StringTopicDict : UnitySerializedDictionary<string, Topic> { }
         
         [Header("Weights")]
-        [ShowInInspector] public float BaseFun => ConfigData.Instance.talk_baseFun; // R-욕구 (결핍)
-        [ShowInInspector] public float BaseLoneliness => ConfigData.Instance.talk_baseLoneliness; // R-욕구 (관계)
-        [ShowInInspector] public float BaseRLoneliness => ConfigData.Instance.talk_baseRLoneliness; // R-욕구 (로맨스)
-        [ShowInInspector] public float BaseTeach => ConfigData.Instance.talk_baseTeach; // G-욕구 (성장 - 양성 피드백 대상)
-        [ShowInInspector] public float BaseInfluence => ConfigData.Instance.talk_baseInfluence; // 평판 변화량
-        [ShowInInspector] public float BaseMotivation => ConfigData.Instance.talk_baseMotivation;  // 관계 변화량
+        [ShowInInspector] public float BaseFun => ConfigData.Instance.talk_baseFun; 
+        [ShowInInspector] public float BaseLoneliness => ConfigData.Instance.talk_baseLoneliness; 
+        [ShowInInspector] public float BaseRLoneliness => ConfigData.Instance.talk_baseRLoneliness;
+        [ShowInInspector] public float BaseTeach => ConfigData.Instance.talk_baseTeach; 
+        [ShowInInspector] public float BaseInfluence => ConfigData.Instance.talk_baseInfluence; 
+        [ShowInInspector] public float BaseMotivation => ConfigData.Instance.talk_baseMotivation; 
 
         [Header("State")]
         [SerializeField] private bool waitForSelect;
@@ -67,7 +67,6 @@ namespace Game.Event.Talk
             _bestTopics = new (Topic topic, float score)[_bestSize];
         }
 
-        // --- 초기화 로직 ---
         public static void StaticInit()
         {
             if (Topics != null) return;
@@ -275,7 +274,6 @@ namespace Game.Event.Talk
                 return;
             }
 
-            // 3. 결과 적용 단계 (시간 종료 후)
             if (curTime < selectTime) return;
 
             foreach (var member in members)

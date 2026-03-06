@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Task;
@@ -55,7 +54,6 @@ namespace Game.Object.Character.AI
                     action.DeltaStats(character, o, ref _result);
                     var score = CalcScore(o, _result);
 
-                    // 관성 보너스
                     if (currentTask is ActionTask actionTask &&
                         actionTask.action.Equals(action) &&
                         actionTask.Obj.Equals(o))
@@ -71,7 +69,6 @@ namespace Game.Object.Character.AI
 
                     if (score <= 0) continue;
 
-                    // 상위 N개 유지
                     InsertTopManual((o, action, score));
                 }
             }
@@ -93,11 +90,9 @@ namespace Game.Object.Character.AI
             
             var selected = _topActions[idx];
             
-            // 결정 임계치 체크
             float curScore = CalcScore(ref _result);
             if (selected.score < curScore * 1.3f) return null;
 
-            // 현재 행동과 동일한지 체크
             if (currentTask is ActionTask a &&
                 a.action.Equals(selected.action) &&
                 a.Obj.Equals(selected.obj))
@@ -114,14 +109,12 @@ namespace Game.Object.Character.AI
             return new ActionTask(character, selected.obj, selected.action);
         }
 
-        // 정렬 기능을 직접 구현하여 LINQ 의존성 제거
         private void InsertTopManual((IInteractable, Action, float) item)
         {
             if (_topActions[RandomSize - 1].score >  item.Item3) return;
 
             _topActions[RandomSize - 1] = item;
 
-            // 삽입 정렬 방식으로 내림차순 정렬 (데이터가 작으므로 매우 빠름)
             for (int i = RandomSize - 1; i > 0; i--)
             {
                 if (_topActions[i].score > _topActions[i - 1].score)
@@ -231,15 +224,14 @@ namespace Game.Object.Character.AI
         
         public float CalcScore(IInteractable o, DeltaResult result)
         {
-            // 1. 관계(Relation) 변화로 인해 얻는 스탯(외로움 해소 등)을 result.Stats에 누적합니다.
             if (result.Relation != null)
             {
                 foreach (var (rel, v) in result.Relation)
                 {
-                    character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref result); // _result가 아님!
+                    character.CalcPersonalizedStatsDeltaOnReceive(rel, v, ref result);
                 }
             }
-            // 2. 최종적으로 합산된 스탯을 바탕으로 점수를 계산합니다.
+            
             return CalcScore(result.Stats, o, ref result);
         }
         
@@ -258,7 +250,6 @@ namespace Game.Object.Character.AI
         
         public float CalcScore(CharacterStats deltas, IInteractable o, ref DeltaResult result)
         {
-            // 기본 모디파이어
             float eMod = ConfigData.Instance.eModifier;
             float rMod = ConfigData.Instance.rModifier;
             float gMod = ConfigData.Instance.gModifier;

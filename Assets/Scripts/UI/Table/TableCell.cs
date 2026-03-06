@@ -2,11 +2,11 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-namespace Game.UI
+namespace Game.UI.Table
 {
     public class TableCell : BorderSpriteImage
     {
-        [SerializeField] private Table.Table table;
+        [SerializeField] private UI.Table.Table table;
         [SerializeField]private TextMeshProUGUI text;
         [SerializeField] private string content;
         
@@ -19,7 +19,7 @@ namespace Game.UI
             text = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        public void Init(Table.Table table, int r, int c, BorderDirection border)
+        public void Init(UI.Table.Table table, int r, int c, BorderDirection border)
         {
             gameObject.SetActive(true);
             this.table = table;

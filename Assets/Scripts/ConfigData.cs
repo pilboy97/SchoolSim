@@ -24,10 +24,10 @@ namespace Game
         public float F_T_modifier = 5f;
         public float P_J_modifier = 5f;
         
-        public float talk_baseFun = 1f;  // R-욕구 (결핍)
-        public float talk_baseLoneliness = 1f;    // R-욕구 (관계)
-        public float talk_baseRLoneliness = 1f;     // R-욕구 (로맨스)
-        public float talk_baseTeach = 1f;     // G-욕구 (성장 - 양성 피드백 대상)
+        public float talk_baseFun = 1f;  
+        public float talk_baseLoneliness = 1f; 
+        public float talk_baseRLoneliness = 1f;   
+        public float talk_baseTeach = 1f; 
         public float talk_baseInfluence = 1f;
         public float talk_baseMotivation = 1f;
         

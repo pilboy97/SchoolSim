@@ -9,7 +9,6 @@ namespace Game.Event
     [Serializable]
     public abstract class Event : IEquatable<Event>
     {
-        // --- 설정 필드 ---
         [Header("Settings")]
         [SerializeField]
         public float minMember = 2;

@@ -89,7 +89,6 @@ namespace Game.Debug
             
             int currentTick = TimeManager.Instance.Ticks;
 
-            // 틱이 이전과 같으면 로그를 남기지 않고 리턴 (매 프레임 기록 방지)
             if (currentTick == _lastLoggedTick) return;
     
             _lastLoggedTick = currentTick;

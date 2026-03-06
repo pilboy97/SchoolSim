@@ -26,7 +26,6 @@ namespace Game
         private Dictionary<(Vector3Int, Vector3Int), int> _distJP = new();
         private Dictionary<(Vector3Int, Vector3Int), Vector3Int> _cacheJP = new();
 
-        // 🌟 실시간 경로 캐싱 딕셔너리 추가
         private Dictionary<(Vector3Int, Vector3Int), (Vector3Int[] path, int dist)> _pathCache = new();
 
         public Vector3Int RandomPos => Random.Choose(WalkableCells.ToList());
@@ -36,7 +35,7 @@ namespace Game
         {
             _jumpPoints.Clear();
             _jumpPointsPos.Clear();
-            _pathCache.Clear(); // 씬이 로드되거나 초기화될 때 캐시 비우기
+            _pathCache.Clear();
 
             foreach (var room in RoomManager.Instance.roomDatas)
             {
@@ -59,21 +58,19 @@ namespace Game
 
             SetWalkableCell();
 
-            // Floyd를 제거하고 포탈(룸 간 이동) 거리만 A*로 미리 캐싱합니다.
             FindInterRoom();
         }
 
-        // 🌟 동적 장애물 배치 시 호출할 메서드
         public void UpdateObstacles()
         {
-            SetWalkableCell(); // 이동 가능 셀 갱신
-            ClearCache();      // 장애물이 생겼으므로 기존 경로 캐시 무효화
+            SetWalkableCell();
+            ClearCache();
         }
 
         public void ClearCache()
         {
             _pathCache.Clear();
-            FindInterRoom(); // 포탈 간 거리도 장애물에 영향받을 수 있으므로 재계산
+            FindInterRoom();
         }
 
         public void SetWalkableCell()
@@ -137,7 +134,6 @@ namespace Game
                 {
                     foreach (var Y in _d)
                     {
-                        // 포탈 간 거리도 A*를 활용해 찾습니다.
                         _distJP[(X, Y)] = FindPathSameMap(X, Y).Item2;
                         _cacheJP[(X, Y)] = Y;
                     }
@@ -258,7 +254,6 @@ namespace Game
             return (ret, dist);
         }
 
-        // 🌟 핵심 A* 및 캐싱 로직
         private (Vector3Int[], int) FindPathSameMap(Vector3Int st, Vector3Int ed)
         {
             if (st == ed) return (new[] { ed }, 0);
@@ -266,13 +261,11 @@ namespace Game
 
             var key = (st, ed);
 
-            // 1. 캐시에 경로가 이미 존재하면 즉시 반환 (O(1))
             if (_pathCache.TryGetValue(key, out var cachedData))
             {
                 return cachedData;
             }
             
-            // 2. 캐시에 없다면 A* 알고리즘으로 계산 수행
             var result = RunAStar(st, ed);
 
             _pathCache[key] = result;
@@ -282,7 +275,7 @@ namespace Game
         
         private (Vector3Int[] path, int dist) RunAStar(Vector3Int st, Vector3Int ed)
         {
-            var openSet = new List<Vector3Int> { st }; // 기존 Heap 구조 대신 범용 List 사용 (성능 향상을 위해 프로젝트의 Heap으로 교체 권장)
+            var openSet = new List<Vector3Int> { st };
             var cameFrom = new Dictionary<Vector3Int, Vector3Int>();
             
             var gScore = new Dictionary<Vector3Int, int> { [st] = 0 };
@@ -298,7 +291,6 @@ namespace Game
 
             while (openSet.Count > 0)
             {
-                // fScore가 가장 낮은 노드 추출
                 var minScore = INF;
                 Vector3Int next = default;
                 foreach (var dot in openSet)
@@ -483,7 +475,7 @@ namespace Game
             while (cameFrom.ContainsKey(current))
             {
                 current = cameFrom[current];
-                if(current != path.Last()) // 시작점 제외 원할 시 조정 가능
+                if(current != path.Last())
                     path.Add(current);
             }
             path.Reverse();

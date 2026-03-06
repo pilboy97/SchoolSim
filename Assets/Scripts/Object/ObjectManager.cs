@@ -2,14 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Map;
-using Game.Object.Character;
 using Game.Room;
-using Game.Task;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
-using Action = Game.Task.Action;
-using ContextMenu = Game.UI.ContextMenu;
 
 namespace Game.Object
 {

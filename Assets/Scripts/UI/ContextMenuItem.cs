@@ -4,7 +4,6 @@ using Game.Object.Character.Player;
 using Game.Task;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Action = Game.Task.Action;

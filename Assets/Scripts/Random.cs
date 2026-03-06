@@ -30,7 +30,6 @@ namespace Game
         {
             if (arr == null || arr.Count == 0) return -1;
 
-            // 1. 점수 총합 계산 (float 정밀도 유지)
             float totalSum = 0f;
             foreach (var p in arr)
             {
@@ -39,7 +38,6 @@ namespace Game
 
             if (totalSum <= 0) return UnityEngine.Random.Range(0, arr.Count);
 
-            // 2. 룰렛 휠 선택
             float rand = UnityEngine.Random.Range(0f, totalSum);
             float acc = 0f;
 

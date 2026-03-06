@@ -20,7 +20,6 @@ namespace Game
         {
             if (!_isHovering) return;
 
-            // If the mouse moves significantly, reset the timer (optional "isStop" logic)
             if (Input.mousePositionDelta.sqrMagnitude > 0.1f && !_isDisplayed)
             {
                 _hoverTimer = 0;
@@ -52,10 +51,10 @@ namespace Game
         {
             RectTransform rect = Box.rectTransform;
             Vector2[] pivots = {
-                new Vector2(0, 1), // Top Left
-                new Vector2(1, 1),  // Top Right
-                new Vector2(0, 0), // Bottom Left
-                new Vector2(1, 0), // Bottom Right
+                new Vector2(0, 1),
+                new Vector2(1, 1),  
+                new Vector2(0, 0),
+                new Vector2(1, 0),
             };
 
             foreach (var pivot in pivots)
@@ -63,7 +62,6 @@ namespace Game
                 rect.pivot = pivot;
                 rect.position = _activationMousePos;
 
-                // Check if this pivot keeps the box on screen
                 if (IsInsideScreen(rect)) break;
             }
         }

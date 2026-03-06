@@ -15,7 +15,7 @@ namespace Game
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            this.Clear();
+            Clear();
             for (int i = 0; i < this.keyData.Count && i < this.valueData.Count; i++)
             {
                 this[this.keyData[i]] = this.valueData[i];
@@ -24,13 +24,13 @@ namespace Game
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
-            this.keyData.Clear();
-            this.valueData.Clear();
+            keyData.Clear();
+            valueData.Clear();
 
             foreach (var item in this)
             {
-                this.keyData.Add(item.Key);
-                this.valueData.Add(item.Value);
+                keyData.Add(item.Key);
+                valueData.Add(item.Value);
             }
         }
     }

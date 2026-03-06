@@ -2,21 +2,21 @@
 {
     public static class Calendar
     {
-        private static readonly int[] _monthDays =
+        private static readonly int[] MonthDays =
         {
             0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
         };
 
         public static int ToTick(int hour, int min, int sec)
         {
-            return (int)hour * 3600 + (int)min * 60 + (int)sec;
+            return hour * 3600 + min * 60 + sec;
         }
         
         public static (int, int, int) ToTime(int tick)
         {
             tick %= 24 * 3600;
 
-            return ((int)tick / 3600, (int)(tick / 60) % 60, (int)tick % 60);
+            return (tick / 3600, (tick / 60) % 60, tick % 60);
         }
 
         public static (int, int, int) ToTime()
@@ -29,16 +29,16 @@
             var days = tick / (24 * 60 * 60);
             var years = days / 365;
 
-            var y = (int)years;
+            var y = years;
             int m;
-            var d = (int)days % 365;
+            var d = days % 365;
             
             for (m = 1; m <= 12; m++)
-                if (d > _monthDays[m])
-                    d -= _monthDays[m];
+                if (d > MonthDays[m])
+                    d -= MonthDays[m];
                 else break;
 
-            var day = (int)days % 7;
+            var day = days % 7;
             var dayFlag = day switch
             {
                 1 => DayFlag.Mon,

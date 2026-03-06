@@ -308,7 +308,7 @@ namespace Game.Object.Character
                     case CharacterStatsType.Motivation: motivation = value; break;
 
                     default:
-                        throw new ArgumentException($"알 수 없는 스테이터스 이름입니다: {typeName}");
+                        throw new ArgumentException($"Unknown name: {typeName}");
                 }
             }
         }

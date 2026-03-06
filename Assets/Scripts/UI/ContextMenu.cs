@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Game.Map;
 using Game.Object;
 using Game.Room;
-using Game.Task;
 using Game.Time;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 using Action = Game.Task.Action;
 
