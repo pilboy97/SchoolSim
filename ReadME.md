@@ -14,7 +14,7 @@ A school life simulation game where 20 NPC students autonomously choose actions 
 
 ---
 
-## ⚙️ Core Systems & Architecture (コアシステムと設計)
+## Core Systems & Architecture (コアシステムと設計)
 
 ### 1. Utility AI Decision Pipeline (意思決定パイプライン)
 NPCs evaluate every possible action in the world and choose the best one. The calculation is processed in the following pipeline:
