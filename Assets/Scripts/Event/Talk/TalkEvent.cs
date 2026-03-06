@@ -180,8 +180,11 @@ namespace Game.Event.Talk
         private void InternalCalcStatsDeltaWithShare(ref DeltaResult delta, Character ch)
         {
             var modifier = shareOfInfluence.GetValueOrDefault(ch.ID) / DesiredShare;
+
+            
             if (modifier < 0.3f) modifier = 0;
             
+            modifier /= members.Count; // to fix priority inversion divide by number of members
             delta.Stats *= modifier;
 
             if (delta.Relation != null)
