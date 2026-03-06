@@ -340,8 +340,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1421941678}
-        m_TargetAssemblyTypeName: Game.SceneLoader, Assembly-CSharp
+      - m_Target: {fileID: 1304668177}
+        m_TargetAssemblyTypeName: Game.TitleButtons, Assembly-CSharp
         m_MethodName: LoadEdit
         m_Mode: 1
         m_Arguments:
@@ -404,6 +404,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
   secToOpen: 0.5
   message: Configures the school and game settings.
+--- !u!1 &171448814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 171448816}
+  - component: {fileID: 171448815}
+  m_Layer: 0
+  m_Name: Initilizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &171448815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171448814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5314160e4e854828aa75f473cd6d6d41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Initializer
+  neverDie: {fileID: 4734310813155764302, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
+--- !u!4 &171448816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171448814}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1000.00385, y: 465.7138, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &263831652
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,8 +671,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1421941678}
-        m_TargetAssemblyTypeName: Game.SceneLoader, Assembly-CSharp
+      - m_Target: {fileID: 1304668177}
+        m_TargetAssemblyTypeName: Game.TitleButtons, Assembly-CSharp
         m_MethodName: Exit
         m_Mode: 1
         m_Arguments:
@@ -924,8 +969,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1421941678}
-        m_TargetAssemblyTypeName: Game.SceneLoader, Assembly-CSharp
+      - m_Target: {fileID: 1304668177}
+        m_TargetAssemblyTypeName: Game.TitleButtons, Assembly-CSharp
         m_MethodName: LoadPlay
         m_Mode: 1
         m_Arguments:
@@ -988,63 +1033,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Tooltip
   secToOpen: 0.5
   message: Starts the game.
---- !u!1001 &1295252839
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 686.09796
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 602.9439
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1475827359395762068, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734310813155764302, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-      propertyPath: m_Name
-      value: NeverDie
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
 --- !u!1 &1304668172
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,6 +1045,7 @@ GameObject:
   - component: {fileID: 1304668176}
   - component: {fileID: 1304668175}
   - component: {fileID: 1304668174}
+  - component: {fileID: 1304668177}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1150,17 +1139,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1304668172}
   m_CullTransparentMesh: 1
---- !u!114 &1421941678 stripped
+--- !u!114 &1304668177
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4271714252232549706, guid: d814aae1ffc954940af37dccdc79d5b0, type: 3}
-  m_PrefabInstance: {fileID: 1295252839}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1304668172}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21af79ae3b08490aa89f7d39adf9ef25, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e980d4037b94ff1b5121a5eb264d0b9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.SceneLoader
+  m_EditorClassIdentifier: Assembly-CSharp::Game.TitleButtons
 --- !u!1 &1447281860
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,4 +1476,4 @@ SceneRoots:
   - {fileID: 31431420}
   - {fileID: 2135807033}
   - {fileID: 2006280005}
-  - {fileID: 1295252839}
+  - {fileID: 171448816}

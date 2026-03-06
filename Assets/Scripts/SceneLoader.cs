@@ -18,6 +18,7 @@ namespace Game
         public void LoadScene(int idx)
         {
             SceneManager.LoadScene(idx);
+            TooltipBox.Instance.gameObject.SetActive(false);
         }
 
         public void LoadTitle()
