@@ -1,5 +1,7 @@
 ﻿# 🏫 SchoolSim - Utility AI School Simulation
 
+https://github.com/pilboy97/SchoolSim
+
 ##　AIの活用について
 
 私はこの「ReadME」の作成、文書の日本語の翻訳、pythonツールの作成、　魅力度システムの確率の計算、コードの整理、一部のバグの解決に使いました。
