@@ -166,3 +166,7 @@ These tools helped me analyze:
 
 I use AI to create Readme, translate documents in japanese, make python tools, and some advice to rewrite code more readable and fix some bugs.
 the urgent function, attraction system, and other things is my own work.
+
+## Document
+
+[こちらもご確認ください。](./Doc/)
