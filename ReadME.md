@@ -24,7 +24,7 @@ The goal of the project is not direct player control but observing **emergent be
 ---
 
 ## Demo Video
-[youtube](https://youtu.be/p1hnskDwTvM)
+[youtube](https://youtu.be/cUN8_OcGlBc)
 
 ---
 
