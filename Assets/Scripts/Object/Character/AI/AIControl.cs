@@ -134,12 +134,10 @@ namespace Game.Object.Character.AI
             if (forced) return UniTask.FromResult(e.TryInvite(character, true));
             
             _result.Reset();
-            
             var x = CalcScore(ref _result);
 
-            e.CalcDeltaStats(character, ref _result);
-            
             _result.Reset();
+            e.CalcDeltaStats(character, ref _result);
             var y = CalcScore(null, _result) ; 
 
             if (TryInterrupt() && x * inertia > y)
@@ -166,7 +164,7 @@ namespace Game.Object.Character.AI
         private float CalcENeedScoreMultiplier(float val)
         {
             var diff = (100 - val > 0) ? 100 - val : 0;
-            return Mathf.Pow(0.3f, -(diff - 50) / 3);
+            return Mathf.Pow(0.3f, -(diff - 30) / 3);
         }
         private float CalcRNeedScoreMultiplier(float val)
         {
@@ -177,7 +175,7 @@ namespace Game.Object.Character.AI
         private float CalcGNeedScoreMultiplier(float val)
         {
             var diff = (100 - val > 0) ? 100 - val : 0;
-            return 2000f * (diff) + 1000;
+            return 300f * (diff);
         }
         
         private CharacterStats CalcENeedScoreMultiplier(CharacterStats val)
@@ -211,12 +209,14 @@ namespace Game.Object.Character.AI
 
         public float CalcScore(ref DeltaResult result)
         {
-            result.Reset();
 
             if (character.taskQueue.Current != null)
             {
+                result.Reset();
                 character.taskQueue.Current.CalcDeltaForScore(ref result);
-                return CalcScore(result.Relation, null, ref result) + CalcScore(result.Stats, null, ref result);
+                CalcScore(result.Relation, null, ref result);
+
+                return CalcScore(result.Stats, null, ref result);
             }
 
             return 0;

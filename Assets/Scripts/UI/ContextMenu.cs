@@ -52,11 +52,6 @@ namespace Game.UI
 
             var active = items != null;
 
-            if (active && !gameObject.activeSelf || !active)
-            {
-                TimeManager.Instance.TogglePause();
-            }
-
             gameObject.SetActive(active);
         }
 

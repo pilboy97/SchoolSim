@@ -48,10 +48,10 @@ namespace Game.UI
             }];
 
             nameText.text = who.Data.charName;
-            fvalueText.text = $"{fvalue:000} / 100";
+            fvalueText.text = $"{fvalue:F2} / 100";
             fbar.value = fvalue;
 
-            rvalueText.text = $"{rvalue:000} / 100";
+            rvalueText.text = $"{rvalue:F2} / 100";
             rbar.value = rvalue;
             
             portrait.Init(who.Data);

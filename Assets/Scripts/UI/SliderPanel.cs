@@ -17,10 +17,10 @@ namespace Game.UI
         public Action<float> OnValueChanged = (_) => { };
 
         
-        public void Init(string txt, float val, float min = 0f, float max = 10f)
+        public void Init(string txt, float val, float min = -5f, float max = 20f)
         {
             text = txt;
-            value = val;
+            value = Mathf.Log(val);
             
             slider.maxValue = max;
             slider.minValue = min;
@@ -29,7 +29,7 @@ namespace Game.UI
             Set(value);
 
             labelTxt.text = text;
-            valueTxt.text = $"{val:f2}";
+            valueTxt.text = $"{Mathf.Exp(value):f2}";
 
             slider.onValueChanged.AddListener(Set);
         }
@@ -37,7 +37,7 @@ namespace Game.UI
         public void Set(float x)
         {
             value = x;
-            valueTxt.text = $"{value:f2}";
+            valueTxt.text = $"{Mathf.Exp(value):f2}";
 
             OnValueChanged(x);
         }
