@@ -9386,16 +9386,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.SchoolDataHolder
   schoolData: {fileID: 11400000, guid: 76a3909fa9762408a84b6e045a5638dc, type: 2}
   isLogEnabled: 1
-  eModifier: 1
-  rModifier: 5
-  gModifier: 0.5
+  eModifier: 8000
+  rModifier: 300
+  gModifier: 1
   statsDecay: 0.1
   needsDecayMod: 1
   subjectDecayMod: 0.1
-  relationDecayMod: 0.1
+  relationDecayMod: 0.01
   skillDecayMod: 0.1
   intDecayMod: 0
-  inertia: 1000
+  inertia: 500000
   I_E_modifier: 3
   N_S_modifier: 3
   F_T_modifier: 1
