@@ -8,7 +8,8 @@ namespace Game.Object.Character
         private Transform _transform;
         private SpriteRenderer _renderer;
 
-        [SerializeField] private TextMeshPro nameLableText;
+        [SerializeField] private TextMeshPro nameLabelText;
+        [SerializeField] private TextMeshPro taskLabelText;
 
         private void Awake()
         {
@@ -34,12 +35,17 @@ namespace Game.Object.Character
         public void SetVisible(bool visible)
         {
             _renderer.enabled = visible;
-            nameLableText.gameObject.SetActive(visible);
+            nameLabelText.gameObject.SetActive(visible);
         }
 
         public void SetName(string name)
         {
-            nameLableText.text = name;
+            nameLabelText.text = name;
+        }
+
+        public void SetTask(string task)
+        {
+            taskLabelText.text = task;
         }
     }
 }

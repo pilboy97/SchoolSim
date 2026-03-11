@@ -314,6 +314,8 @@ namespace Game.Object.Character
             _view.SetPosition(Position);
             _view.SetDirection(Direction);
             _view.SetName(_data.charName);
+            
+            _view.SetTask(taskQueue.Current?.Desc);
         }
 
         private void LateUpdate()
