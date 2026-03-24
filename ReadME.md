@@ -4,8 +4,7 @@ https://github.com/pilboy97/SchoolSim
 
 ##　AIの活用について
 
-私はこの「ReadME」の作成、文書の日本語の翻訳、pythonツールの作成、　魅力度システムの確率の計算、コードの整理、一部のバグの解決に使いました。
-応急度のファンショーン、魅力度のシステムをはじめ全てのシステムの設計は私自身の独自の設計です。
+AI was used for Japanese translation assistance and README formatting. All system design — including the Utility AI pipeline, urgency functions, attraction system, and MBTI integration — is my own original work.
 
 ## Gameplay Overview (ゲーム概要)
 
