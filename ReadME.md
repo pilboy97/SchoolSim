@@ -2,9 +2,10 @@
 
 https://github.com/pilboy97/SchoolSim
 
-##　AIの活用について
-
-AI was used for Japanese translation assistance and README formatting. All system design — including the Utility AI pipeline, urgency functions, attraction system, and MBTI integration — is my own original work.
+## Usage of AI
+I used AI as a tool for code review, refactoring suggestions, Japanese translation, and README formatting.
+The core system design — including the Utility AI pipeline, urgency functions, MBTI integration, and attraction system — was designed and implemented by me.
+Python visualization tools were designed by me for parameter tuning purposes, with AI assistance in implementation.
 
 ## Gameplay Overview (ゲーム概要)
 
